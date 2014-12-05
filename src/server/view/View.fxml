@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane minHeight="124.0" minWidth="228.0" prefHeight="124.0" prefWidth="228.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="server.view.ViewController">
+   <children>
+      <Button layoutX="144.0" layoutY="45.0" mnemonicParsing="false" onAction="#btnStartClick" text="Start" AnchorPane.rightAnchor="33.5" AnchorPane.topAnchor="44.0" />
+      <Button layoutX="144.0" layoutY="76.0" mnemonicParsing="false" onAction="#btnStopClick" text="Stop" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="33.5" />
+      <Label layoutX="114.0" layoutY="14.0" text="Server Control" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
+      <Label layoutX="14.0" layoutY="14.0" text="Server Status" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
+      <Separator layoutX="104.0" layoutY="3.0" orientation="VERTICAL" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" />
+      <Circle fx:id="statusInd" fill="RED" layoutX="54.0" layoutY="71.0" radius="14.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" AnchorPane.bottomAnchor="33.0" AnchorPane.leftAnchor="40.0" />
+   </children>
+</AnchorPane>
