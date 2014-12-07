@@ -1,9 +1,10 @@
 package server.core;
 
+
 /*
  * Interface for the Core class
  */
-public interface ICore {
+public interface ICoreServer {
 	/*
 	 * Returns if the server is running or not
 	 */

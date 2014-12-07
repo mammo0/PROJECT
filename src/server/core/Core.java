@@ -1,19 +1,25 @@
 package server.core;
 
+import server.ASingelton;
 import server.view.View;
 
-public class Core implements ICore {
+/*
+ * This class is the core for the server application
+ */
+public class Core extends ASingelton implements ICoreServer {
 	
 	private View view;
 	
-
+	
 	@Override
 	public boolean isServerRunning() {
+		//TODO: implement this method
 		return true;
 	}
 
 	@Override
 	public void startGui() {
 		view = new View(this);
+		view.showFrame();
 	}
 }

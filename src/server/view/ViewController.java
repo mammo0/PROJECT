@@ -6,33 +6,30 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
-import server.core.ICore;
+import server.core.Core;
+import server.core.ICoreServer;
 
 /*
  * This class displays the server view on the screen
  */
 public class ViewController implements Initializable{
 	
-	private static ICore core;
+	private ICoreServer core;
+	private IViewServer view;
 	
 	@FXML
 	private Circle statusInd;
 	
-	
-	
 	/*
-	 * Getter / Setter
+	 * The constructor looks for the singleton instances of the Core and View
 	 */
-	
-	/*
-	 * This method sets the core object
-	 */
-	public static void setCore(ICore core){
-		ViewController.core = core;
+	public ViewController(){
+		this.core = (ICoreServer) Core.getInstance(Core.class);
+		this.view = (IViewServer) View.getInstance(View.class);
 	}
-	
 	
 	
 	/*
