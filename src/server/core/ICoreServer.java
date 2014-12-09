@@ -14,4 +14,14 @@ public interface ICoreServer {
 	 * This method starts the server GUI
 	 */
 	public void startGui();
+	
+	/*
+	 * This method starts the PROJECT server
+	 */
+	public void startServer();
+	
+	/*
+	 * This method stops the PROJECT server
+	 */
+	public void stopServer();
 }

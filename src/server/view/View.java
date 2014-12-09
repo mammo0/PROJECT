@@ -1,7 +1,5 @@
 package server.view;
 
-import java.awt.Container;
-import java.awt.Insets;
 import java.io.IOException;
 
 import javafx.application.Platform;

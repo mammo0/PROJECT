@@ -17,9 +17,22 @@ public class Core extends ASingelton implements ICoreServer {
 		return true;
 	}
 
+	
 	@Override
 	public void startGui() {
 		view = new View(this);
 		view.showFrame();
+	}
+
+	
+	@Override
+	public void startServer() {
+		// TODO implement this method
+	}
+
+	
+	@Override
+	public void stopServer() {
+		// TODO implement this method
 	}
 }

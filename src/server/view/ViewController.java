@@ -6,7 +6,6 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.layout.AnchorPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import server.core.Core;
@@ -41,6 +40,9 @@ public class ViewController implements Initializable{
 	 * It will start the server thread.
 	 */
 	public void btnStartClick(ActionEvent event){
+		// start the server
+		core.startServer();
+		
 		// change the color only if the server is running
 		if(core.isServerRunning())
 			statusInd.setFill(Color.GREEN);
@@ -51,6 +53,10 @@ public class ViewController implements Initializable{
 	 * It will stop the server thread.
 	 */
 	public void btnStopClick(ActionEvent event){
+		// stop the server
+		core.stopServer();
+		
+		// change the color of the status indicator
 		statusInd.setFill(Color.RED);
 	}
 	
