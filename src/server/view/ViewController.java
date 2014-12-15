@@ -11,8 +11,10 @@ import javafx.scene.shape.Circle;
 import server.core.Core;
 import server.core.ICoreServer;
 
-/*
+/**
  * This class displays the server view on the screen
+ * @author Ammon
+ *
  */
 public class ViewController implements Initializable{
 	
@@ -22,7 +24,7 @@ public class ViewController implements Initializable{
 	@FXML
 	private Circle statusInd;
 	
-	/*
+	/**
 	 * The constructor looks for the singleton instances of the Core and View
 	 */
 	public ViewController(){
@@ -35,7 +37,7 @@ public class ViewController implements Initializable{
 	 * Button controller
 	 */
 	
-	/*
+	/**
 	 * This method is called, when the start button is hit.
 	 * It will start the server thread.
 	 */
@@ -48,7 +50,7 @@ public class ViewController implements Initializable{
 			statusInd.setFill(Color.GREEN);
     }
 	
-	/*
+	/**
 	 * This method is called, when the stop button is hit.
 	 * It will stop the server thread.
 	 */

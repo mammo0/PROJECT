@@ -3,8 +3,10 @@ package server.core;
 import server.ASingelton;
 import server.view.View;
 
-/*
+/**
  * This class is the core for the server application
+ * @author Ammon
+ *
  */
 public class Core extends ASingelton implements ICoreServer {
 	

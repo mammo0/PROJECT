@@ -14,8 +14,10 @@ import javax.swing.SwingUtilities;
 import server.ASingelton;
 import server.core.ICoreServer;
 
-/*
+/**
  * This class is the view for the server application
+ * @author Ammon
+ *
  */
 public class View extends ASingelton implements IViewServer {
 	
@@ -61,6 +63,9 @@ public class View extends ASingelton implements IViewServer {
                 initFX(fxPanel);
             }
         });
+		
+		// set up the frame
+		frame.validate();
 		frame.pack();
 	}
 	

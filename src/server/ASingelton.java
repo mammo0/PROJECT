@@ -3,14 +3,16 @@ package server;
 import java.util.ArrayList;
 import java.util.List;
 
-/*
+/**
  * Abstract class implementing the singleton pattern
+ * @author Ammon
+ *
  */
 public abstract class ASingelton {
 	// the List that contains all instances of the child classes
 	private static List<ASingelton> classList = new ArrayList<ASingelton>();
 
-	/*
+	/**
 	 * This constructor is automatically called if a child object is initialized.
 	 * It ensures that only one instance can be created.
 	 */
