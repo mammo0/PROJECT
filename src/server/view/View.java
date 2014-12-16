@@ -1,5 +1,7 @@
 package server.view;
 
+import global.ASingelton;
+
 import java.io.IOException;
 
 import javafx.application.Platform;
@@ -11,7 +13,6 @@ import javafx.scene.Scene;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import absTract.ASingelton;
 import server.core.ICoreServer;
 
 /**

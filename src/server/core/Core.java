@@ -1,6 +1,6 @@
 package server.core;
 
-import absTract.ASingelton;
+import global.ASingelton;
 import server.view.View;
 
 /**
