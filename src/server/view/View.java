@@ -11,7 +11,7 @@ import javafx.scene.Scene;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
 
-import server.ASingelton;
+import absTract.ASingelton;
 import server.core.ICoreServer;
 
 /**
