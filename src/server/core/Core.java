@@ -11,8 +11,7 @@ import server.view.View;
 public class Core extends ASingelton implements ICoreServer {
 	
 	private View view;
-	
-	
+	private ServerService sDienst;
 	@Override
 	public boolean isServerRunning() {
 		//TODO: implement this method
@@ -29,12 +28,15 @@ public class Core extends ASingelton implements ICoreServer {
 	
 	@Override
 	public void startServer() {
-		// TODO implement this method
+		sDienst = new ServerService();
+		sDienst.startServer();
+		
 	}
 
 	
 	@Override
 	public void stopServer() {
-		// TODO implement this method
+		sDienst.stopServer();
 	}
+
 }

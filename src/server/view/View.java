@@ -51,7 +51,7 @@ public class View extends ASingelton implements IViewServer {
 	private void generateFrame(){
 		frame = new JFrame();
 		frame.setTitle("PROJECT Server");
-		frame.setResizable(false);
+		frame.setResizable(true);
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		frame.setLocation(100, 100);
 		
