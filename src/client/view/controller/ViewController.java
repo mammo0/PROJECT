@@ -1,11 +1,18 @@
-package client.view;
+package client.view.controller;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.layout.GridPane;
 import client.core.Core;
 import client.core.ICoreClient;
+import client.view.IViewClient;
+import client.view.View;
 
 /**
  * This class handles the user interactions from the view
@@ -16,6 +23,10 @@ public class ViewController implements Initializable{
 	
 	private ICoreClient core;
 	private IViewClient view;
+	
+	
+	@FXML
+	private GridPane competenceList;
 	
 	
 	/**
@@ -35,5 +46,13 @@ public class ViewController implements Initializable{
 	
 	@Override
 	// this method does nothing but has to be implemented
-	public void initialize(URL location, ResourceBundle resources) {}
+	public void initialize(URL location, ResourceBundle resources) {
+//		Parent root;
+//		try {
+//			root = FXMLLoader.load(View.class.getResource("/client/view/fxml/Competences.fxml"));
+//			competenceList.add(root, 1, 0);
+//		} catch (IOException e) {
+//			e.printStackTrace();
+//		}
+	}
 }

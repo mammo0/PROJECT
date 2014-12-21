@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.web.*?>
+<?import javafx.scene.paint.*?>
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.text.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.view.controller.ViewController">
+   <children>
+      <TreeView layoutX="14.0" layoutY="106.0" prefWidth="150.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="116.0" />
+      <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" prefHeight="89.0" prefWidth="150.0" style="-fx-background-color: red;" text="Logo" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
+      <GridPane layoutX="164.0" layoutY="14.0" prefHeight="89.0" prefWidth="522.0" AnchorPane.leftAnchor="178.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="NEVER" minWidth="-Infinity" prefWidth="165.0" />
+          <ColumnConstraints hgrow="SOMETIMES" maxWidth="375.0" minWidth="10.0" prefWidth="343.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+        </rowConstraints>
+         <children>
+            <Label text="Projektname:" />
+            <Label text="Projektleiter:" GridPane.rowIndex="1" />
+            <Label text="Gesamtaufwand / -kosten:" GridPane.rowIndex="2" />
+            <Label fx:id="lblProjectName" text="PN" GridPane.columnIndex="1" />
+            <Label fx:id="lblProjectLeader" text="PL" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+            <Label fx:id="lblTotalCosts" text="GK" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+         </children>
+      </GridPane>
+      <AnchorPane layoutX="178.0" layoutY="116.0" prefHeight="570.0" prefWidth="608.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="178.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="116.0">
+         <children>
+            <fx:include source="ProjectEditor.fxml" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"/>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
