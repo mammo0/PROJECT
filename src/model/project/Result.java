@@ -1,5 +1,7 @@
 package model.project;
 
+import java.util.ArrayList;
+
 /**
  * This class and it subclasses contain all results of the project calculation
  * @author Ammon
@@ -24,8 +26,11 @@ public class Result {
 	// the total costs
 	private float costTotal;
 	
+	// the results for every single year of the project duration
+	private ArrayList<Year> years;
 	
 	
+
 	/**
 	 * Get the internal people days
 	 * @return the pdInt
@@ -88,6 +93,14 @@ public class Result {
 	 */
 	public float getCostTotal() {
 		return costTotal;
+	}
+	
+	/**
+	 * Get the years of the project with their quarter results
+	 * @return the years
+	 */
+	public ArrayList<Year> getYears() {
+		return years;
 	}
 	
 	
@@ -154,5 +167,13 @@ public class Result {
 	 */
 	public void setCostTotal(float costTotal) {
 		this.costTotal = costTotal;
+	}
+
+	/**
+	 * Add a year with the quarter splitted results to the project result
+	 * @param years the years to set
+	 */
+	public void addYear(Year year) {
+		this.years.add(year);
 	}
 }

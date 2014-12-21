@@ -14,6 +14,12 @@ public class Skill {
 	
 	// flag if the skill is internal or not
 	private boolean intern;
+	
+	// the result of the calculation per skill including the risk factor
+	private Result resultRisk;
+	
+	// the result of the calculation per skill without the risk factor
+	private Result resultWRisk;
 
 	
 	
@@ -40,6 +46,22 @@ public class Skill {
 	public boolean isIntern() {
 		return intern;
 	}
+	
+	/**
+	 * Get the calculated result without the risk factor
+	 * @return the resultWRisk
+	 */
+	public Result getResultWRisk() {
+		return resultWRisk;
+	}
+
+	/**
+	 * Get the calculated result including the risk factor
+	 * @return the resultRisk
+	 */
+	public Result getResultRisk() {
+		return resultRisk;
+	}
 
 	/**
 	 * Set the name of the Skill
@@ -63,5 +85,21 @@ public class Skill {
 	 */
 	public void setIntern(boolean intern) {
 		this.intern = intern;
+	}
+
+	/**
+	 * Set the result calculated with the risk factor
+	 * @param resultRisk the resultRisk to set
+	 */
+	public void setResultRisk(Result resultRisk) {
+		this.resultRisk = resultRisk;
+	}
+
+	/**
+	 * Set the result calculated without the risk factor
+	 * @param resultWRisk the resultWRisk to set
+	 */
+	public void setResultWRisk(Result resultWRisk) {
+		this.resultWRisk = resultWRisk;
 	}
 }

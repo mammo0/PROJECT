@@ -30,9 +30,15 @@ public class Project {
 	
 	// the project end Date
 	private Date endDate;
+	
+	// the result of the project calculation including the risk factor
+	private Result resultRisk;
+	
+	// the result of the project calculation without the risk factor
+	private Result resultWRisk;
 
 	
-	
+
 	/**
 	 * Get the project name
 	 * @return the projectName
@@ -87,6 +93,22 @@ public class Project {
 	 */
 	public Date getEndDate() {
 		return endDate;
+	}
+	
+	/**
+	 * Get the calculated result without the risk factor
+	 * @return the resultWRisk
+	 */
+	public Result getResultWRisk() {
+		return resultWRisk;
+	}
+
+	/**
+	 * Get the calculated result including the risk factor
+	 * @return the resultRisk
+	 */
+	public Result getResultRisk() {
+		return resultRisk;
 	}
 
 	/**
@@ -143,5 +165,21 @@ public class Project {
 	 */
 	public void addSkill(Skill skill){
 		this.skills.add(skill);
+	}
+
+	/**
+	 * Set the result calculated with the risk factor
+	 * @param resultRisk the resultRisk to set
+	 */
+	public void setResultRisk(Result resultRisk) {
+		this.resultRisk = resultRisk;
+	}
+
+	/**
+	 * Set the result calculated without the risk factor
+	 * @param resultWRisk the resultWRisk to set
+	 */
+	public void setResultWRisk(Result resultWRisk) {
+		this.resultWRisk = resultWRisk;
 	}
 }
