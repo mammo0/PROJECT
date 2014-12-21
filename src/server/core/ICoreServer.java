@@ -1,11 +1,13 @@
 package server.core;
 
+import global.IServerService;
+
 /**
  * Interface for the Core class
  * @author Ammon
  *
  */
-public interface ICoreServer {
+public interface ICoreServer extends IServerService {
 	/**
 	 * Returns if the server is running or not
 	 */
