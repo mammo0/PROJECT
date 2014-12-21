@@ -1,6 +1,7 @@
 package server.core;
 
 import global.ASingelton;
+import model.project.Project;
 import server.view.View;
 
 /**
@@ -11,7 +12,9 @@ import server.view.View;
 public class Core extends ASingelton implements ICoreServer {
 	
 	private View view;
-	private ServerService sDienst;
+	
+	
+	
 	@Override
 	public boolean isServerRunning() {
 		//TODO: implement this method
@@ -28,15 +31,27 @@ public class Core extends ASingelton implements ICoreServer {
 	
 	@Override
 	public void startServer() {
-		sDienst = new ServerService();
-		sDienst.startServer();
-		
+		// TODO Auto-generated method stub
 	}
 
 	
 	@Override
 	public void stopServer() {
-		sDienst.stopServer();
+		// TODO Auto-generated method stub
+	}
+
+
+	@Override
+	public String[] getAllProjects() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+
+	@Override
+	public Project calculateProject(Project project) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
