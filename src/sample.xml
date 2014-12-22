@@ -1,0 +1,63 @@
+<project>
+	<projectName></projectName>
+	<description></description>
+	<phases>
+		<phase>
+			<phaseName></phaseName>
+			<parent></parent>
+			<startDate></startDate>
+			<endDate></endDate>
+			<riskFactor></riskFactor>
+			<skills>
+				<skill>
+					<!-- skill eintrag -->
+				</skill>
+			</skills>
+		</phase>
+	</phases>
+	<skills>
+		<skill amount="1">
+			<skillName></skillName>
+			<dayRate></dayRate>
+			<intern></intern>
+			<resultRisk><!-- siehe unten --></resultRisk>
+			<resultWRisk><!-- siehe unten --></resultWRisk>
+		</skill>
+	</skills>
+	<resources>
+		<resource>
+			<resourceID></resourceID>
+			<skill></skill>
+			<availability></availability>
+		</resource>
+	</resources>
+	<startDate></startDate>
+	<endDate></endDate>
+	<resultRisk>
+		<pdInt></pdInt>
+		<pdExt></pdExt>
+		<pdTotal></pdTotal>
+		<pdTotalShould></pdTotalShould>
+		<pdTotalBe></pdTotalBe>
+		<costInt></costInt>
+		<costExt></costExt>
+		<costTotal></costTotal>
+		<years>
+			<year>
+				<yearDate></yearDate>
+				<q1>
+					<costInt></costInt>
+					<costExt></costExt>
+					<costTotal></costTotal>
+					<pdInt></pdInt>
+					<pdExt></pdExt>
+					<pdTotal></pdTotal>
+				</q1>
+				<q2></q2>
+				<q3></q3>
+				<q4></q4>
+			</year>
+		</years>
+	</resultRisk>
+	<resultWRisk></resultWRisk>
+</project>
