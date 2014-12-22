@@ -12,12 +12,12 @@ public class Result {
 	private int pdInt;
 	// the external people days
 	private int pdExt;
-	// the total people days
-	private int pdTotal;
 	// the total people days that should be there
 	private int pdTotalShould;
 	// the total people days that are there
 	private int pdTotalBe;
+	// the difference between the should and be people days
+	private int pdTotalDiff;
 	
 	// the internal costs
 	private float costInt;
@@ -48,11 +48,11 @@ public class Result {
 	}
 	
 	/**
-	 * Get the total people days
-	 * @return the pdTotal
+	 * Get the difference of the should and be people days
+	 * @return the pdTotalDiff
 	 */
 	public int getPdTotal() {
-		return pdTotal;
+		return pdTotalDiff;
 	}
 	
 	/**
@@ -122,11 +122,11 @@ public class Result {
 	}
 	
 	/**
-	 * Set the total people days
-	 * @param pdTotal the pdTotal to set
+	 * Set the difference of the should and be people days
+	 * @param pdTotalDiff the pdTotal to set
 	 */
-	public void setPdTotal(int pdTotal) {
-		this.pdTotal = pdTotal;
+	public void setPdTotal(int pdTotalDiff) {
+		this.pdTotalDiff = pdTotalDiff;
 	}
 	
 	/**

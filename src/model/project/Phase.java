@@ -25,7 +25,7 @@ public class Phase {
 	private int riskFactor;
 	
 	// the required skills of the phase with the required amount
-	private Hashtable<Skill, Integer> skills;
+	private Hashtable<Integer, Integer> skills;
 
 	
 	
@@ -73,7 +73,7 @@ public class Phase {
 	 * Get the skills required by this phase with their number
 	 * @return the skills
 	 */
-	public Hashtable<Skill, Integer> getSkills() {
+	public Hashtable<Integer, Integer> getSkills() {
 		return skills;
 	}
 
@@ -118,11 +118,11 @@ public class Phase {
 	}
 
 	/**
-	 * Add a new skill to the phase with its number
+	 * Add a new skill to the phase with its amount
 	 * @param amount the amount of that skill
 	 * @param skill the skill
 	 */
-	public void addSkill(int amount, Skill skill) {
-		this.skills.put(skill, amount);
+	public void addSkill(int skillID, int amount) {
+		this.skills.put(skillID, amount);
 	}
 }

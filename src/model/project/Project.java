@@ -13,6 +13,9 @@ public class Project {
 	// the name of the project
 	private String projectName;
 	
+	// the name of the project responsible
+	private String projectResponsible;
+	
 	// a short description of the project
 	private String description;
 	
@@ -45,6 +48,14 @@ public class Project {
 	 */
 	public String getProjectName() {
 		return projectName;
+	}
+
+	/**
+	 * Get the responsible of this project
+	 * @return the projectResponsible
+	 */
+	public String getProjectResponsible() {
+		return projectResponsible;
 	}
 	
 	/**
@@ -117,6 +128,14 @@ public class Project {
 	 */
 	public void setProjectName(String projectName) {
 		this.projectName = projectName;
+	}
+
+	/**
+	 * Set the responsible of this project
+	 * @param projectResponsible the projectResponsible to set
+	 */
+	public void setProjectResponsible(String projectResponsible) {
+		this.projectResponsible = projectResponsible;
 	}
 	
 	/**

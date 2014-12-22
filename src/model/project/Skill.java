@@ -9,11 +9,14 @@ public class Skill {
 	// the name of the skill
 	private String skillName;
 	
-	// the daily rate
-	private float dayRate;
+	// the skillID calculated by the hashvalue of the skill name
+	private int skillID;
 	
-	// flag if the skill is internal or not
-	private boolean intern;
+	// the internal daily rate
+	private float dayRateInt;
+	
+	// the external daily rate
+	private float dayRateExt;
 	
 	// the result of the calculation per skill including the risk factor
 	private Result resultRisk;
@@ -22,7 +25,7 @@ public class Skill {
 	private Result resultWRisk;
 
 	
-	
+
 	/**
 	 * Get the name of the skill
 	 * @return the skillName
@@ -30,21 +33,29 @@ public class Skill {
 	public String getSkillName() {
 		return skillName;
 	}
-
+	
 	/**
-	 * Get the daily rate of the skill
-	 * @return the dayRate
+	 * Get the skill ID
+	 * @return the skillID
 	 */
-	public float getDayRate() {
-		return dayRate;
+	public int getSkillID() {
+		return skillID;
 	}
 
 	/**
-	 * Return if the skill is internal or external
-	 * @return the intern
+	 * Get the internal daily rate of the skill
+	 * @return the dayRateInt
 	 */
-	public boolean isIntern() {
-		return intern;
+	public float getDayRateInt() {
+		return dayRateInt;
+	}
+
+	/**
+	 * Get the external daily rate of the skill
+	 * @return the dayRateExt
+	 */
+	public float getDayRateExt() {
+		return dayRateExt;
 	}
 	
 	/**
@@ -62,7 +73,9 @@ public class Skill {
 	public Result getResultRisk() {
 		return resultRisk;
 	}
-
+	
+	
+	
 	/**
 	 * Set the name of the Skill
 	 * @param skillName the skillName to set
@@ -72,19 +85,27 @@ public class Skill {
 	}
 
 	/**
-	 * Set the daily rate of the skill
-	 * @param dayRate the dayRate to set
+	 * Set the skill ID
+	 * @param skillID the skillID to set
 	 */
-	public void setDayRate(float dayRate) {
-		this.dayRate = dayRate;
+	public void setSkillID(int skillID) {
+		this.skillID = skillID;
 	}
 
 	/**
-	 * Define if the skill is internal or not
-	 * @param intern the intern to set
+	 * Set the internal daily rate of the skill
+	 * @param dayRateInt the dayRate to set
 	 */
-	public void setIntern(boolean intern) {
-		this.intern = intern;
+	public void setDayRateInt(float dayRateInt) {
+		this.dayRateInt = dayRateInt;
+	}
+
+	/**
+	 * Set the external daily rate of the skill
+	 * @param dayRateExt the dayRateExt to set
+	 */
+	public void setDayRateExt(float dayRateExt) {
+		this.dayRateExt = dayRateExt;
 	}
 
 	/**
