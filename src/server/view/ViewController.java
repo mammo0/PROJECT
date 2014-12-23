@@ -6,6 +6,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import server.core.Core;
@@ -23,6 +24,12 @@ public class ViewController implements Initializable{
 	
 	@FXML
 	private Circle statusInd;
+	
+	@FXML
+	private Button btnStart;
+	@FXML
+	private Button btnStop;
+	
 	
 	/**
 	 * The constructor looks for the singleton instances of the Core and View
@@ -45,9 +52,14 @@ public class ViewController implements Initializable{
 		// start the server
 		core.startServer();
 		
-		// change the color only if the server is running
-		if(core.isServerRunning())
+		// check if the server is running
+		if(core.isServerRunning()){
+			// disable the start button
+			btnStart.setDisable(true);
+			
+			// change the server status indicator
 			statusInd.setFill(Color.GREEN);
+		}
     }
 	
 	/**
@@ -58,8 +70,14 @@ public class ViewController implements Initializable{
 		// stop the server
 		core.stopServer();
 		
-		// change the color of the status indicator
-		statusInd.setFill(Color.RED);
+		// check if the server has stopped
+		if(!core.isServerRunning()){
+			// enable the start button again
+			btnStart.setDisable(false);
+			
+			// change the server status indicator
+			statusInd.setFill(Color.RED);
+		}
 	}
 	
 	
