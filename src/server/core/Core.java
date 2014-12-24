@@ -26,19 +26,25 @@ public class Core extends ASingelton implements ICoreServer {
 	private String rmiUrl;
 	
 	
-	/**
-	 * The constructor
-	 */
-	public Core(){
-		// set up the server parameter
-		this.serverPort = 4711;
-		this.rmiUrl = "rmi://localhost:"+serverPort+"/PROJECT";
+	
+	@Override
+	public int getServerPort() {
+		return serverPort;
+	}
+
+
+	@Override
+	public void setServerPort(int portNumber) {
+		this.serverPort = portNumber;
 	}
 	
 	
 	
 	@Override
 	public boolean isServerRunning() {
+		if(rmiUrl == null)
+			return false;
+		
 		try {
 			if(Naming.lookup(rmiUrl) != null)
 				return true;
@@ -59,6 +65,12 @@ public class Core extends ASingelton implements ICoreServer {
 	
 	@Override
 	public void startServer() {
+		if(serverPort == 0)
+			return;
+		
+		// build the rmi url
+		this.rmiUrl = "rmi://localhost:"+serverPort+"/PROJECT";
+		
 		try {
 			// set up the server 
 			server = new ProjectCalculator(this);
@@ -75,6 +87,9 @@ public class Core extends ASingelton implements ICoreServer {
 	
 	@Override
 	public void stopServer() {
+		if(rmiUrl == null)
+			return;
+		
 		try {
 			Naming.unbind(rmiUrl);
 		} catch (RemoteException | MalformedURLException | NotBoundException e) {
@@ -100,5 +115,4 @@ public class Core extends ASingelton implements ICoreServer {
 		// TODO Auto-generated method stub
 		return null;
 	}
-
 }

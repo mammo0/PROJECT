@@ -27,4 +27,16 @@ public interface ICoreServer extends IServerService {
 	 * This method stops the PROJECT server
 	 */
 	public void stopServer();
+	
+	/**
+	 * Get the server port number
+	 * @return the server port
+	 */
+	public int getServerPort();
+	
+	/**
+	 * Set the port number for the server
+	 * @param portNumber
+	 */
+	public void setServerPort(int portNumber);
 }

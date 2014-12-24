@@ -8,13 +8,42 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane minHeight="124.0" minWidth="228.0" prefHeight="124.0" prefWidth="228.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="server.view.ViewController">
+<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="140.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="server.view.ViewController">
    <children>
-      <Button fx:id="btnStart" layoutX="144.0" layoutY="45.0" mnemonicParsing="false" onAction="#btnStartClick" text="Start" AnchorPane.rightAnchor="33.5" AnchorPane.topAnchor="44.0" />
-      <Button fx:id="btnStop" layoutX="144.0" layoutY="76.0" mnemonicParsing="false" onAction="#btnStopClick" text="Stop" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="33.5" />
-      <Label layoutX="114.0" layoutY="14.0" text="Server Control" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
-      <Label layoutX="14.0" layoutY="14.0" text="Server Status" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
-      <Separator layoutX="104.0" layoutY="3.0" orientation="VERTICAL" AnchorPane.bottomAnchor="0.0" AnchorPane.topAnchor="0.0" />
-      <Circle fx:id="statusInd" fill="RED" layoutX="54.0" layoutY="71.0" radius="14.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" AnchorPane.bottomAnchor="33.0" AnchorPane.leftAnchor="40.0" />
+      <GridPane prefHeight="135.0" prefWidth="228.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columnConstraints>
+          <ColumnConstraints fillWidth="false" halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints fillWidth="false" halignment="CENTER" hgrow="NEVER" prefWidth="10.0" />
+            <ColumnConstraints fillWidth="false" halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="NEVER" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="ALWAYS" />
+          <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="ALWAYS" />
+            <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="ALWAYS" />
+        </rowConstraints>
+         <children>
+            <Label text="Server Status" />
+            <Label text="Server Control" GridPane.columnIndex="2" />
+            <Button fx:id="btnStart" mnemonicParsing="false" onAction="#btnStartClick" text="Start" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+            <Button fx:id="btnStop" mnemonicParsing="false" onAction="#btnStopClick" text="Stop" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+            <Circle fx:id="statusInd" fill="RED" radius="14.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" GridPane.rowIndex="1" GridPane.rowSpan="2" />
+            <Separator orientation="VERTICAL" GridPane.columnIndex="1" GridPane.rowSpan="2147483647" />
+            <GridPane GridPane.columnIndex="2" GridPane.rowIndex="3">
+              <columnConstraints>
+                <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints fillWidth="false" halignment="CENTER" hgrow="NEVER" prefWidth="80.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="ALWAYS" />
+              </rowConstraints>
+               <children>
+                  <TextField fx:id="txtPort" prefWidth="60.0" promptText="Port" text="4711" GridPane.columnIndex="1" />
+                  <Label text="Portnumber:" />
+               </children>
+            </GridPane>
+            <Label fx:id="lblServerStatus" text="Server not running" GridPane.rowIndex="3" />
+         </children>
+      </GridPane>
    </children>
 </AnchorPane>
