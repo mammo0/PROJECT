@@ -8,42 +8,39 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="140.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="server.view.ViewController">
+
+<GridPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="140.0" prefWidth="350.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="server.view.ViewController">
+  <columnConstraints>
+    <ColumnConstraints fillWidth="false" halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+    <ColumnConstraints fillWidth="false" halignment="CENTER" hgrow="NEVER" prefWidth="10.0" />
+      <ColumnConstraints fillWidth="false" halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="NEVER" />
+    <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="ALWAYS" />
+    <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="ALWAYS" />
+      <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="ALWAYS" />
+  </rowConstraints>
    <children>
-      <GridPane prefHeight="135.0" prefWidth="228.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <Label text="Server Status" />
+      <Label text="Server Control" GridPane.columnIndex="2" />
+      <Button fx:id="btnStart" mnemonicParsing="false" onAction="#btnStartClick" text="Start" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+      <Button fx:id="btnStop" mnemonicParsing="false" onAction="#btnStopClick" text="Stop" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+      <Circle fx:id="statusInd" fill="RED" radius="14.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" GridPane.rowIndex="1" GridPane.rowSpan="2" />
+      <Separator orientation="VERTICAL" GridPane.columnIndex="1" GridPane.rowSpan="2147483647" />
+      <GridPane GridPane.columnIndex="2" GridPane.rowIndex="3">
         <columnConstraints>
-          <ColumnConstraints fillWidth="false" halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-          <ColumnConstraints fillWidth="false" halignment="CENTER" hgrow="NEVER" prefWidth="10.0" />
-            <ColumnConstraints fillWidth="false" halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+          <ColumnConstraints fillWidth="false" halignment="CENTER" hgrow="NEVER" prefWidth="80.0" />
         </columnConstraints>
         <rowConstraints>
-          <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="NEVER" />
           <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="ALWAYS" />
-          <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="ALWAYS" />
-            <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="ALWAYS" />
         </rowConstraints>
          <children>
-            <Label text="Server Status" />
-            <Label text="Server Control" GridPane.columnIndex="2" />
-            <Button fx:id="btnStart" mnemonicParsing="false" onAction="#btnStartClick" text="Start" GridPane.columnIndex="2" GridPane.rowIndex="1" />
-            <Button fx:id="btnStop" mnemonicParsing="false" onAction="#btnStopClick" text="Stop" GridPane.columnIndex="2" GridPane.rowIndex="2" />
-            <Circle fx:id="statusInd" fill="RED" radius="14.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" GridPane.rowIndex="1" GridPane.rowSpan="2" />
-            <Separator orientation="VERTICAL" GridPane.columnIndex="1" GridPane.rowSpan="2147483647" />
-            <GridPane GridPane.columnIndex="2" GridPane.rowIndex="3">
-              <columnConstraints>
-                <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
-                <ColumnConstraints fillWidth="false" halignment="CENTER" hgrow="NEVER" prefWidth="80.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="ALWAYS" />
-              </rowConstraints>
-               <children>
-                  <TextField fx:id="txtPort" prefWidth="60.0" promptText="Port" text="4711" GridPane.columnIndex="1" />
-                  <Label text="Portnumber:" />
-               </children>
-            </GridPane>
-            <Label fx:id="lblServerStatus" text="Server not running" GridPane.rowIndex="3" />
+            <TextField fx:id="txtPort" prefWidth="60.0" promptText="Port" text="4711" GridPane.columnIndex="1" />
+            <Label text="Portnumber:" />
          </children>
       </GridPane>
+      <Label fx:id="lblServerStatus" text="Server not running" GridPane.rowIndex="3" />
    </children>
-</AnchorPane>
+</GridPane>

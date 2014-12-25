@@ -1,13 +1,14 @@
 package server.core;
 
+import global.ASingelton;
+import global.IServerService;
+
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 
-import global.ASingelton;
-import global.IServerService;
 import model.project.Project;
 import server.view.View;
 
@@ -80,7 +81,7 @@ public class Core extends ASingelton implements ICoreServer {
 			Naming.rebind(rmiUrl, server);
 			System.out.println("Server läuft.");
 		} catch (RemoteException | MalformedURLException e) {
-			e.printStackTrace();
+			System.err.println(e.getMessage());
 		}
 	}
 
@@ -93,7 +94,8 @@ public class Core extends ASingelton implements ICoreServer {
 		try {
 			Naming.unbind(rmiUrl);
 		} catch (RemoteException | MalformedURLException | NotBoundException e) {
-			e.printStackTrace();
+			// ignore the exception
+			//e.printStackTrace();
 		}
 		
 		// clean server object
