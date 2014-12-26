@@ -37,12 +37,12 @@ public class ProjectCalculator extends UnicastRemoteObject implements IServerSer
 	
 	
 	@Override
-	public String[] getAllProjects() throws RemoteException{
+	public String[] getAllProjects() throws RemoteException {
 		return core.getAllProjects();
 	}
 
 	@Override
-	public Project calculateProject(Project project) throws RemoteException{
+	public Project calculateProject(Project project) throws RemoteException {
 		return core.calculateProject(project);
 	}
 }

@@ -20,7 +20,6 @@ public class Core extends ASingelton implements ICoreClient {
 	// the server object
 	private IServerService server;
 	
-	
 	private IViewClient view;
 	
 	

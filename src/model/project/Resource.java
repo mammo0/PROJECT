@@ -9,14 +9,20 @@ public class Resource {
 	// the ID of the resource
 	private int resourceID;
 	
-	// the skill belonging to the resource
-	private Skill skill;
+	// the skill ID of the skill belonging to the resource
+	private int skillID;
 	
 	// the availability of the resource in percent over the whole project duration
 	private int availability;
+	
+	// the amount of an available skill
+	private int skillAmount;
+	
+	// flag if the resource is internal or external
+	private boolean intern;
 
 	
-	
+
 	/**
 	 * Get the ID of the resource
 	 * @return the resourceID
@@ -26,11 +32,11 @@ public class Resource {
 	}
 
 	/**
-	 * Get the skill which belongs to the resource
+	 * Get the skill ID of the skill which belongs to the resource
 	 * @return the skill
 	 */
-	public Skill getSkill() {
-		return skill;
+	public int getSkillID() {
+		return skillID;
 	}
 
 	/**
@@ -40,7 +46,25 @@ public class Resource {
 	public int getAvailability() {
 		return availability;
 	}
+	
+	/**
+	 * Get the available amount of a skill
+	 * @return the skillAmount
+	 */
+	public int getSkillAmount() {
+		return skillAmount;
+	}
 
+	/**
+	 * Returns if the resource is internal or not
+	 * @return the intern
+	 */
+	public boolean isIntern() {
+		return intern;
+	}
+	
+	
+	
 	/**
 	 * Set the resource ID
 	 * @param resourceID the resourceID to set
@@ -50,11 +74,11 @@ public class Resource {
 	}
 
 	/**
-	 * Set the skill belonging to the resource
+	 * Set the skill ID of the skill belonging to the resource
 	 * @param skill the skill to set
 	 */
-	public void setSkill(Skill skill) {
-		this.skill = skill;
+	public void setSkill(int skillID) {
+		this.skillID = skillID;
 	}
 
 	/**
@@ -63,5 +87,21 @@ public class Resource {
 	 */
 	public void setAvailability(int availability) {
 		this.availability = availability;
+	}
+
+	/**
+	 * Set the available amount of a skill
+	 * @param skillAmount the skillAmount to set
+	 */
+	public void setSkillAmount(int skillAmount) {
+		this.skillAmount = skillAmount;
+	}
+
+	/**
+	 * Set if the resource is internal or not
+	 * @param intern the intern to set
+	 */
+	public void setIntern(boolean intern) {
+		this.intern = intern;
 	}
 }

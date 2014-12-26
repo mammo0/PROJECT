@@ -1,13 +1,10 @@
-
-
-import java.io.File;
 import java.io.FileInputStream;
 import java.io.ObjectInputStream;
 
 public class GutscheinRead {
 
 	public static void main(String[] args) {
-		String dateiname = "src/Gutscheine.dat";
+		String dateiname = "bin/vertSys/uebung2/Gutscheine.dat";
 		
 		Gutschein[] scheine = liesGutscheineAus(dateiname);
 		
