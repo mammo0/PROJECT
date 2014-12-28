@@ -28,11 +28,11 @@ public class Core extends ASingelton implements ICoreClient {
 	 */
 	public Core(){
 		// connect to the server
-		try {
-			server = (IServerService) Naming.lookup("rmi://localhost:12345/PROJECT");
-		} catch (MalformedURLException | RemoteException | NotBoundException e) {
-			e.printStackTrace();
-		}
+//		try {
+//			server = (IServerService) Naming.lookup("rmi://localhost:12345/PROJECT");
+//		} catch (MalformedURLException | RemoteException | NotBoundException e) {
+//			e.printStackTrace();
+//		}
 	}
 	
 	

@@ -32,10 +32,6 @@
             <Label fx:id="lblTotalCosts" text="GK" GridPane.columnIndex="1" GridPane.rowIndex="2" />
          </children>
       </GridPane>
-      <AnchorPane layoutX="178.0" layoutY="116.0" prefHeight="570.0" prefWidth="608.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="178.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="116.0">
-         <children>
-            <fx:include source="ProjectEditor.fxml" AnchorPane.topAnchor="0.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"/>
-         </children>
-      </AnchorPane>
+      <AnchorPane fx:id="editorPane" layoutX="178.0" layoutY="116.0" prefHeight="570.0" prefWidth="608.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="178.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="116.0"/>
    </children>
 </AnchorPane>

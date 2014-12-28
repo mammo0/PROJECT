@@ -5,13 +5,13 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root type="AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <GridPane gridLinesVisible="true" layoutX="0.5" layoutY="0.5" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <TextField promptText="Kompetenzbezeichnung" />
-            <TextField promptText="interner Tagessatz" GridPane.columnIndex="1" />
-            <TextField promptText="externer Tagessatz" GridPane.columnIndex="2" />
+            <TextField fx:id="skillName" promptText="Kompetenzbezeichnung" />
+            <TextField fx:id="dayRateInt" promptText="interner Tagessatz" GridPane.columnIndex="1" />
+            <TextField fx:id="dayRateExt" promptText="externer Tagessatz" GridPane.columnIndex="2" />
          </children>
          <columnConstraints>
             <ColumnConstraints hgrow="ALWAYS" />
@@ -23,4 +23,4 @@
          </rowConstraints>
       </GridPane>
    </children>
-</AnchorPane>
+</fx:root>

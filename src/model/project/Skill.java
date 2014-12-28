@@ -9,7 +9,7 @@ public class Skill {
 	// the name of the skill
 	private String skillName;
 	
-	// the skillID calculated by the hashvalue of the skill name
+	// the skillID calculated by the hash value of the skill name
 	private int skillID;
 	
 	// the internal daily rate
@@ -35,11 +35,16 @@ public class Skill {
 	}
 	
 	/**
-	 * Get the skill ID
+	 * Get the skill ID.
+	 * It is based on the hash value of the skill name.
+	 * Returns -1 if no name is given.
 	 * @return the skillID
 	 */
 	public int getSkillID() {
-		return skillID;
+		if(skillName == null)
+			return -1;
+		else
+			return skillID;
 	}
 
 	/**

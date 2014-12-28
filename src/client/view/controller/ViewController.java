@@ -1,32 +1,34 @@
 package client.view.controller;
 
-import java.io.IOException;
+import global.ASingelton;
+
 import java.net.URL;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
-import javafx.scene.layout.GridPane;
+import javafx.scene.layout.AnchorPane;
 import client.core.Core;
 import client.core.ICoreClient;
 import client.view.IViewClient;
 import client.view.View;
+import client.view.components.ProjectEditor;
 
 /**
  * This class handles the user interactions from the view
  * @author Ammon
  *
  */
-public class ViewController implements Initializable{
+public class ViewController extends ASingelton implements Initializable{
 	
 	private ICoreClient core;
 	private IViewClient view;
 	
+	// the project editor pane
+	private ProjectEditor projectEditor;
 	
 	@FXML
-	private GridPane competenceList;
+	private AnchorPane editorPane; 
 	
 	
 	/**
@@ -35,6 +37,8 @@ public class ViewController implements Initializable{
 	public ViewController(){
 		this.core = (ICoreClient) Core.getInstance(Core.class);
 		this.view = (IViewClient) View.getInstance(View.class);
+		
+		projectEditor = new ProjectEditor();
 	}
 	
 	
@@ -43,16 +47,14 @@ public class ViewController implements Initializable{
 	 */
 	
 	
-	
+	// this method is called by the initialization of the frame
 	@Override
-	// this method does nothing but has to be implemented
 	public void initialize(URL location, ResourceBundle resources) {
-//		Parent root;
-//		try {
-//			root = FXMLLoader.load(View.class.getResource("/client/view/fxml/Competences.fxml"));
-//			competenceList.add(root, 1, 0);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
+		// add the project editor to the main window
+		editorPane.getChildren().add(projectEditor);
+		AnchorPane.setTopAnchor(projectEditor, 0d);
+		AnchorPane.setBottomAnchor(projectEditor, 0d);
+		AnchorPane.setRightAnchor(projectEditor, 0d);
+		AnchorPane.setLeftAnchor(projectEditor, 0d);
 	}
 }
