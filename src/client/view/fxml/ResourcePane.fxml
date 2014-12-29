@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<fx:root type="AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <GridPane gridLinesVisible="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="ALWAYS" />
+            <ColumnConstraints hgrow="ALWAYS" prefWidth="163.0" />
+            <ColumnConstraints hgrow="ALWAYS" />
+            <ColumnConstraints hgrow="ALWAYS" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints />
+        </rowConstraints>
+         <children>
+            <TextField fx:id="resourceName" promptText="Resourcename" GridPane.columnIndex="0" />
+            <TextField fx:id="availability" promptText="Verfügbarkeit" GridPane.columnIndex="2" />
+            <TextField fx:id="skillAmount" promptText="Anzahl" GridPane.columnIndex="3" />
+            <ChoiceBox fx:id="intExt" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
+         </children>
+      </GridPane>
+   </children>
+</fx:root>

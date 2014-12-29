@@ -3,6 +3,7 @@ package client.view;
 import global.ASingelton;
 
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -10,6 +11,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import client.core.ICoreClient;
+import client.view.components.SkillPane;
+import client.view.controller.ViewController;
 
 /**
  * This class is the view for the client application
@@ -20,18 +23,36 @@ public class View extends ASingelton implements IViewClient {
 	
 	private ICoreClient core;
 	
+	private ViewController viewController;
+	
 	
 	/**
 	 * Constructor
 	 */
 	public View(ICoreClient core) {
 		this.core = core;
+		this.viewController = ViewController.getInstance(ViewController.class);
 	}
 	
 	
 	@Override
 	public void showFrame(){
 		Application.launch(Frame.class, "");
+		this.viewController = ViewController.getInstance(ViewController.class);
+	}
+	
+	
+	
+	@Override
+	public void setViewController(ViewController viewController) {
+		this.viewController = viewController;
+	}
+	
+	
+	
+	@Override
+	public ArrayList<SkillPane> getSkillPanes(){
+		return viewController.getSkillPanes();
 	}
 	
 	
@@ -43,11 +64,11 @@ public class View extends ASingelton implements IViewClient {
 	 */
 	public static class Frame extends Application {
 		
-		private static IViewClient view;
-		
-		static{
-			Frame.view = (IViewClient) View.getInstance(View.class);
-		}
+//		private static IViewClient view;
+//		
+//		static{
+//			Frame.view = (IViewClient) View.getInstance(View.class);
+//		}
 		
 		
 		@Override

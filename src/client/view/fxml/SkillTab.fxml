@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<fx:root type="AnchorPane" xmlns:fx="http://javafx.com/fxml/1" xmlns="http://javafx.com/javafx/8">
+<fx:root type="AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
 	<children>
 	    <GridPane layoutX="40.0" layoutY="14.0" prefHeight="60.0" prefWidth="510.0" AnchorPane.leftAnchor="40.0" AnchorPane.rightAnchor="56.0" AnchorPane.topAnchor="14.0">
 	      <columnConstraints>
@@ -29,6 +29,6 @@
 	          <Label text="Extern" GridPane.columnIndex="2" GridPane.rowIndex="1" />
 	       </children>
 	    </GridPane>
-	    <ScrollPane fx:id="scrSkillList" fitToWidth="true" hbarPolicy="NEVER" layoutX="14.0" layoutY="74.0" prefHeight="200.0" vbarPolicy="ALWAYS" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="79.0"/>
+      <AnchorPane fx:id="ancSkillList" layoutX="14.0" layoutY="79.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="79.0" />
 	 </children>
 </fx:root>

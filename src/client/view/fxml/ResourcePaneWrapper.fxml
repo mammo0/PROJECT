@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.*?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+
+<fx:root fx:id="titlePane" type="TitledPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <content>
+      <GridPane>
+         <columnConstraints>
+            <ColumnConstraints hgrow="ALWAYS" />
+         </columnConstraints>
+         <rowConstraints>
+            <RowConstraints vgrow="NEVER" />
+            <RowConstraints vgrow="ALWAYS" />
+         </rowConstraints>
+         <children>
+            <GridPane VBox.vgrow="NEVER">
+              <columnConstraints>
+                  <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints prefHeight="25.0" vgrow="NEVER" />
+              </rowConstraints>
+               <children>
+                  <Label text="Kompetenz" />
+                  <Label text="Intern/Extern" GridPane.columnIndex="1" />
+                  <Label text="Verfügbarkeit (%)" GridPane.columnIndex="2" />
+                  <Label text="Anzahl" GridPane.columnIndex="3" />
+               </children>
+               <GridPane.margin>
+                  <Insets left="25.0" right="25.0" />
+               </GridPane.margin>
+            </GridPane>
+            <AnchorPane fx:id="ancResourceList" GridPane.rowIndex="1" />
+         </children>
+      </GridPane>
+   </content>
+</fx:root>

@@ -3,6 +3,7 @@ package client.view.controller;
 import global.ASingelton;
 
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
@@ -13,6 +14,7 @@ import client.core.ICoreClient;
 import client.view.IViewClient;
 import client.view.View;
 import client.view.components.ProjectEditor;
+import client.view.components.SkillPane;
 
 /**
  * This class handles the user interactions from the view
@@ -37,14 +39,21 @@ public class ViewController extends ASingelton implements Initializable{
 	public ViewController(){
 		this.core = (ICoreClient) Core.getInstance(Core.class);
 		this.view = (IViewClient) View.getInstance(View.class);
+		view.setViewController(this);
 		
 		projectEditor = new ProjectEditor();
 	}
 	
 	
-	/*
-	 * Button controller
+	
+	/**
+	 * Get the skill panes from the project editor
+	 * @return the skill panes
 	 */
+	public ArrayList<SkillPane> getSkillPanes(){
+		return projectEditor.getSkillPanes();
+	}
+	
 	
 	
 	// this method is called by the initialization of the frame

@@ -27,22 +27,7 @@
 	         </content>
 	      </Tab>
 	      <Tab fx:id="tabSkills" text="Kompetenzen anlegen" />
-	      <Tab text="Verfügbarkeiten">
-	        <content>
-	          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-	               <children>
-	                  <TableView layoutX="14.0" layoutY="14.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
-	                    <columns>
-	                      <TableColumn prefWidth="132.0" text="Kompetenz" />
-	                      <TableColumn prefWidth="144.0" text="Intern/Extern" />
-	                        <TableColumn prefWidth="144.0" text="Verfügbarkeit (%)" />
-	                        <TableColumn prefWidth="157.0" text="Anzahl" />
-	                    </columns>
-	                  </TableView>
-	               </children>
-	            </AnchorPane>
-	        </content>
-	      </Tab>
+	      <Tab fx:id="tabResources" onSelectionChanged="#updateResources" text="Verfügbarkeiten" />
 	      <Tab text="Phasenplanung">
 	        <content>
 	          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
