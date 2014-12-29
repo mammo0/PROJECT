@@ -6,7 +6,10 @@ package model.project;
  *
  */
 public class Resource {
-	// the ID of the resource
+	// the name of the resource
+	private String resourceName;
+	
+	// the ID of the resource calculated by the hash value of the resource name
 	private int resourceID;
 	
 	// the skill ID of the skill belonging to the resource
@@ -22,13 +25,28 @@ public class Resource {
 	private boolean intern;
 
 	
-
+	
 	/**
-	 * Get the ID of the resource
+	 * Get the name of the resource
+	 * @return the resourceName
+	 */
+	public String getResourceName(){
+		return resourceName;
+	}
+	
+	/**
+	 * Get the ID of the resource.
+	 * It is based on the hash value of the resource name.
+	 * Returns -1 if no name is given.
 	 * @return the resourceID
 	 */
 	public int getResourceID() {
-		return resourceID;
+		if(resourceName == null)
+			return -1;
+		else{
+			resourceID = resourceName.hashCode();
+			return resourceID;
+		}
 	}
 
 	/**
@@ -66,11 +84,11 @@ public class Resource {
 	
 	
 	/**
-	 * Set the resource ID
-	 * @param resourceID the resourceID to set
+	 * Set the resource name
+	 * @param resourceName the resourceName to set
 	 */
-	public void setResourceID(int resourceID) {
-		this.resourceID = resourceID;
+	public void setResourceName(String resourceName){
+		this.resourceName = resourceName;
 	}
 
 	/**

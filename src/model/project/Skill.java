@@ -43,8 +43,10 @@ public class Skill {
 	public int getSkillID() {
 		if(skillName == null)
 			return -1;
-		else
+		else{
+			skillID = skillName.hashCode();
 			return skillID;
+		}
 	}
 
 	/**
@@ -87,14 +89,6 @@ public class Skill {
 	 */
 	public void setSkillName(String skillName) {
 		this.skillName = skillName;
-	}
-
-	/**
-	 * Set the skill ID
-	 * @param skillID the skillID to set
-	 */
-	public void setSkillID(int skillID) {
-		this.skillID = skillID;
 	}
 
 	/**
