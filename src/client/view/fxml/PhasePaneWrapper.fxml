@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.effect.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.layout.*?>
+<?import java.lang.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<fx:root type="TitledPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <content>
+      <VBox spacing="14.0">
+         <children>
+            <GridPane hgap="14.0">
+               <columnConstraints>
+                  <ColumnConstraints hgrow="NEVER" />
+                  <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+               </columnConstraints>
+               <rowConstraints>
+                  <RowConstraints vgrow="NEVER" />
+                  <RowConstraints vgrow="NEVER" />
+                  <RowConstraints vgrow="NEVER" />
+               </rowConstraints>
+               <children>
+                  <Label layoutX="11.0" layoutY="14.0" text="Phasenbeginn:" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
+                  <Label text="Phasenende:" GridPane.rowIndex="1" />
+                  <Label text="Risikofaktor:" GridPane.rowIndex="2" />
+                  <TextField GridPane.columnIndex="1" />
+                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                  <TextField GridPane.columnIndex="1" GridPane.rowIndex="2" />
+               </children>
+            </GridPane>
+            <VBox VBox.vgrow="ALWAYS">
+               <children>
+                  <GridPane AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="114.0">
+                    <columnConstraints>
+                      <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                      <ColumnConstraints halignment="CENTER" hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                      <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER" />
+                    </rowConstraints>
+                     <children>
+                        <Label text="Kompetenz" />
+                        <Label text="Dauer" GridPane.columnIndex="1" />
+                     </children>
+                     <padding>
+                        <Insets left="25.0" right="25.0" />
+                     </padding>
+                  </GridPane>
+                  <AnchorPane fx:id="ancPhaseList" minHeight="250.0" VBox.vgrow="ALWAYS" />
+               </children>
+            </VBox>
+         </children>
+      </VBox>
+   </content>
+</fx:root>

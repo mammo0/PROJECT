@@ -28,22 +28,6 @@
 	      </Tab>
 	      <Tab fx:id="tabSkills" text="Kompetenzen anlegen" />
 	      <Tab fx:id="tabResources" onSelectionChanged="#updateResources" text="Verfügbarkeiten" />
-	      <Tab text="Phasenplanung">
-	        <content>
-	          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
-	               <children>
-	                  <Label layoutX="14.0" layoutY="19.0" text="Hauptphase 1:" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
-	                  <TextField layoutX="429.0" layoutY="14.0" promptText="Risikozuschlag (%)" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
-	                  <TableView layoutX="14.0" layoutY="40.0" prefHeight="200.0" prefWidth="200.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="55.0">
-	                    <columns>
-	                      <TableColumn prefWidth="177.0" text="Kompetenz" />
-	                      <TableColumn prefWidth="213.0" text="Dauer (PT)" />
-	                        <TableColumn prefWidth="187.0" text="Anzahl" />
-	                    </columns>
-	                  </TableView>
-	               </children>
-	            </AnchorPane>
-	        </content>
-	      </Tab>
+	      <Tab fx:id="tabPhases" onSelectionChanged="#updatePhases" text="Phasenplanung" />
 	   </tabs>
 	</fx:root>

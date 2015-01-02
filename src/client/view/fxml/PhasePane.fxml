@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<fx:root type="AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <GridPane gridLinesVisible="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <columnConstraints>
+          <ColumnConstraints hgrow="ALWAYS" />
+          <ColumnConstraints hgrow="ALWAYS" />
+        </columnConstraints>
+        <rowConstraints>
+          <RowConstraints vgrow="NEVER" />
+        </rowConstraints>
+         <children>
+            <ComboBox fx:id="cmbSkills" maxWidth="1.7976931348623157E308" prefWidth="163.0" />
+            <TextField promptText="Dauer" GridPane.columnIndex="1" />
+         </children>
+      </GridPane>
+   </children>
+</fx:root>

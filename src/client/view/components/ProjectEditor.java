@@ -26,7 +26,7 @@ public class ProjectEditor extends TabPane {
 	
 	private SkillTab skillTab;
 	private ResourceTab resourceTab;
-	private ExpandableAccordion test;
+	private ExpandableAccordion phaseTab;
 	
 	
 	/**
@@ -56,18 +56,25 @@ public class ProjectEditor extends TabPane {
 		tabResources.setContent(resourceTab);
 		
 		ScrollPane scr = new ScrollPane();
-		test = new ExpandableAccordion();
+		phaseTab = new ExpandableAccordion();
 		scr.setFitToWidth(true);
-		scr.setContent(test);
+		scr.setContent(phaseTab);
 		tabPhases.setContent(scr);
 	}
 	
 	
 	// this method is called when the resources tab is opened
-	// it calls updates the resources view
+	// it updates the resources view
 	@FXML
 	private void updateResources(){
 		resourceTab.updateResources();
+	}
+	
+	// this method is called when the phases tab is opened
+	// it updates the phases view
+	@FXML
+	private void updatePhases(){
+		phaseTab.updatePhases();
 	}
 	
 	
