@@ -69,9 +69,9 @@ public class ResourcePaneWrapper extends TitledPane {
 	
 	/**
 	 * This method returns all entered resources
-	 * @return the skills
+	 * @return the resources
 	 */
-	public ArrayList<ResourcePane> getSkills(){
+	public ArrayList<ResourcePane> getResources(){
 		return resourceTable.getContents();
 	}
 }

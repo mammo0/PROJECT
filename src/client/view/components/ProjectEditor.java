@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 
@@ -20,9 +21,12 @@ public class ProjectEditor extends TabPane {
 	private Tab tabSkills;
 	@FXML
 	private Tab tabResources;
+	@FXML
+	private Tab tabPhases;
 	
 	private SkillTab skillTab;
 	private ResourceTab resourceTab;
+	private ExpandableAccordion test;
 	
 	
 	/**
@@ -50,6 +54,12 @@ public class ProjectEditor extends TabPane {
 		// add the third screen (resources)
 		resourceTab = new ResourceTab();
 		tabResources.setContent(resourceTab);
+		
+		ScrollPane scr = new ScrollPane();
+		test = new ExpandableAccordion();
+		scr.setFitToWidth(true);
+		scr.setContent(test);
+		tabPhases.setContent(scr);
 	}
 	
 	

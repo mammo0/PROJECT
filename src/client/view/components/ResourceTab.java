@@ -75,9 +75,8 @@ public class ResourceTab extends AnchorPane {
 		if(skills == null)
 			return;
 		
-		// define a temporary accordion pane and wrapper list
-		Accordion tempAcc = new Accordion();
-		ArrayList<ResourcePaneWrapper> tempRPW = new ArrayList<ResourcePaneWrapper>();
+		// define a temporary wrapper list
+		ArrayList<ResourcePaneWrapper> wrappersToAdd = new ArrayList<ResourcePaneWrapper>();
 		
 		// iterate over all skills
 		for(Skill skill : skills){
@@ -85,15 +84,33 @@ public class ResourceTab extends AnchorPane {
 			if(skillHasPane(skill))
 				continue;
 			
+			// add a new resource wrapper
 			ResourcePaneWrapper resWrapper = new ResourcePaneWrapper(skill);
-			tempAcc.getPanes().add(resWrapper);
-			tempRPW.add(resWrapper);
+			wrappersToAdd.add(resWrapper);
 		}
 		
-		// clear the old accordion and wrapper list and apply to the new one
-		wrapperPanes = tempRPW;
-		accSkillList.getPanes().clear();
-		accSkillList.getPanes().addAll(tempAcc.getPanes());
+		// add all newly created wrappers to the accordion
+		wrapperPanes.addAll(wrappersToAdd);
+		accSkillList.getPanes().addAll(wrappersToAdd);
+		
+		// remove the no longer needed wrappers
+		boolean deleted = true;
+		for(int i=0;i<wrapperPanes.size();i++){
+			ResourcePaneWrapper pane = wrapperPanes.get(i);
+			for(Skill skill : skills){
+				if(pane.getSkill().getSkillID() == skill.getSkillID()){
+					deleted = false;
+					break;
+				}
+			}
+			
+			if(deleted){
+				accSkillList.getPanes().remove(pane);
+				wrapperPanes.remove(pane);
+				deleted = true;
+				i--;
+			}
+		}
 		
 		// disable the accordion pane if it has no children
 		if(accSkillList.getPanes().isEmpty())
