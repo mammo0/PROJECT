@@ -3,12 +3,16 @@ package server.core;
 import global.ASingelton;
 import global.IServerService;
 
+import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 
+import javax.xml.stream.XMLStreamException;
+
+import model.project.Phase;
 import model.project.Project;
 import server.view.View;
 
@@ -20,6 +24,8 @@ import server.view.View;
 public class Core extends ASingelton implements ICoreServer {
 	
 	private View view;
+	private CreateXML createxml;
+	
 	
 	// the server object
 	private IServerService server;
@@ -117,4 +123,23 @@ public class Core extends ASingelton implements ICoreServer {
 		// TODO Auto-generated method stub
 		return null;
 	}
-}
+	
+	public Phase calculatePhase (Phase phase) {
+		return null;
+	}
+	
+	public void writeProject (Project project) throws FileNotFoundException, XMLStreamException{
+		
+		createxml.setFile(""+project.getProjectName()+".xml");
+	    try {
+	      createxml.saveConfig(project);
+	      createxml.startTagPhasen();
+	      createxml.endTagPhasen();
+	      createxml.closeXML();
+	     
+	    } catch (Exception e) {
+	      e.printStackTrace();
+	    }
+	  }
+	}
+	
