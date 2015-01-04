@@ -5,13 +5,18 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Insets;
 import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TitledPane;
 
-public class ExpandableAccordion extends Accordion {
+public class PhaseTab extends ScrollPane {
+	
+	@FXML
+	private Accordion accPhaseList;
 	
 	private ArrayList<PhasePaneWrapper> mainPhases;
 	private Hashtable<PhasePaneWrapper, ArrayList<PhasePaneWrapper>> subPhases;
@@ -23,7 +28,7 @@ public class ExpandableAccordion extends Accordion {
 	/**
 	 * The Constructor
 	 */
-	public ExpandableAccordion() {
+	public PhaseTab() {
 		// load the project editor fxml
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/client/view/fxml/PhaseTab.fxml"));
 		
@@ -44,7 +49,7 @@ public class ExpandableAccordion extends Accordion {
 		
 		// new main phase adder
 		addMain = new AddPhaseWrapper(this, "Neue Hauptphase");
-		this.getPanes().add(addMain);
+		accPhaseList.getPanes().add(addMain);
 	}
 	
 	
@@ -61,11 +66,11 @@ public class ExpandableAccordion extends Accordion {
 		// new main phase adder below the sub phase adder
 		AddPhaseWrapper addMain = new AddPhaseWrapper(this, "Neue Hauptphase");
 		
-		int index = this.getPanes().indexOf(from)+1;
+		int index = accPhaseList.getPanes().indexOf(from)+1;
 		
-		this.getPanes().add(index, main);
-		this.getPanes().add(index+1, addSub);
-		this.getPanes().add(index+2, addMain);
+		accPhaseList.getPanes().add(index, main);
+		accPhaseList.getPanes().add(index+1, addSub);
+		accPhaseList.getPanes().add(index+2, addMain);
 		
 		mainPhases.add(main);
 	}
@@ -80,9 +85,9 @@ public class ExpandableAccordion extends Accordion {
 		// create the new sub phase
 		PhasePaneWrapper sub = new PhasePaneWrapper(this, true);
 		
-		int index = this.getPanes().indexOf(from);
+		int index = accPhaseList.getPanes().indexOf(from);
 		
-		this.getPanes().add(index, sub);
+		accPhaseList.getPanes().add(index, sub);
 		
 		ArrayList<PhasePaneWrapper> tempSubPhases = subPhases.get(mainPhases.get(mainPhases.indexOf(main)));
 		if(tempSubPhases == null)
@@ -98,7 +103,7 @@ public class ExpandableAccordion extends Accordion {
 	 * @param phase the main phase to remove
 	 */
 	public void removeMainPhase(PhasePaneWrapper phase){
-		int indexBeginn = this.getPanes().indexOf(phase);
+		int indexBeginn = accPhaseList.getPanes().indexOf(phase);
 		
 		int indexEnd;
 		try{
@@ -107,7 +112,7 @@ public class ExpandableAccordion extends Accordion {
 			indexEnd = indexBeginn;
 		}
 		
-		this.getPanes().remove(indexBeginn, indexEnd+3);
+		accPhaseList.getPanes().remove(indexBeginn, indexEnd+3);
 		
 		subPhases.remove(phase);
 		mainPhases.remove(phase);
@@ -119,8 +124,8 @@ public class ExpandableAccordion extends Accordion {
 	 * @param phase the sub phase to remove
 	 */
 	public void removeSubPhase(PhasePaneWrapper phase){
-		int index = this.getPanes().indexOf(phase);
-		this.getPanes().remove(index);
+		int index = accPhaseList.getPanes().indexOf(phase);
+		accPhaseList.getPanes().remove(index);
 		
 		for(ArrayList<PhasePaneWrapper> pane : subPhases.values()){
 			for(int i=0;i<pane.size();i++){
@@ -158,14 +163,14 @@ public class ExpandableAccordion extends Accordion {
 		private PhasePaneWrapper parentPhase;
 		
 		private Button btnAddPhase;
-		private ExpandableAccordion parent;
+		private PhaseTab parent;
 		
 		/**
 		 * The constructor
 		 * @param parent the accordion parent
 		 * @param title the title of the pane
 		 */
-		public AddPhaseWrapper(ExpandableAccordion parent, String title){
+		public AddPhaseWrapper(PhaseTab parent, String title){
 			this(parent, title, null);
 		}
 		
@@ -175,7 +180,7 @@ public class ExpandableAccordion extends Accordion {
 		 * @param title the title of the pane
 		 * @param parentPhase the parent phase wrapper pane
 		 */
-		public AddPhaseWrapper(ExpandableAccordion parent, String title, PhasePaneWrapper parentPhase){
+		public AddPhaseWrapper(PhaseTab parent, String title, PhasePaneWrapper parentPhase){
 			this.parent = parent;
 			
 			// set the title

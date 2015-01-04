@@ -20,7 +20,7 @@ public class PhasePaneWrapper extends TitledPane {
 	@FXML
 	private AnchorPane ancPhaseList;
 	
-	private ExpandableAccordion parent;
+	private PhaseTab parent;
 	
 	private ExpandableTable<PhasePane> phaseTable;
 	private TextField phaseName;
@@ -32,11 +32,11 @@ public class PhasePaneWrapper extends TitledPane {
 	/**
 	 * The Constructor
 	 */
-	public PhasePaneWrapper(ExpandableAccordion parent){
+	public PhasePaneWrapper(PhaseTab parent){
 		this(parent, false);
 	}
 	
-	public PhasePaneWrapper(ExpandableAccordion parent, boolean subPhase) {
+	public PhasePaneWrapper(PhaseTab parent, boolean subPhase) {
 		// load the project editor fxml
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/client/view/fxml/PhasePaneWrapper.fxml"));
 		
