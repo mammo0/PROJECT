@@ -7,6 +7,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import client.view.IComponents;
 
 /**
  * This class represents the project editor panel
@@ -14,7 +15,7 @@ import javafx.scene.control.TabPane;
  * @author Ammon
  *
  */
-public class ProjectEditor extends TabPane {
+public class ProjectEditor extends TabPane implements IComponents {
 	
 	@FXML
 	private Tab tabSkills;
@@ -22,10 +23,13 @@ public class ProjectEditor extends TabPane {
 	private Tab tabResources;
 	@FXML
 	private Tab tabPhases;
+	@FXML
+	private Tab tabResults;
 	
 	private SkillTab skillTab;
 	private ResourceTab resourceTab;
 	private PhaseTab phaseTab;
+	private ResultTab resultTab;
 	
 	
 	/**
@@ -57,6 +61,10 @@ public class ProjectEditor extends TabPane {
 		// add the fourth screen (phases)
 		phaseTab = new PhaseTab();
 		tabPhases.setContent(phaseTab);
+		
+		// add the fifth screen (results)
+		resultTab = new ResultTab();
+		tabResults.setContent(resultTab);
 	}
 	
 	
@@ -77,11 +85,8 @@ public class ProjectEditor extends TabPane {
 	
 	
 	
-	/**
-	 * Get the skill panes from the project editor
-	 * @return the skill panes
-	 */
+	@Override
 	public ArrayList<SkillPane> getSkillPanes(){
-		return skillTab.getSkills();
+		return skillTab.getSkillPanes();
 	}
 }

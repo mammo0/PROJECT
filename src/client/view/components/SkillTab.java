@@ -3,6 +3,7 @@ package client.view.components;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import client.view.IComponents;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
@@ -13,7 +14,7 @@ import javafx.scene.layout.AnchorPane;
  * @author Ammon
  *
  */
-public class SkillTab extends AnchorPane {
+public class SkillTab extends AnchorPane implements IComponents {
 	
 	@FXML
 	private AnchorPane ancSkillList;
@@ -49,12 +50,11 @@ public class SkillTab extends AnchorPane {
 	}
 	
 	
-	
-	/**
-	 * This method returns all entered skills
-	 * @return the skills
-	 */
-	public ArrayList<SkillPane> getSkills(){
+
+
+
+	@Override
+	public ArrayList<SkillPane> getSkillPanes() {
 		return skillTable.getContents();
 	}
 }

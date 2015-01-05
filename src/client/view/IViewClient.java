@@ -1,8 +1,5 @@
 package client.view;
 
-import java.util.ArrayList;
-
-import client.view.components.SkillPane;
 import client.view.controller.ViewController;
 
 /**
@@ -10,7 +7,7 @@ import client.view.controller.ViewController;
  * @author Ammon
  *
  */
-public interface IViewClient {
+public interface IViewClient extends IComponents {
 	/**
 	 * This method shows the JFrame on the display
 	 */
@@ -21,10 +18,4 @@ public interface IViewClient {
 	 * @param viewController
 	 */
 	public void setViewController(ViewController viewController);
-	
-	/**
-	 * Get the skill panes from the project editor
-	 * @return the skill panes
-	 */
-	public ArrayList<SkillPane> getSkillPanes();
 }

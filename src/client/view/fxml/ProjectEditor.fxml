@@ -27,7 +27,12 @@
 	         </content>
 	      </Tab>
 	      <Tab fx:id="tabSkills" text="Kompetenzen anlegen" />
-	      <Tab fx:id="tabResources" onSelectionChanged="#updateResources" text="Verfügbarkeiten" />
+	      <Tab fx:id="tabResources" onSelectionChanged="#updateResources" text="Ressourcenplanung" />
 	      <Tab fx:id="tabPhases" onSelectionChanged="#updatePhases" text="Phasenplanung" />
+      <Tab fx:id="tabResults" text="Ergebinsse">
+        <content>
+          <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+        </content>
+      </Tab>
 	   </tabs>
 	</fx:root>
