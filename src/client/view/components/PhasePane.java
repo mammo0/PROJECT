@@ -46,6 +46,7 @@ public class PhasePane extends AnchorPane {
 		// initialize the skill collection
 		skills = FXCollections.observableArrayList();
 		
+		// update the combo boxes
 		updateCmbSkills();
 		
 		// set the skill collection as data source to the combo box

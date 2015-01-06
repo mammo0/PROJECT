@@ -2,6 +2,7 @@ package client.view.components;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 import java.util.Hashtable;
 
 import javafx.event.ActionEvent;
@@ -53,6 +54,20 @@ public class PhaseTab extends ScrollPane {
 	}
 	
 	
+	// this method checks if a main phase has sub phases
+	// if so, the main phases gets uneditable
+	private void checkMainPhases(){
+		for(PhasePaneWrapper main : mainPhases){
+			if(subPhases.containsKey(main))
+				main.setCollapsible(false);
+			else if(!main.isCollapsible())
+				main.setCollapsible(true);
+		}
+	}
+	
+	
+	
+	
 	/**
 	 * This method adds a new main phase
 	 * @param from the add pane wrapper calling this method
@@ -95,6 +110,8 @@ public class PhaseTab extends ScrollPane {
 		tempSubPhases.add(sub);
 		
 		subPhases.put(mainPhases.get(mainPhases.indexOf(main)), tempSubPhases);
+		
+		this.checkMainPhases();
 	}
 	
 	
@@ -127,14 +144,25 @@ public class PhaseTab extends ScrollPane {
 		int index = accPhaseList.getPanes().indexOf(phase);
 		accPhaseList.getPanes().remove(index);
 		
+		outerLoop:
 		for(ArrayList<PhasePaneWrapper> pane : subPhases.values()){
 			for(int i=0;i<pane.size();i++){
 				if(pane.get(i).equals(phase)){
 					pane.remove(i);
-					return;
+					break outerLoop;
 				}
 			}
 		}
+		
+		// clear the sub phases hash table if necessary
+		Enumeration<PhasePaneWrapper> enumKey = subPhases.keys();
+		while(enumKey.hasMoreElements()){
+			PhasePaneWrapper key = enumKey.nextElement();
+			if(subPhases.get(key).isEmpty())
+				subPhases.remove(key);
+		}
+		
+		this.checkMainPhases();
 	}
 	
 	
