@@ -4,6 +4,7 @@ import global.ASingelton;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -11,6 +12,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import client.core.ICoreClient;
+import client.view.components.PhasePaneWrapper;
+import client.view.components.ResourcePaneWrapper;
 import client.view.components.SkillPane;
 import client.view.controller.ViewController;
 
@@ -31,30 +34,19 @@ public class View extends ASingelton implements IViewClient {
 	 */
 	public View(ICoreClient core) {
 		this.core = core;
-		this.viewController = ViewController.getInstance(ViewController.class);
 	}
 	
-	
-	@Override
-	public void showFrame(){
-		Application.launch(Frame.class, "");
-		this.viewController = ViewController.getInstance(ViewController.class);
-	}
-	
-	
-	
-	@Override
-	public void setViewController(ViewController viewController) {
+	// this method sets the view controller
+	private void setViewController(ViewController viewController) {
 		this.viewController = viewController;
 	}
 	
 	
 	
 	@Override
-	public ArrayList<SkillPane> getSkillPanes(){
-		return viewController.getSkillPanes();
+	public void showFrame(){
+		Application.launch(Frame.class, "");
 	}
-	
 	
 	
 	/**
@@ -64,11 +56,13 @@ public class View extends ASingelton implements IViewClient {
 	 */
 	public static class Frame extends Application {
 		
-//		private static IViewClient view;
-//		
-//		static{
-//			Frame.view = (IViewClient) View.getInstance(View.class);
-//		}
+		private static View view;
+		
+		// get the view instance
+		static{
+			view = View.getInstance(View.class);
+		}
+		
 		
 		
 		@Override
@@ -80,9 +74,46 @@ public class View extends ASingelton implements IViewClient {
 	            stage.setTitle("PROJECT Client");
 	            stage.setScene(new Scene(root));
 	            stage.show();
+	            view.setViewController(ViewController.getInstance(ViewController.class));
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	
+	
+	
+	@Override
+	public ArrayList<SkillPane> getSkillPanes(){
+		return viewController.getSkillPanes();
+	}
+
+	
+	@Override
+	public String getProjectName() {
+		return viewController.getProjectName();
+	}
+
+
+	@Override
+	public String getProjectResponsible() {
+		return viewController.getProjectResponsible();
+	}
+
+
+	@Override
+	public String getProjectDescription() {
+		return viewController.getProjectDescription();
+	}
+
+	@Override
+	public Hashtable<PhasePaneWrapper, ArrayList<PhasePaneWrapper>> getPhasePanes() {
+		return viewController.getPhasePanes();
+	}
+
+	@Override
+	public ArrayList<ResourcePaneWrapper> getResourcePanes() {
+		return viewController.getResourcePanes();
 	}
 }

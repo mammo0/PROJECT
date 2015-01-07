@@ -17,13 +17,13 @@ import javafx.scene.layout.AnchorPane;
 public class ResourcePane extends AnchorPane {
 	
 	@FXML
-	private TextField resourceName;
+	private TextField txtResourceName;
 	@FXML
-	private ChoiceBox<String> intExt;
+	private ChoiceBox<String> cmbIntExt;
 	@FXML
-	private TextField availability;
+	private TextField txtAvailability;
 	@FXML
-	private TextField skillAmount;
+	private TextField txtSkillAmount;
 	
 	
 	
@@ -46,8 +46,8 @@ public class ResourcePane extends AnchorPane {
 		}
 		
 		// finalize the choice box
-		intExt.getItems().addAll("Intern","Extern");
-		intExt.getSelectionModel().selectFirst();
+		cmbIntExt.getItems().addAll("Intern","Extern");
+		cmbIntExt.getSelectionModel().selectFirst();
 	}
 	
 	
@@ -58,7 +58,7 @@ public class ResourcePane extends AnchorPane {
 	 * @return the resourceName
 	 */
 	public String getResourceName(){
-		return resourceName.getText();
+		return txtResourceName.getText();
 	}
 	
 	/**
@@ -66,7 +66,7 @@ public class ResourcePane extends AnchorPane {
 	 * @return boolean
 	 */
 	public boolean isIntern(){
-		if(intExt.getSelectionModel().selectedItemProperty().get() == "Intern")
+		if(cmbIntExt.getSelectionModel().selectedItemProperty().get() == "Intern")
 			return true;
 		else
 			return false;
@@ -77,7 +77,7 @@ public class ResourcePane extends AnchorPane {
 	 * @return the availability
 	 */
 	public String getAvailability(){
-		return availability.getText();
+		return txtAvailability.getText();
 	}
 	
 	/**
@@ -86,7 +86,7 @@ public class ResourcePane extends AnchorPane {
 	 */
 	public int getSkillAmount(){
 		try{
-			return Integer.valueOf(skillAmount.getText());
+			return Integer.valueOf(txtSkillAmount.getText());
 		}catch (Exception e){
 			return -1;
 		}

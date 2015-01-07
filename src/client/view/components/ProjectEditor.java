@@ -2,11 +2,14 @@ package client.view.components;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
+import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import client.view.IComponents;
 
 /**
@@ -25,6 +28,13 @@ public class ProjectEditor extends TabPane implements IComponents {
 	private Tab tabPhases;
 	@FXML
 	private Tab tabResults;
+	
+	@FXML
+	private TextField txtProjectName;
+	@FXML
+	private TextField txtProjectResponsible;
+	@FXML
+	private TextArea txtProjectDescription;
 	
 	private SkillTab skillTab;
 	private ResourceTab resourceTab;
@@ -88,5 +98,35 @@ public class ProjectEditor extends TabPane implements IComponents {
 	@Override
 	public ArrayList<SkillPane> getSkillPanes(){
 		return skillTab.getSkillPanes();
+	}
+
+
+	@Override
+	public String getProjectName() {
+		return txtProjectName.getText();
+	}
+
+
+	@Override
+	public String getProjectResponsible() {
+		return txtProjectResponsible.getText();
+	}
+
+
+	@Override
+	public String getProjectDescription() {
+		return txtProjectDescription.getText();
+	}
+
+
+	@Override
+	public Hashtable<PhasePaneWrapper, ArrayList<PhasePaneWrapper>> getPhasePanes() {
+		return phaseTab.getPhasePanes();
+	}
+
+
+	@Override
+	public ArrayList<ResourcePaneWrapper> getResourcePanes() {
+		return resourceTab.getResourcePanes();
 	}
 }

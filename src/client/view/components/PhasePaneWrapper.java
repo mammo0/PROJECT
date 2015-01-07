@@ -1,6 +1,8 @@
 package client.view.components;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.util.ArrayList;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -9,6 +11,7 @@ import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.AnchorPane;
@@ -17,6 +20,12 @@ import javafx.scene.layout.Priority;
 
 public class PhasePaneWrapper extends TitledPane {
 	
+	@FXML
+	private DatePicker datProjectBegin;
+	@FXML
+	private DatePicker datProjectEnd;
+	@FXML
+	private TextField txtRiskFactor;
 	@FXML
 	private AnchorPane ancPhaseList;
 	
@@ -104,5 +113,45 @@ public class PhasePaneWrapper extends TitledPane {
 		for(PhasePane pane : phaseTable.getContents()){
 			pane.updateCmbSkills();
 		}
+	}
+	
+	
+	/**
+	 * Get the project begin date
+	 * @return the begin date
+	 */
+	public LocalDate getProjectBegin(){
+		return datProjectBegin.getValue();
+	}
+	
+	
+	/**
+	 * Get the project end date
+	 * @return the end date
+	 */
+	public LocalDate getProjectEnd(){
+		return datProjectEnd.getValue();
+	}
+	
+	
+	/**
+	 * Get the risk factor for this phase
+	 * @return the risk factor
+	 */
+	public int getRiskFactor(){
+		try{
+			return Integer.valueOf(txtRiskFactor.getText());
+		}catch (Exception e){
+			return -1;
+		}
+	}
+	
+	
+	/**
+	 * Get the phase panes
+	 * @return the phase panes
+	 */
+	public ArrayList<PhasePane> getPhasePanes(){
+		return phaseTable.getContents();
 	}
 }

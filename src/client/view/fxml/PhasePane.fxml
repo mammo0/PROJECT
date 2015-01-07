@@ -17,7 +17,7 @@
         </rowConstraints>
          <children>
             <ComboBox fx:id="cmbSkills" maxWidth="1.7976931348623157E308" prefWidth="163.0" />
-            <TextField promptText="Dauer" GridPane.columnIndex="1" />
+            <TextField fx:id="txtDuration" promptText="Dauer" GridPane.columnIndex="1" />
          </children>
       </GridPane>
    </children>

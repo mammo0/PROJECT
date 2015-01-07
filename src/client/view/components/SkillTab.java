@@ -2,6 +2,7 @@ package client.view.components;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 import client.view.IComponents;
 import javafx.fxml.FXML;
@@ -50,11 +51,33 @@ public class SkillTab extends AnchorPane implements IComponents {
 	}
 	
 	
-
-
-
 	@Override
 	public ArrayList<SkillPane> getSkillPanes() {
 		return skillTable.getContents();
+	}
+
+	@Override
+	public String getProjectName() {
+		return null;
+	}
+
+	@Override
+	public String getProjectResponsible() {
+		return null;
+	}
+
+	@Override
+	public String getProjectDescription() {
+		return null;
+	}
+
+	@Override
+	public Hashtable<PhasePaneWrapper, ArrayList<PhasePaneWrapper>> getPhasePanes() {
+		return null;
+	}
+
+	@Override
+	public ArrayList<ResourcePaneWrapper> getResourcePanes() {
+		return null;
 	}
 }

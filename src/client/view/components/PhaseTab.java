@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
+import client.view.IComponents;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,7 +15,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TitledPane;
 
-public class PhaseTab extends ScrollPane {
+public class PhaseTab extends ScrollPane implements IComponents {
 	
 	@FXML
 	private Accordion accPhaseList;
@@ -58,8 +59,10 @@ public class PhaseTab extends ScrollPane {
 	// if so, the main phases gets uneditable
 	private void checkMainPhases(){
 		for(PhasePaneWrapper main : mainPhases){
-			if(subPhases.containsKey(main))
+			if(subPhases.containsKey(main)){
+				main.setExpanded(false);
 				main.setCollapsible(false);
+			}
 			else if(!main.isCollapsible())
 				main.setCollapsible(true);
 		}
@@ -185,7 +188,11 @@ public class PhaseTab extends ScrollPane {
 	
 	
 	
-	
+	/**
+	 * This class is a place holder to add new phases
+	 * @author ammon
+	 *
+	 */
 	private class AddPhaseWrapper extends TitledPane{
 		
 		private PhasePaneWrapper parentPhase;
@@ -238,5 +245,64 @@ public class PhaseTab extends ScrollPane {
 			else
 				parent.addMainPhase(this);
 		}
+	}
+
+
+
+	
+	
+	
+	@Override
+	public ArrayList<SkillPane> getSkillPanes() {
+		return null;
+	}
+	
+
+
+	@Override
+	public Hashtable<PhasePaneWrapper, ArrayList<PhasePaneWrapper>> getPhasePanes() {
+		Hashtable<PhasePaneWrapper, ArrayList<PhasePaneWrapper>> panes = new Hashtable<PhasePaneWrapper, ArrayList<PhasePaneWrapper>>();
+		for(PhasePaneWrapper pane : mainPhases){
+			if(!subPhases.containsKey(pane))
+				panes.put(pane, null);
+		}
+		
+		Enumeration<PhasePaneWrapper> enumKey = subPhases.keys();
+		while(enumKey.hasMoreElements()){
+			PhasePaneWrapper key = enumKey.nextElement();
+			ArrayList<PhasePaneWrapper> subPanes = new ArrayList<PhasePaneWrapper>();
+			subPanes.addAll(subPhases.get(key));
+			
+			panes.put(key, subPanes);
+		}
+		
+		return panes;
+	}
+	
+
+
+	@Override
+	public String getProjectName() {
+		return null;
+	}
+	
+
+
+	@Override
+	public String getProjectResponsible() {
+		return null;
+	}
+	
+
+
+	@Override
+	public String getProjectDescription() {
+		return null;
+	}
+
+
+	@Override
+	public ArrayList<ResourcePaneWrapper> getResourcePanes() {
+		return null;
 	}
 }

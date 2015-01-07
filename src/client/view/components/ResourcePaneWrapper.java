@@ -68,10 +68,10 @@ public class ResourcePaneWrapper extends TitledPane {
 	
 	
 	/**
-	 * This method returns all entered resources
+	 * This method returns all resource panes
 	 * @return the resources
 	 */
-	public ArrayList<ResourcePane> getResources(){
+	public ArrayList<ResourcePane> getResourcePanes(){
 		return resourceTable.getContents();
 	}
 }

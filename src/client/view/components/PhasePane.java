@@ -11,12 +11,15 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
 public class PhasePane extends AnchorPane {
 	
 	@FXML
 	private ComboBox<String> cmbSkills;
+	@FXML
+	private TextField txtDuration;
 	
 	private ObservableList<String> skills;
 	
@@ -102,5 +105,24 @@ public class PhasePane extends AnchorPane {
 				i--;
 			}
 		}
+	}
+	
+	
+	
+	/**
+	 * Get the selected Skill for this phase
+	 * @return the selected skill
+	 */
+	public String getPhaseSkill(){
+		return cmbSkills.getSelectionModel().getSelectedItem();
+	}
+	
+	
+	/**
+	 * Get the phase duration
+	 * @return the duration
+	 */
+	public String getPhaseDuration(){
+		return txtDuration.getText();
 	}
 }

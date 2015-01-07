@@ -2,6 +2,7 @@ package client.view.components;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,6 +11,7 @@ import javafx.scene.layout.AnchorPane;
 import model.project.Skill;
 import client.core.Core;
 import client.core.ICoreClient;
+import client.view.IComponents;
 
 /**
  * This class represents the tab where the resources are entered
@@ -17,7 +19,7 @@ import client.core.ICoreClient;
  * @author Ammon
  *
  */
-public class ResourceTab extends AnchorPane {
+public class ResourceTab extends AnchorPane implements IComponents {
 	
 	private ICoreClient core;
 	
@@ -117,5 +119,37 @@ public class ResourceTab extends AnchorPane {
 			accSkillList.setDisable(true);
 		else
 			accSkillList.setDisable(false);
+	}
+
+
+	
+	@Override
+	public ArrayList<SkillPane> getSkillPanes() {
+		return null;
+	}
+
+	@Override
+	public ArrayList<ResourcePaneWrapper> getResourcePanes() {
+		return wrapperPanes;
+	}
+
+	@Override
+	public Hashtable<PhasePaneWrapper, ArrayList<PhasePaneWrapper>> getPhasePanes() {
+		return null;
+	}
+
+	@Override
+	public String getProjectName() {
+		return null;
+	}
+
+	@Override
+	public String getProjectResponsible() {
+		return null;
+	}
+
+	@Override
+	public String getProjectDescription() {
+		return null;
 	}
 }
