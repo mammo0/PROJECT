@@ -112,7 +112,7 @@ public class Core extends ASingelton implements ICoreServer {
 
 
 	@Override
-	public String[] getAllProjects() {
+	public String[] getAllProjectNames() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -120,7 +120,7 @@ public class Core extends ASingelton implements ICoreServer {
 
 	@Override
 	public Project calculateProject(Project project) {
-		// TODO Auto-generated method stub
+		System.out.println();
 		return null;
 	}
 	
@@ -141,5 +141,19 @@ public class Core extends ASingelton implements ICoreServer {
 	      e.printStackTrace();
 	    }
 	  }
+
+
+	@Override
+	public void saveProject(Project project) throws RemoteException {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public Project loadProject(String projectName) throws RemoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	}
 	

@@ -1,11 +1,13 @@
 package model.project;
 
+import java.io.Serializable;
+
 /**
  * This class represents a year
  * @author Ammon
  *
  */
-public class Year {
+public class Year implements Serializable {
 	// the date
 	private int yearDate;
 	

@@ -19,7 +19,7 @@ public interface IServerService extends Remote{
 	 * @return all project names
 	 * @throws RemoteException 
 	 */
-	public String[] getAllProjects() throws RemoteException;
+	public String[] getAllProjectNames() throws RemoteException;
 	
 	/**
 	 * This method calculates the costs and people days for a project
@@ -28,4 +28,19 @@ public interface IServerService extends Remote{
 	 * @throws RemoteException 
 	 */
 	public Project calculateProject(Project project) throws RemoteException;
+	
+	/**
+	 * This method saves the project to a XML file
+	 * @param project the project to be saved
+	 * @throws RemoteException
+	 */
+	public void saveProject(Project project) throws RemoteException;
+	
+	/**
+	 * This method loads a project from a XML file
+	 * @param projectName the name of the project
+	 * @return the project
+	 * @throws RemoteException
+	 */
+	public Project loadProject(String projectName) throws RemoteException;
 }

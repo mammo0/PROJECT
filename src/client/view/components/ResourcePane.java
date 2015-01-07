@@ -76,8 +76,12 @@ public class ResourcePane extends AnchorPane {
 	 * Get the availability of a resource
 	 * @return the availability
 	 */
-	public String getAvailability(){
-		return txtAvailability.getText();
+	public int getAvailability(){
+		try{
+			return Integer.valueOf(txtAvailability.getText());
+		}catch (Exception e){
+			return -1;
+		}
 	}
 	
 	/**

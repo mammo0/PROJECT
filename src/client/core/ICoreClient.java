@@ -20,4 +20,10 @@ public interface ICoreClient {
 	 * @return the skills
 	 */
 	public ArrayList<Skill> getSkills();
+	
+	
+	/**
+	 * Calculate the project object
+	 */
+	public void calculateProject();
 }

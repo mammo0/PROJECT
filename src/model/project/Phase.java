@@ -1,6 +1,7 @@
 package model.project;
 
-import java.util.Date;
+import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Hashtable;
 
 /**
@@ -8,7 +9,7 @@ import java.util.Hashtable;
  * @author Ammon
  *
  */
-public class Phase {
+public class Phase implements Serializable {
 	// the name of the phase
 	private String phaseName;
 	
@@ -16,16 +17,25 @@ public class Phase {
 	private Phase parent = null;
 	
 	// the start date of the phase
-	private Date startDate;
+	private LocalDate startDate;
 	
 	// the end date of the phase
-	private Date endDate;
+	private LocalDate endDate;
 	
 	// the risk factor for the phase
 	private int riskFactor;
 	
-	// the required skills of the phase with the required amount
+	// the required skills of the phase with the required duration
 	private Hashtable<Integer, Integer> skills;
+	
+	
+	
+	/**
+	 * Constructor
+	 */
+	public Phase(){
+		skills = new Hashtable<Integer, Integer>();
+	}
 
 	
 	
@@ -49,7 +59,7 @@ public class Phase {
 	 * Get the starting date of the phase
 	 * @return the startDate
 	 */
-	public Date getStartDate() {
+	public LocalDate getStartDate() {
 		return startDate;
 	}
 
@@ -57,7 +67,7 @@ public class Phase {
 	 * Get the ending date of the phase
 	 * @return the endDate
 	 */
-	public Date getEndDate() {
+	public LocalDate getEndDate() {
 		return endDate;
 	}
 
@@ -70,7 +80,7 @@ public class Phase {
 	}
 
 	/**
-	 * Get the skills required by this phase with their number
+	 * Get the skills required by this phase with their duration
 	 * @return the skills
 	 */
 	public Hashtable<Integer, Integer> getSkills() {
@@ -97,7 +107,7 @@ public class Phase {
 	 * Set the starting date of the phase
 	 * @param startDate the startDate to set
 	 */
-	public void setStartDate(Date startDate) {
+	public void setStartDate(LocalDate startDate) {
 		this.startDate = startDate;
 	}
 
@@ -105,7 +115,7 @@ public class Phase {
 	 * Set the ending date of the phase
 	 * @param endDate the endDate to set
 	 */
-	public void setEndDate(Date endDate) {
+	public void setEndDate(LocalDate endDate) {
 		this.endDate = endDate;
 	}
 
@@ -118,7 +128,7 @@ public class Phase {
 	}
 
 	/**
-	 * Add a new skill to the phase with its amount
+	 * Add a new skill to the phase with its duration
 	 * @param amount the amount of that skill
 	 * @param skill the skill
 	 */

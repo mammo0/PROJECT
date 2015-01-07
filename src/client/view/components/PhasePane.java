@@ -110,11 +110,17 @@ public class PhasePane extends AnchorPane {
 	
 	
 	/**
-	 * Get the selected Skill for this phase
-	 * @return the selected skill
+	 * Get the selected skill id for this phase
+	 * @return the selected skill id
 	 */
-	public String getPhaseSkill(){
-		return cmbSkills.getSelectionModel().getSelectedItem();
+	public int getPhaseSkill(){
+		for(Skill skill : core.getSkills()){
+			if(skill.getSkillName().equals(cmbSkills.getSelectionModel().getSelectedItem())){
+				return skill.getSkillID();
+			}
+		}
+		
+		return -1;
 	}
 	
 	
@@ -122,7 +128,11 @@ public class PhasePane extends AnchorPane {
 	 * Get the phase duration
 	 * @return the duration
 	 */
-	public String getPhaseDuration(){
-		return txtDuration.getText();
+	public int getPhaseDuration(){
+		try{
+			return Integer.valueOf(txtDuration.getText());
+		}catch (Exception e){
+			return -1;
+		}
 	}
 }

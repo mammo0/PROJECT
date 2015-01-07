@@ -116,11 +116,21 @@ public class PhasePaneWrapper extends TitledPane {
 	}
 	
 	
+	
+	/**
+	 * Get the phase name
+	 * @return the phase name
+	 */
+	public String getPhaseName(){
+		return phaseName.getText();
+	}
+	
+	
 	/**
 	 * Get the project begin date
 	 * @return the begin date
 	 */
-	public LocalDate getProjectBegin(){
+	public LocalDate getPhaseBegin(){
 		return datProjectBegin.getValue();
 	}
 	
@@ -129,7 +139,7 @@ public class PhasePaneWrapper extends TitledPane {
 	 * Get the project end date
 	 * @return the end date
 	 */
-	public LocalDate getProjectEnd(){
+	public LocalDate getPhaseEnd(){
 		return datProjectEnd.getValue();
 	}
 	

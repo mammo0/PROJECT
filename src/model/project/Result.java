@@ -1,5 +1,6 @@
 package model.project;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 
 /**
@@ -7,7 +8,7 @@ import java.util.ArrayList;
  * @author Ammon
  *
  */
-public class Result {
+public class Result implements Serializable {
 	// the internal people days
 	private int pdInt;
 	// the external people days

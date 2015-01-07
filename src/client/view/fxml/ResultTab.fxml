@@ -11,21 +11,6 @@
          <children>
             <TabPane layoutX="14.0" layoutY="14.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="111.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="14.0" VBox.vgrow="ALWAYS">
               <tabs>
-                <Tab text="Kosten (€/PT)">
-                     <content>
-                        <TableView>
-                          <columns>
-                            <TableColumn maxWidth="100000.0" minWidth="200.0" prefWidth="200.0" text="Kompetenz" />
-                            <TableColumn maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Gesamt" />
-                              <TableColumn maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Intern" />
-                              <TableColumn maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Extern" />
-                          </columns>
-                           <columnResizePolicy>
-                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                           </columnResizePolicy>
-                        </TableView>
-                     </content>
-                  </Tab>
                 <Tab text="Aufwand (PT)">
                      <content>
                         <TableView>
@@ -35,6 +20,21 @@
                               <TableColumn maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Ist-Gesamt" />
                               <TableColumn maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Ist-Intern" />
                               <TableColumn maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Ist-Extern" />
+                          </columns>
+                           <columnResizePolicy>
+                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                           </columnResizePolicy>
+                        </TableView>
+                     </content>
+                  </Tab>
+                <Tab text="Kosten (€/PT)">
+                     <content>
+                        <TableView>
+                          <columns>
+                            <TableColumn maxWidth="100000.0" minWidth="200.0" prefWidth="200.0" text="Kompetenz" />
+                            <TableColumn maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Gesamt" />
+                              <TableColumn maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Intern" />
+                              <TableColumn maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Extern" />
                           </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

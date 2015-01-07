@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.layout.AnchorPane;
 import client.core.Core;
 import client.core.ICoreClient;
@@ -34,7 +35,7 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 	private ProjectEditor projectEditor;
 	
 	@FXML
-	private AnchorPane editorPane; 
+	private AnchorPane editorPane;
 	
 	
 	/**
@@ -57,6 +58,12 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 		AnchorPane.setBottomAnchor(projectEditor, 0d);
 		AnchorPane.setRightAnchor(projectEditor, 0d);
 		AnchorPane.setLeftAnchor(projectEditor, 0d);
+	}
+	
+	
+	@FXML
+	private void calculateProject(){
+		core.calculateProject();
 	}
 
 	

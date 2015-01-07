@@ -264,7 +264,7 @@ public class PhaseTab extends ScrollPane implements IComponents {
 		Hashtable<PhasePaneWrapper, ArrayList<PhasePaneWrapper>> panes = new Hashtable<PhasePaneWrapper, ArrayList<PhasePaneWrapper>>();
 		for(PhasePaneWrapper pane : mainPhases){
 			if(!subPhases.containsKey(pane))
-				panes.put(pane, null);
+				panes.put(pane, new ArrayList<PhasePaneWrapper>());
 		}
 		
 		Enumeration<PhasePaneWrapper> enumKey = subPhases.keys();

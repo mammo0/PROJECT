@@ -1,11 +1,13 @@
 package model.project;
 
+import java.io.Serializable;
+
 /**
  * This class represents a quarter in a year
  * @author Ammon
  *
  */
-public class Quarter {
+public class Quarter implements Serializable {
 	// the internal costs
 	private float costInt;
 	// the external costs

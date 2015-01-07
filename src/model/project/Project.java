@@ -1,5 +1,6 @@
 package model.project;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -9,7 +10,7 @@ import java.util.Date;
  * @author Ammon
  *
  */
-public class Project {
+public class Project implements Serializable {
 	// the name of the project
 	private String projectName;
 	
@@ -18,6 +19,9 @@ public class Project {
 	
 	// a short description of the project
 	private String description;
+	
+	// final saving of the project
+	private boolean finished;
 	
 	// a list of the containing phases
 	private ArrayList<Phase> phases;
@@ -39,6 +43,17 @@ public class Project {
 	
 	// the result of the project calculation without the risk factor
 	private Result resultWRisk;
+	
+	
+	
+	/**
+	 * Constructor
+	 */
+	public Project(){
+		phases = new ArrayList<Phase>();
+		skills = new ArrayList<Skill>();
+		resources = new ArrayList<Resource>();
+	}
 
 	
 
@@ -64,6 +79,14 @@ public class Project {
 	 */
 	public String getDescription() {
 		return description;
+	}
+	
+	/**
+	 * Get the final state of the project
+	 * @return the finished
+	 */
+	public boolean isFinished(){
+		return finished;
 	}
 
 	/**
@@ -144,6 +167,14 @@ public class Project {
 	 */
 	public void setDescription(String description) {
 		this.description = description;
+	}
+	
+	/**
+	 * Mark the project as finished
+	 * @param finished
+	 */
+	public void setFinished(boolean finished){
+		this.finished = finished;
 	}
 
 	/**

@@ -1,11 +1,13 @@
 package model.project;
 
+import java.io.Serializable;
+
 /**
  * This class represents a resource of the project
  * @author Ammon
  *
  */
-public class Resource {
+public class Resource implements Serializable{
 	// the name of the resource
 	private String resourceName;
 	

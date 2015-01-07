@@ -1,11 +1,13 @@
 package model.project;
 
+import java.io.Serializable;
+
 /**
  * This class describes an available skill
  * @author Ammon
  *
  */
-public class Skill {
+public class Skill implements Serializable {
 	// the name of the skill
 	private String skillName;
 	
