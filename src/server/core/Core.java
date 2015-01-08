@@ -9,9 +9,11 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
+import java.time.LocalDate;
 
 import javax.xml.stream.XMLStreamException;
 
+import client.view.components.PhasePaneWrapper;
 import model.project.Phase;
 import model.project.Project;
 import server.view.View;
@@ -31,7 +33,7 @@ public class Core extends ASingelton implements ICoreServer {
 	private IServerService server;
 	private int serverPort;
 	private String rmiUrl;
-	
+	private Project project;
 	
 	
 	@Override
@@ -120,12 +122,33 @@ public class Core extends ASingelton implements ICoreServer {
 
 	@Override
 	public Project calculateProject(Project project) {
-		System.out.println();
+		this.project = project;
+		calculateLenght(project);
 		return null;
 	}
 	
 	public Phase calculatePhase (Phase phase) {
 		return null;
+	}
+	
+	//calculate the length og the complete Project
+	public void calculateLenght(Project project){
+	
+	LocalDate startdate = null;
+	LocalDate enddate = null;
+	for( Phase phases  : project.getPhases()){
+		 
+		if(startdate == null || startdate.compareTo(phases.getStartDate())>0){
+			
+		startdate = phases.getStartDate();
+			}
+		
+		if(enddate == null || enddate.compareTo(phases.getEndDate())<0){
+			enddate = phases.getEndDate();
+		}
+	}
+	project.setStartDate(startdate);
+	project.setEndDate(enddate);
 	}
 	
 	public void writeProject (Project project) throws FileNotFoundException, XMLStreamException{

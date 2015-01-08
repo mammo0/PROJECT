@@ -1,6 +1,7 @@
 package model.project;
 
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -33,10 +34,10 @@ public class Project implements Serializable {
 	private ArrayList<Resource> resources;
 	
 	// the project starting date
-	private Date startDate;
+	private LocalDate startDate;
 	
 	// the project end Date
-	private Date endDate;
+	private LocalDate endDate;
 	
 	// the result of the project calculation including the risk factor
 	private Result resultRisk;
@@ -117,7 +118,7 @@ public class Project implements Serializable {
 	 * Get the starting date of the project
 	 * @return the startDate
 	 */
-	public Date getStartDate() {
+	public LocalDate getStartDate() {
 		return startDate;
 	}
 
@@ -125,7 +126,7 @@ public class Project implements Serializable {
 	 * Get the ending date of the project
 	 * @return the endDate
 	 */
-	public Date getEndDate() {
+	public LocalDate getEndDate() {
 		return endDate;
 	}
 	
@@ -181,7 +182,7 @@ public class Project implements Serializable {
 	 * Set the starting date of the project
 	 * @param startDate the startDate to set
 	 */
-	public void setStartDate(Date startDate) {
+	public void setStartDate(LocalDate startDate) {
 		this.startDate = startDate;
 	}
 
@@ -189,7 +190,7 @@ public class Project implements Serializable {
 	 * Set the ending date of the project
 	 * @param endDate the endDate to set
 	 */
-	public void setEndDate(Date endDate) {
+	public void setEndDate(LocalDate endDate) {
 		this.endDate = endDate;
 	}
 	
