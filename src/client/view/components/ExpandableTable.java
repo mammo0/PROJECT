@@ -1,11 +1,10 @@
 package client.view.components;
 
-import global.IExpandableNode;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
 
+import client.view.IExpandableNode;
 import javafx.event.ActionEvent;
 import javafx.geometry.HPos;
 import javafx.scene.Node;

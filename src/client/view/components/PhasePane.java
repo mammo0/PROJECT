@@ -1,13 +1,14 @@
 package client.view.components;
 
-import global.IExpandableNode;
-
 import java.io.IOException;
 import java.util.ArrayList;
 
 import model.project.Skill;
 import client.core.Core;
 import client.core.ICoreClient;
+import client.view.IExpandableNode;
+import client.view.ITester;
+import client.view.InputTester;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,7 +19,7 @@ import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 
-public class PhasePane extends AnchorPane implements IExpandableNode {
+public class PhasePane extends AnchorPane implements IExpandableNode, ITester {
 	
 	@FXML
 	private ComboBox<String> cmbSkills;
@@ -61,6 +62,9 @@ public class PhasePane extends AnchorPane implements IExpandableNode {
 		
 		// set the skill collection as data source to the combo box
 		cmbSkills.setItems(skills);
+		
+		// add an input tester to the text field
+		txtDuration.textProperty().addListener(new InputTester(this, txtDuration));
 	}
 	
 	
@@ -82,6 +86,27 @@ public class PhasePane extends AnchorPane implements IExpandableNode {
 		}
 		
 		return false;
+	}
+	
+	
+	
+	@Override
+	public boolean checkInput(Node node) {
+		if(node.equals(txtDuration)){
+			if(txtDuration.getText().isEmpty())
+				return true;
+			
+			try{
+				int input = Integer.valueOf(txtDuration.getText());
+				if(input < 0)
+					return false;
+				else
+					return true;
+			}catch (Exception e){
+				return false;
+			}
+		}else
+			return false;
 	}
 	
 	

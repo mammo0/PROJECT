@@ -1,4 +1,4 @@
-package global;
+package client.view;
 
 import javafx.scene.Node;
 

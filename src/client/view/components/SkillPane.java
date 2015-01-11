@@ -1,16 +1,15 @@
 package client.view.components;
 
-import global.IExpandableNode;
-
 import java.io.IOException;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import client.view.IExpandableNode;
+import client.view.ITester;
+import client.view.InputTester;
 
 /**
  * This class is the input mask of the skills
@@ -18,7 +17,7 @@ import javafx.scene.layout.AnchorPane;
  * @author Ammon
  *
  */
-public class SkillPane extends AnchorPane implements IExpandableNode {
+public class SkillPane extends AnchorPane implements IExpandableNode, ITester {
 	
 	@FXML
 	private TextField skillName;
@@ -32,39 +31,22 @@ public class SkillPane extends AnchorPane implements IExpandableNode {
 	 * The constructor
 	 */
 	public SkillPane() { 
-	     FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/client/view/fxml/SkillPane.fxml"));
-	     
-	     // apply this class as root and controller
-	     fxmlLoader.setRoot(this);
-	     fxmlLoader.setController(this);
-	     
-	     // load the fxml
-	     try {
-	    	 fxmlLoader.load();
-	     } catch (IOException e) { 
-	         e.printStackTrace();
-	     }
-	     
-	     dayRateInt.focusedProperty().addListener(new ChangeListener<Boolean>(){
-		     @Override
-		     public void changed(ObservableValue<? extends Boolean> arg0, Boolean oldPropertyValue, Boolean newPropertyValue){
-		    	 if (newPropertyValue){
-		             System.out.println("Textfield on focus");
-		         }
-		         else{
-		        	BlockableButton.setBlocked(false);
-		        	float rate = castStringToFloat(dayRateInt.getText());
-					if(Float.isNaN(rate) && !dayRateInt.getText().isEmpty()){
-						BlockableButton.setBlocked(true);
-						dayRateInt.setStyle("{-fx-focus-color: red; -fx-background-color: red}");
-						dayRateInt.requestFocus();
-					}else{
-						dayRateInt.setStyle("{-fx-focus-color: #0093ff; -fx-background-color: white}");
-					}
-		            System.out.println("Textfield out focus");
-		         }
-		     }
-		 });
+	    FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/client/view/fxml/SkillPane.fxml"));
+	    
+	    // apply this class as root and controller
+	    fxmlLoader.setRoot(this);
+	    fxmlLoader.setController(this);
+	    
+	    // load the fxml
+	    try {
+	    	fxmlLoader.load();
+	    } catch (IOException e) { 
+	        e.printStackTrace();
+	    }
+	    
+	    // add an input tester to the text fields
+	    dayRateInt.textProperty().addListener(new InputTester(this, dayRateInt));
+	    dayRateExt.textProperty().addListener(new InputTester(this, dayRateExt));
     }
 	
 	// This method casts a String to a float
@@ -108,4 +90,17 @@ public class SkillPane extends AnchorPane implements IExpandableNode {
 
 	@Override
 	public void removeNode() {}
+
+	@Override
+	public boolean checkInput(Node node) {
+		if(node.equals(dayRateInt) || node.equals(dayRateExt)){
+			TextField txtField = (TextField) node;
+			float rate = castStringToFloat(txtField.getText());
+			if(Float.isNaN(rate) && !txtField.getText().isEmpty())
+				return false;
+			else
+				return true;
+		}else
+			return false;
+	}
 }

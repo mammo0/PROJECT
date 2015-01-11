@@ -8,6 +8,7 @@ import java.util.Hashtable;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -28,6 +29,8 @@ public class View extends ASingelton implements IViewClient {
 	
 	private ViewController viewController;
 	
+	private Node viewRootPane;
+	
 	
 	/**
 	 * Constructor
@@ -41,12 +44,22 @@ public class View extends ASingelton implements IViewClient {
 		this.viewController = viewController;
 	}
 	
+	// this method sets the root pane of the view
+	private void setViewRootPane(Node viewRootPane){
+		this.viewRootPane = viewRootPane;
+	}
+	
+	@Override
+	public Node getViewRootPane() {
+		return viewRootPane;
+	}
 	
 	
 	@Override
 	public void showFrame(){
 		Application.launch(Frame.class, "");
 	}
+	
 	
 	
 	/**
@@ -75,6 +88,7 @@ public class View extends ASingelton implements IViewClient {
 	            stage.setScene(new Scene(root));
 	            stage.show();
 	            view.setViewController(ViewController.getInstance(ViewController.class));
+	            view.setViewRootPane(root);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

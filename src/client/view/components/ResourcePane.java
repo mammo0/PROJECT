@@ -1,9 +1,10 @@
 package client.view.components;
 
-import global.IExpandableNode;
-
 import java.io.IOException;
 
+import client.view.IExpandableNode;
+import client.view.ITester;
+import client.view.InputTester;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -17,7 +18,7 @@ import javafx.scene.layout.AnchorPane;
  * @author Ammon
  *
  */
-public class ResourcePane extends AnchorPane implements IExpandableNode {
+public class ResourcePane extends AnchorPane implements IExpandableNode, ITester {
 	
 	@FXML
 	private TextField txtResourceName;
@@ -51,6 +52,33 @@ public class ResourcePane extends AnchorPane implements IExpandableNode {
 		// finalize the choice box
 		cmbIntExt.getItems().addAll("Intern","Extern");
 		cmbIntExt.getSelectionModel().selectFirst();
+		
+		// add an input tester to the text fields
+		txtAvailability.textProperty().addListener(new InputTester(this, txtAvailability));
+		txtSkillAmount.textProperty().addListener(new InputTester(this, txtSkillAmount));
+	}
+	
+	
+	@Override
+	public boolean checkInput(Node node) {
+		if(node.equals(txtAvailability) || node.equals(txtSkillAmount)){
+			TextField txtField = (TextField) node;
+			if(txtField.getText().isEmpty())
+				return true;
+			
+			try{
+				int input = Integer.valueOf(txtField.getText());
+				if(input < 0)
+					return false;
+				else if(input > 100 && node.equals(txtAvailability))
+					return false;
+				else
+					return true;
+			}catch (Exception e){
+				return false;
+			}
+		}else
+			return false;
 	}
 	
 	
@@ -104,9 +132,6 @@ public class ResourcePane extends AnchorPane implements IExpandableNode {
 
 	@Override
 	public void setParentNode(Node parent) {}
-
-
-
 
 	@Override
 	public void removeNode() {}

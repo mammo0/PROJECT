@@ -6,13 +6,18 @@ import java.util.ArrayList;
 
 import client.core.Core;
 import client.core.ICoreClient;
+import client.view.ITester;
+import client.view.InputTester;
 import model.project.Skill;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.HPos;
 import javafx.geometry.Insets;
 import javafx.geometry.VPos;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
@@ -21,7 +26,7 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
 
-public class PhasePaneWrapper extends TitledPane {
+public class PhasePaneWrapper extends TitledPane implements ITester {
 	
 	@FXML
 	private DatePicker datProjectBegin;
@@ -107,6 +112,27 @@ public class PhasePaneWrapper extends TitledPane {
 		AnchorPane.setBottomAnchor(phaseTable, 0d);
 		AnchorPane.setRightAnchor(phaseTable, 0d);
 		AnchorPane.setLeftAnchor(phaseTable, 0d);
+		
+		// check that the dates are correct
+		datProjectBegin.valueProperty().addListener(new ChangeListener<LocalDate>(){
+			@Override
+			public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
+				if(newValue != null && (getPhaseEnd() == null || getPhaseEnd().isBefore(newValue)))
+					datProjectEnd.setValue(newValue);
+			}
+		});
+		datProjectEnd.valueProperty().addListener(new ChangeListener<LocalDate>(){
+			@Override
+			public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
+				if(getPhaseBegin() == null)
+					datProjectBegin.setValue(newValue);
+				else if(newValue != null && newValue.isBefore(getPhaseBegin()))
+					datProjectEnd.setValue(getPhaseBegin());
+			}
+		});
+		
+		// add an input tester to the text field
+		txtRiskFactor.textProperty().addListener(new InputTester(this, txtRiskFactor));
 	}
 	
 	
@@ -115,6 +141,27 @@ public class PhasePaneWrapper extends TitledPane {
 			parent.removeSubPhase(this);
 		else
 			parent.removeMainPhase(this);
+	}
+	
+	
+	
+	@Override
+	public boolean checkInput(Node node) {
+		if(node.equals(txtRiskFactor)){
+			if(txtRiskFactor.getText().isEmpty())
+				return true;
+			
+			try{
+				int input = Integer.valueOf(txtRiskFactor.getText());
+				if(input < 0)
+					return false;
+				else
+					return true;
+			}catch (Exception e){
+				return false;
+			}
+		}else
+			return false;
 	}
 	
 	
