@@ -9,45 +9,45 @@ import java.util.ArrayList;
  *
  */
 public class Result implements Serializable {
-	// the internal people days
+	
+	// the total people days 
 	private int pdInt;
-	// the external people days
+	// the total people Ext days 
 	private int pdExt;
 	// the total people days that should be there
 	private int pdTotalShould;
 	// the total people days that are there
 	private int pdTotalBe;
+	// the total people days that are there extern 
+	private int pdTotalBeExt;
 	// the difference between the should and be people days
 	private int pdTotalDiff;
-	
-	// the internal costs
+	//the difference between the should and the ext people days
+	private int Puffer;
+	// the internal cost;
 	private float costInt;
 	// the external costs
 	private float costExt;
 	// the total costs
 	private float costTotal;
-	
 	// the results for every single year of the project duration
 	private ArrayList<Year> years;
 	
+	public Result(){
+		years = new ArrayList<Year>();
+	}
 	
-
-	/**
-	 * Get the internal people days
-	 * @return the pdInt
-	 */
+	public int getPuffer() {
+		return Puffer;
+	}
+	
 	public int getPdInt() {
 		return pdInt;
 	}
 	
-	/**
-	 * Get the external people days
-	 * @return the pdExt
-	 */
 	public int getPdExt() {
 		return pdExt;
 	}
-	
 	/**
 	 * Get the difference of the should and be people days
 	 * @return the pdTotalDiff
@@ -55,7 +55,14 @@ public class Result implements Serializable {
 	public int getPdTotal() {
 		return pdTotalDiff;
 	}
-	
+
+	/**
+	 * Get the total external days
+	 * @return the pdTotalBeExt
+	 */
+	public int getPdTotalBeExt() {
+		return pdTotalBeExt;
+	}
 	/**
 	 * Get the total people days that should be there
 	 * @return the pdTotalShould
@@ -104,20 +111,15 @@ public class Result implements Serializable {
 		return years;
 	}
 	
+	public void setPuffer(int puffer) {
+		Puffer = puffer;
+	}
 	
-	
-	/**
-	 * Set the internal people days
-	 * @param pdInt the pdInt to set
-	 */
 	public void setPdInt(int pdInt) {
 		this.pdInt = pdInt;
 	}
 	
-	/**
-	 * Set the external people days
-	 * @param pdExt the pdExt to set
-	 */
+	
 	public void setPdExt(int pdExt) {
 		this.pdExt = pdExt;
 	}
@@ -128,6 +130,14 @@ public class Result implements Serializable {
 	 */
 	public void setPdTotal(int pdTotalDiff) {
 		this.pdTotalDiff = pdTotalDiff;
+	}
+
+	/**
+	 * Set the total externaldays
+	 * @param pdTotalBeExt the ppdTotalBeExt to set
+	 */
+	public void setPdTotalBeExt(int pdTotalBeExt) {
+		this.pdTotalBeExt = pdTotalBeExt;
 	}
 	
 	/**
