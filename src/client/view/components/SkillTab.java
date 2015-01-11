@@ -42,7 +42,7 @@ public class SkillTab extends AnchorPane implements IComponents {
 		}
 		
 		// initialize the expandable table and add it to the anchor pane
-		skillTable = new ExpandableTable<SkillPane>(SkillPane.class);
+		skillTable = new ExpandableTable<SkillPane>(SkillPane.class, this);
 		ancSkillList.getChildren().add(skillTable);
 		AnchorPane.setTopAnchor(skillTable, 0d);
 		AnchorPane.setBottomAnchor(skillTable, 0d);

@@ -1,9 +1,12 @@
 package client.view.components;
 
+import global.IExpandableNode;
+
 import java.io.IOException;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -14,7 +17,7 @@ import javafx.scene.layout.AnchorPane;
  * @author Ammon
  *
  */
-public class ResourcePane extends AnchorPane {
+public class ResourcePane extends AnchorPane implements IExpandableNode {
 	
 	@FXML
 	private TextField txtResourceName;
@@ -95,4 +98,16 @@ public class ResourcePane extends AnchorPane {
 			return -1;
 		}
 	}
+
+
+
+
+	@Override
+	public void setParentNode(Node parent) {}
+
+
+
+
+	@Override
+	public void removeNode() {}
 }

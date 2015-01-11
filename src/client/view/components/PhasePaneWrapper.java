@@ -4,6 +4,9 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
+import client.core.Core;
+import client.core.ICoreClient;
+import model.project.Skill;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -37,6 +40,11 @@ public class PhasePaneWrapper extends TitledPane {
 	
 	private boolean subPhase;
 	
+	private ArrayList<String> availableSkills;
+	private ArrayList<String> skillsInUse;
+	
+	private ICoreClient core;
+	
 	
 	/**
 	 * The Constructor
@@ -63,6 +71,11 @@ public class PhasePaneWrapper extends TitledPane {
 		this.parent = parent;
 		this.subPhase = subPhase;
 		
+		availableSkills = new ArrayList<String>();
+		skillsInUse = new ArrayList<String>();
+		
+		core = Core.getInstance(Core.class);
+		
 		// build the titled pane header
 		phaseName = new TextField();
 		phaseName.setPromptText("Phasenname");
@@ -88,7 +101,7 @@ public class PhasePaneWrapper extends TitledPane {
 		
 		
 		// initialize the expandable table and add it to the anchor pane
-		phaseTable = new ExpandableTable<PhasePane>(PhasePane.class);
+		phaseTable = new ExpandableTable<PhasePane>(PhasePane.class, this);
 		ancPhaseList.getChildren().add(phaseTable);
 		AnchorPane.setTopAnchor(phaseTable, 0d);
 		AnchorPane.setBottomAnchor(phaseTable, 0d);
@@ -113,6 +126,41 @@ public class PhasePaneWrapper extends TitledPane {
 		for(PhasePane pane : phaseTable.getContents()){
 			pane.updateCmbSkills();
 		}
+	}
+	
+	
+	/**
+	 * Get all available skills
+	 * @return the available skills
+	 */
+	public ArrayList<String> getAvailableSkills(){
+		availableSkills.clear();
+		
+		ArrayList<Skill> skills = core.getSkills();
+		for(Skill skill : skills){
+			if(!skillsInUse.contains(skill.getSkillName()))
+				availableSkills.add(skill.getSkillName());
+		}
+		
+		return availableSkills;
+	}
+	
+	
+	/**
+	 * Add a skill to the in use list
+	 * @param skillName the name of the skill
+	 */
+	public void addSkillInUse(String skillName){
+		skillsInUse.add(skillName);
+	}
+	
+	/**
+	 * Remove a skill from the in use list
+	 * @param skillName the name of the skill
+	 */
+	public void removeSkillInUse(String skillName){
+		if(skillsInUse.contains(skillName))
+			skillsInUse.remove(skillName);
 	}
 	
 	

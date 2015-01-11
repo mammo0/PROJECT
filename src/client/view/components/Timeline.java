@@ -2,12 +2,14 @@ package client.view.components;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Hashtable;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.ScrollPane;
+import javafx.scene.control.ToggleButton;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
@@ -25,6 +27,10 @@ public class Timeline extends ScrollPane {
 	
 	@FXML
 	private StackPane stkTimeline;
+	
+	private Hashtable<Integer, ArrayList<ToggleButton>> quarterPanes;
+	
+	
 	
 	/**
 	 * The Constructor
@@ -44,10 +50,11 @@ public class Timeline extends ScrollPane {
 		    e.printStackTrace();
 		}
 		
+		quarterPanes = new Hashtable<Integer, ArrayList<ToggleButton>>();
 		
 		AnchorPane time = buildTimeline(yearBeginn, beginnQuarter, yearEnd, endQuarter);
-		this.setMinHeight(time.minHeight(0d));
-		this.setMaxHeight(time.minHeight(0d));
+		this.setMinHeight(110d);
+		this.setMaxHeight(time.maxHeight(0d));
 		stkTimeline.getChildren().add(time);
 	}
 	
@@ -62,19 +69,19 @@ public class Timeline extends ScrollPane {
 			ArrayList<AnchorPane> quarters = new ArrayList<AnchorPane>();
 			if(i==yearBeginn && i== yearEnd){
 				for(int j=beginnQuarter;j<=endQuarter;j++){
-					quarters.add(buildQuarter(j));
+					quarters.add(buildQuarter(j,i));
 				}
 			}else if(i==yearEnd){
 				for(int j=1;j<=endQuarter;j++){
-					quarters.add(buildQuarter(j));
+					quarters.add(buildQuarter(j,i));
 				}
 			}else if(i==yearBeginn){
 				for(int j=beginnQuarter;j<=4;j++){
-					quarters.add(buildQuarter(j));
+					quarters.add(buildQuarter(j,i));
 				}
 			}else{
 				for(int j=1;j<=4;j++){
-					quarters.add(buildQuarter(j));
+					quarters.add(buildQuarter(j,i));
 				}
 			}
 			
@@ -83,8 +90,6 @@ public class Timeline extends ScrollPane {
 				year.setStyle("-fx-border-color: transparent black transparent transparent;");
 			pane.getChildren().add(year);
 		}
-		
-		
 		
 		timeline.getChildren().add(pane);
 		timeline.setMaxWidth(pane.minWidth(0d));
@@ -101,13 +106,15 @@ public class Timeline extends ScrollPane {
 	private AnchorPane buildYear(int yearNumber, AnchorPane... quarters){
 		AnchorPane year = new AnchorPane();
 		year.setMinWidth(50d*quarters.length);
+		year.setMaxWidth(50d*quarters.length);
 		year.setStyle("-fx-border-color: transparent transparent transparent transparent;");
 		
 		VBox pane = new VBox();
 		StackPane yearPane = new StackPane();
-		Label yearTitle = new Label(String.valueOf(yearNumber));
-		yearTitle.setFont(Font.font("", FontWeight.BOLD, 17.5));
-		yearPane.getChildren().add(yearTitle);
+		Button btnYear = new Button(String.valueOf(yearNumber));
+		btnYear.setFont(Font.font("", FontWeight.BOLD, 17.5));
+		btnYear.setOnAction(this::btnYearClick);
+		yearPane.getChildren().add(btnYear);
 		pane.getChildren().add(yearPane);
 		
 		HBox quarterPane = new HBox();
@@ -128,10 +135,10 @@ public class Timeline extends ScrollPane {
 	
 	
 	// this method builds a single quarter element of the time line
-	private AnchorPane buildQuarter(int quarterNumber){
+	private AnchorPane buildQuarter(int quarterNumber, int yearNumber){
 		AnchorPane quarter = new AnchorPane();
 		quarter.setMinWidth(50d);
-		quarter.setMinHeight(85d);
+		quarter.setMaxHeight(110d);
 		
 		VBox pane = new VBox();
 		
@@ -149,7 +156,14 @@ public class Timeline extends ScrollPane {
 		pane.getChildren().add(linePane);
 		
 		StackPane buttonPane = new StackPane();
-		Button btnQuarter = new Button("Q"+quarterNumber);
+		ToggleButton btnQuarter = new ToggleButton("Q"+quarterNumber);
+		if(quarterPanes.get(yearNumber) == null){
+			ArrayList<ToggleButton> buttons = new ArrayList<ToggleButton>();
+			quarterPanes.put(yearNumber, buttons);
+		}
+		ArrayList<ToggleButton> buttons = quarterPanes.get(yearNumber);
+		buttons.add(btnQuarter);
+		quarterPanes.put(yearNumber, buttons);
 		buttonPane.getChildren().add(btnQuarter);
 		pane.getChildren().add(buttonPane);
 		
@@ -160,5 +174,25 @@ public class Timeline extends ScrollPane {
 		AnchorPane.setLeftAnchor(pane, 0d);
 		
 		return quarter;
+	}
+	
+	
+	
+	// this method 
+	private void btnYearClick(ActionEvent event){
+		ArrayList<ToggleButton> buttons = quarterPanes.get(Integer.valueOf(((Button)event.getSource()).getText()));
+		
+		boolean allSelected = true;
+		for(ToggleButton button : buttons){
+			if(!button.isSelected())
+				allSelected = false;
+		}
+		
+		for(ToggleButton button : buttons){
+			if(allSelected)
+				button.setSelected(false);
+			else
+				button.setSelected(true);
+		}
 	}
 }

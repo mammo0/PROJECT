@@ -45,7 +45,7 @@ public class Core extends ASingelton implements ICoreClient {
 		try {
 			server = (IServerService) Naming.lookup("rmi://localhost:4711/PROJECT");
 		} catch (MalformedURLException | RemoteException | NotBoundException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 	}
 	
@@ -127,7 +127,7 @@ public class Core extends ASingelton implements ICoreClient {
 				mainPhase.setRiskFactor(main.getRiskFactor());
 				
 				for(PhasePane phasePane : main.getPhasePanes()){
-					mainPhase.addSkill(phasePane.getPhaseSkill(), phasePane.getPhaseDuration());
+					mainPhase.addSkill(phasePane.getPhaseSkillId(), phasePane.getPhaseDuration());
 				}
 				
 				project.addPhase(mainPhase);
@@ -141,7 +141,7 @@ public class Core extends ASingelton implements ICoreClient {
 					subPhase.setRiskFactor(sub.getRiskFactor());
 					
 					for(PhasePane phasePane : sub.getPhasePanes()){
-						subPhase.addSkill(phasePane.getPhaseSkill(), phasePane.getPhaseDuration());
+						subPhase.addSkill(phasePane.getPhaseSkillId(), phasePane.getPhaseDuration());
 					}
 					
 					project.addPhase(subPhase);

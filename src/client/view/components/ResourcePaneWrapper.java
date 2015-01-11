@@ -49,7 +49,7 @@ public class ResourcePaneWrapper extends TitledPane {
 		setText(skill.getSkillName());
 		
 		// initialize the expandable table and add it to the anchor pane
-		resourceTable = new ExpandableTable<ResourcePane>(ResourcePane.class);
+		resourceTable = new ExpandableTable<ResourcePane>(ResourcePane.class, this);
 		ancResourceList.getChildren().add(resourceTable);
 		AnchorPane.setTopAnchor(resourceTable, 0d);
 		AnchorPane.setBottomAnchor(resourceTable, 0d);

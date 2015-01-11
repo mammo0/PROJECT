@@ -9,7 +9,7 @@ import java.util.ResourceBundle;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
 import client.core.Core;
 import client.core.ICoreClient;
@@ -36,6 +36,8 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 	
 	@FXML
 	private AnchorPane editorPane;
+	@FXML
+	private ListView<String> lstProjects;
 	
 	
 	/**

@@ -1,5 +1,7 @@
 package client.view.components;
 
+import global.IExpandableNode;
+
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Hashtable;
@@ -33,14 +35,17 @@ public class ExpandableTable<Content extends Node> extends ScrollPane {
 	private Hashtable<Integer, Content> contentPanes;
 	private Hashtable<Button, Integer> btnContentRemoves;
 	
+	private Node parent;
+	
 	
 	
 	/**
 	 * The constructor
 	 * @param contentPane the content class
 	 */
-	public ExpandableTable(Class<Content> contentPane){
+	public ExpandableTable(Class<Content> contentPane, Node parent){
 		this.contentPane = contentPane;
+		this.parent = parent;
 		
 		this.setFitToWidth(true);
 		
@@ -81,6 +86,7 @@ public class ExpandableTable<Content extends Node> extends ScrollPane {
 		Content newContent = null;
 		try {
 			newContent = contentPane.newInstance();
+			((IExpandableNode) newContent).setParentNode(parent);
 		} catch (InstantiationException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
@@ -113,8 +119,17 @@ public class ExpandableTable<Content extends Node> extends ScrollPane {
 	private void btnContentRemoveClick(ActionEvent event){
 		int deleteRowIndex = btnContentRemoves.get(event.getSource());
 		
-		// return if only one row is left
+		// build a new row only if one row is left
 		if(contentListRowCount == 1){
+			for(Node child : contentList.getChildren()){
+				try{
+					// call the remove method in the child
+					((IExpandableNode) child).removeNode();
+				}catch (Exception e){}
+			}
+			contentList.getChildren().clear();
+			contentListRowCount--;
+			contentListAddRow();
 			return;
 		}
 		
@@ -135,6 +150,7 @@ public class ExpandableTable<Content extends Node> extends ScrollPane {
 		int childCounter = 0;
 		int rowIndex = 0;
 		int temp = 0;
+		IExpandableNode removeChild = null;
 		while(contentList.getChildren().size() > childCounter){
 			Node child = contentList.getChildren().get(childCounter);
 			
@@ -154,16 +170,23 @@ public class ExpandableTable<Content extends Node> extends ScrollPane {
 				tempGrid.add(child, GridPane.getColumnIndex(child), rowIndex);
 				
 				// rebuild the hashtables
-				if(child.getClass().equals(SkillPane.class)){
+				if(child.getClass().equals(contentPane)){
 					contentPanes.put(rowIndex, (Content) child);
 				}
 				if(btnContentRemoves.containsKey(child)){
 					btnContentRemoves.replace((Button) child, rowIndex);
 				}
 			}else{
+				try{
+					// call the remove method in the child
+					removeChild = ((IExpandableNode) child);
+				}catch (Exception e){}
 				childCounter++;
 			}
 		}
+		
+		if(removeChild != null)
+			removeChild.removeNode();
 		
 		// check if the last row should be removed
 		if(deleteRowIndex == contentListRowCount-1){
