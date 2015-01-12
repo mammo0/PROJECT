@@ -7,10 +7,17 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.ResourceBundle;
 
+import javafx.animation.KeyFrame;
+import javafx.animation.KeyValue;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.effect.BoxBlur;
+import javafx.scene.effect.GaussianBlur;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.Duration;
 import client.core.Core;
 import client.core.ICoreClient;
 import client.view.IComponents;
@@ -19,6 +26,7 @@ import client.view.View;
 import client.view.components.PhasePaneWrapper;
 import client.view.components.ProjectEditor;
 import client.view.components.ResourcePaneWrapper;
+import client.view.components.SettingsMenu;
 import client.view.components.SkillPane;
 
 /**
@@ -33,11 +41,16 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 	
 	// the project editor pane
 	private ProjectEditor projectEditor;
+	// the settings menu
+	private SettingsMenu settingsMenu;
 	
 	@FXML
 	private AnchorPane editorPane;
 	@FXML
 	private ListView<String> lstProjects;
+	
+	@FXML
+	private Label lblStatus;
 	
 	
 	/**
@@ -48,6 +61,7 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 		this.view = (IViewClient) View.getInstance(View.class);
 		
 		projectEditor = new ProjectEditor();
+		settingsMenu = new SettingsMenu();
 	}
 	
 	
@@ -66,6 +80,44 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 	@FXML
 	private void calculateProject(){
 		core.calculateProject();
+	}
+	
+	@FXML
+	private void openSettings(){
+		AnchorPane root = (AnchorPane) view.getViewRootPane();
+		root.getChildren().add(settingsMenu);
+		AnchorPane.setTopAnchor(settingsMenu, 0d);
+		AnchorPane.setBottomAnchor(settingsMenu, 0d);
+		AnchorPane.setRightAnchor(settingsMenu, 0d);
+		AnchorPane.setLeftAnchor(settingsMenu, 0d);
+	}
+	
+	@FXML
+	private void loadProject(){
+		
+	}
+	
+	@FXML
+	private void saveProject(){
+		
+	}
+	
+	
+	/**
+	 * This method displays a status text for a given period of time on the view
+	 * @param status the status message
+	 * @param displayTime the time how long the message is displayed
+	 */
+	public void setStatus(String status, int displayTime){
+		lblStatus.setText(status);
+		
+		if(displayTime > 0){
+			Timeline timeline = new Timeline();
+			KeyValue endValue = new KeyValue(lblStatus.textProperty(), "");
+			KeyFrame endFrame = new KeyFrame(Duration.seconds(displayTime), endValue);
+			timeline.getKeyFrames().add(endFrame);
+			timeline.play();
+		}
 	}
 
 	

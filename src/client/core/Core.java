@@ -1,5 +1,14 @@
 package client.core;
 
+import global.ASingelton;
+import global.IServerService;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -12,8 +21,6 @@ import model.project.Phase;
 import model.project.Project;
 import model.project.Resource;
 import model.project.Skill;
-import global.ASingelton;
-import global.IServerService;
 import client.view.IViewClient;
 import client.view.View;
 import client.view.components.PhasePane;
@@ -36,16 +43,85 @@ public class Core extends ASingelton implements ICoreClient {
 	
 	private Project project;
 	
+	private String serverAddress;
+	private int serverPort;
+	
+	private File configFile;
+	
 	
 	/**
 	 * The constructor
 	 */
 	public Core(){
-		// connect to the server
+		configFile = new File("client.conf");
+		
+		loadSettings();
+	}
+	
+	
+	// this method builds the rmi url
+	private String buildRmiurl(String serverAddress){
+		return "rmi://"+serverAddress+":"+serverPort+"/PROJECT";
+	}
+	
+	// this method opens a new connection to the server
+	private void openNewConnection(){
+		// close the old connection
+		server = null;
+		
+		// open a new one
 		try {
-			server = (IServerService) Naming.lookup("rmi://localhost:4711/PROJECT");
+			server = (IServerService) Naming.lookup(buildRmiurl(serverAddress));
 		} catch (MalformedURLException | RemoteException | NotBoundException e) {
-//			e.printStackTrace();
+			if(view != null)
+				view.setStatus("Keine Verbindung zum Server möglich.", 0);
+		}
+	}
+	
+	// this method loads the connection settings from a configuration file
+	private void loadSettings(){
+		BufferedReader reader;
+		try {
+			reader = new BufferedReader(new FileReader(configFile));
+			String line = null;
+			while ((line = reader.readLine()) != null) {
+				if(line.startsWith("PORT="))
+					this.serverPort = Integer.valueOf(line.split("=")[1]);
+				else if(line.startsWith("ADDR="))
+					this.serverAddress = line.split("=")[1];
+			}
+			reader.close();
+			
+			openNewConnection();
+		} catch (IOException e) {
+			if(view != null)
+				view.setStatus("Bitte die Servereinstellungen überprüfen.", 0);
+		}
+	}
+	
+	
+	@Override
+	public void saveSettings(String serverAddress, int serverPort) {
+		// do something only on change
+		if(!serverAddress.equals(this.serverAddress) || this.serverPort != serverPort){
+			this.serverPort = serverPort;
+			this.serverAddress = serverAddress;
+			
+			String firstLine = "ADDR="+serverAddress;
+			String lastLine = "PORT="+serverPort;
+			
+			BufferedWriter writer;
+			try {
+				writer = new BufferedWriter(new FileWriter(configFile));
+				writer.write(firstLine);
+				writer.newLine();
+				writer.write(lastLine);
+				writer.close();
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			
+			openNewConnection();
 		}
 	}
 	
@@ -56,7 +132,25 @@ public class Core extends ASingelton implements ICoreClient {
 		view = new View(this);
 		view.showFrame();
 	}
-
+	
+	
+	@Override
+	public void guiInitialized() {
+		loadSettings();
+	}
+	
+	
+	@Override
+	public String getServerAddress(){
+		return serverAddress;
+	}
+	
+	
+	@Override
+	public int getServerPort(){
+		return serverPort;
+	}
+	
 
 
 	@Override

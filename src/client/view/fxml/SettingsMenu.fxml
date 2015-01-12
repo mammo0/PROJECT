@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.shape.*?>
+<?import javafx.scene.web.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.effect.*?>
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.AnchorPane?>
+
+<fx:root style="-fx-background-color: transparent;" type="GridPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+  <columnConstraints>
+    <ColumnConstraints hgrow="SOMETIMES" prefWidth="200.0" />
+  </columnConstraints>
+  <rowConstraints>
+    <RowConstraints vgrow="SOMETIMES" />
+    <RowConstraints minHeight="150.0" vgrow="NEVER" />
+    <RowConstraints vgrow="SOMETIMES" />
+  </rowConstraints>
+   <children>
+      <AnchorPane style="-fx-background-color: #f4f4f4;" GridPane.rowIndex="1">
+         <children>
+            <Label layoutX="14.0" layoutY="14.0" text="Einstellungen" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
+            <GridPane hgap="14.0" layoutX="93.0" layoutY="46.0" vgap="7.0" AnchorPane.bottomAnchor="54.0" AnchorPane.leftAnchor="107.0" AnchorPane.rightAnchor="14.0">
+              <columnConstraints>
+                <ColumnConstraints hgrow="NEVER" />
+                <ColumnConstraints hgrow="SOMETIMES" />
+              </columnConstraints>
+              <rowConstraints>
+                <RowConstraints vgrow="SOMETIMES" />
+                <RowConstraints vgrow="SOMETIMES" />
+              </rowConstraints>
+               <children>
+                  <Label text="Serveradresse:" />
+                  <Label text="Serverport:" GridPane.rowIndex="1" />
+                  <TextField fx:id="txtServerAddress" promptText="Adresse" GridPane.columnIndex="1" />
+                  <TextField fx:id="txtServerPort" promptText="Port" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+               </children>
+            </GridPane>
+            <Button layoutX="128.0" layoutY="110.0" mnemonicParsing="false" onAction="#saveSettings" text="OK" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+            <Button layoutX="78.0" layoutY="110.0" mnemonicParsing="false" onAction="#closeSettings" text="Abbrechen" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="65.0" />
+         </children>
+      </AnchorPane>
+   </children>
+</fx:root>

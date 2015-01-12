@@ -21,12 +21,11 @@ public class InputTester implements ChangeListener<Object> {
 		if(oldValue == null || !oldValue.equals(newValue)){
 			if(tester.checkInput(node)){
 				view.getViewRootPane().setMouseTransparent(false);
-				node.setStyle("{-fx-focus-color: #0093ff; -fx-background-color: white}");
+				node.setStyle("{-fx-background-color: white; -fx-accent: #0093ff; -fx-focus-color: #0093ff}");
 				
 			}else{
 				view.getViewRootPane().setMouseTransparent(true);
-				node.setStyle("{-fx-focus-color: red; -fx-background-color: red}");
-				node.requestFocus();
+				node.setStyle("{-fx-background-color: red; -fx-focus-color: red}");
 			}
 	    }
 	}

@@ -11,9 +11,17 @@
 
 <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.view.controller.ViewController">
    <children>
-      <ListView fx:id="lstProjects" layoutX="14.0" layoutY="116.0" prefWidth="150.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="116.0" />
+      <ListView fx:id="lstProjects" layoutX="14.0" layoutY="116.0" prefWidth="150.0" AnchorPane.bottomAnchor="54.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="116.0" />
       <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" prefHeight="89.0" prefWidth="150.0" style="-fx-background-color: red;" text="Logo" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
-      <AnchorPane fx:id="editorPane" layoutX="178.0" layoutY="116.0" prefHeight="570.0" prefWidth="608.0" AnchorPane.bottomAnchor="60.0" AnchorPane.leftAnchor="178.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="116.0" />
+      <AnchorPane fx:id="editorPane" layoutX="178.0" layoutY="116.0" prefHeight="570.0" prefWidth="608.0" AnchorPane.bottomAnchor="54.0" AnchorPane.leftAnchor="178.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="116.0" />
       <Button layoutX="728.0" layoutY="660.0" mnemonicParsing="false" onAction="#calculateProject" text="Berechnen" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+      <Button layoutX="619.0" layoutY="660.0" mnemonicParsing="false" onAction="#saveProject" text="Speichern" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="110.0" />
+      <Button layoutX="14.0" layoutY="660.0" mnemonicParsing="false" onAction="#loadProject" prefWidth="150.0" text="Projekt laden" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" />
+      <Button layoutX="728.0" layoutY="14.0" mnemonicParsing="false" onAction="#openSettings" text="Einstellungen" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
+      <AnchorPane layoutX="178.0" layoutY="661.0" prefHeight="25.0" style="-fx-border-color: black;" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="178.0" AnchorPane.rightAnchor="250.0">
+         <children>
+            <Label fx:id="lblStatus" layoutX="49.0" layoutY="5.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
+         </children>
+      </AnchorPane>
    </children>
 </AnchorPane>

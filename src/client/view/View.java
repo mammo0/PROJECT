@@ -42,6 +42,7 @@ public class View extends ASingelton implements IViewClient {
 	// this method sets the view controller
 	private void setViewController(ViewController viewController) {
 		this.viewController = viewController;
+		core.guiInitialized();
 	}
 	
 	// this method sets the root pane of the view
@@ -58,6 +59,11 @@ public class View extends ASingelton implements IViewClient {
 	@Override
 	public void showFrame(){
 		Application.launch(Frame.class, "");
+	}
+	
+	@Override
+	public void setStatus(String status, int displayTime) {
+		viewController.setStatus(status, displayTime);
 	}
 	
 	

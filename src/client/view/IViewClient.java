@@ -19,4 +19,11 @@ public interface IViewClient extends IComponents {
 	 * @return the root pane
 	 */
 	public Node getViewRootPane();
+	
+	/**
+	 * This method displays a status text for a given period of time on the view
+	 * @param status the status message
+	 * @param displayTime the time how long the message is displayed
+	 */
+	public void setStatus(String status, int displayTime);
 }
