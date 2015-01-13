@@ -321,10 +321,12 @@ public class Core extends ASingelton implements ICoreServer {
 		for (Skill skill : project.getSkills()) {
 
 			Result result = new Result();
+			Result resultRisk = new Result();
 			
 			
 			int _skillID = 0;
 			int _totalShould = 0;
+			int _totalShouldRisk = 0;
 			double _totalBe = 0;
 			double _totalBeExt = 0;
 			int _availability = 0;
@@ -348,10 +350,13 @@ public class Core extends ASingelton implements ICoreServer {
 			for (Phase phases : project.getPhases()) {
 				Enumeration<Integer> enumKey = phases.getSkills().keys();
 				while (enumKey.hasMoreElements()) {
+					int temp = 0;
 					int key = enumKey.nextElement();
 					if (key == _skillID) {
 						_totalShould = _totalShould
 								+ phases.getSkills().get(_skillID);
+							temp = (int) Math.round(phases.getRiskFactor()*0.01*_totalShould);
+							_totalShouldRisk = _totalShouldRisk+(temp+_totalShould);
 					}
 				}
 
@@ -420,7 +425,10 @@ public class Core extends ASingelton implements ICoreServer {
 			result.setCostExt(_costExt);
 			result.setCostInt(_costInt);
 			result.setCostTotal(_costTotal);
+			
+			resultRisk.setPdTotalShould(_totalShouldRisk);
 
+			skill.setResultRisk(resultRisk);
 			skill.setResultWRisk(result);
 
 		}
