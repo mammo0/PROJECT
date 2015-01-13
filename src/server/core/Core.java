@@ -338,6 +338,7 @@ public class Core extends ASingelton implements ICoreServer {
 			float _costTotal = 0;
 			float _dayrateInt = skill.getDayRateInt();
 			float _dayrateExt = skill.getDayRateExt();
+			int _pdTotalBe = 0;
 			
 
 			
@@ -378,8 +379,8 @@ public class Core extends ASingelton implements ICoreServer {
 			_totalBe = Math.round(_totalBe);
 			_totalBeExt = Math.round(_totalBeExt);
 
-			result.setPdTotalBe((int) _totalBe);
-			result.setPdTotalBeExt((int) _totalBeExt);
+//			result.setPdTotalBe((int) _totalBe);
+//			result.setPdTotalBeExt((int) _totalBeExt);
 
 			_availability = 0;
 			_availabilityExt = 0;
@@ -409,9 +410,11 @@ public class Core extends ASingelton implements ICoreServer {
 			_costInt = _pdInt*_dayrateInt;
 			_costExt = _pdExt*_dayrateExt;
 			_costTotal = _costInt + _costExt;
-
-			result.setPdInt(_pdInt);
-			result.setPdExt(_pdExt);
+			_pdTotalBe = _pdInt + _pdExt;
+			
+			result.setPdIntBe(_pdInt);
+			result.setPdExtBe(_pdExt);
+			result.setPdTotalBe(_pdTotalBe);
 			result.setPuffer(_Puffer);
 			result.setPdTotalDiff(_totalDif);
 			result.setCostExt(_costExt);

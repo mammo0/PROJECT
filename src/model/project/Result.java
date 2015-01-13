@@ -11,15 +11,13 @@ import java.util.ArrayList;
 public class Result implements Serializable {
 	
 	// the total people days 
-	private int pdInt;
+	private int pdIntBe;
 	// the total people Ext days 
-	private int pdExt;
-	// the total people days that should be there
-	private int pdTotalShould;
+	private int pdExtBe;
 	// the total people days that are there
 	private int pdTotalBe;
-	// the total people days that are there extern 
-	private int pdTotalBeExt;
+	// the total people days that should be there
+	private int pdTotalShould;
 	// the difference between the should and be people days
 	private int pdTotalDiff;
 	//the difference between the should and the ext people days
@@ -42,11 +40,11 @@ public class Result implements Serializable {
 	}
 	
 	public int getPdInt() {
-		return pdInt;
+		return pdIntBe;
 	}
 	
 	public int getPdExt() {
-		return pdExt;
+		return pdExtBe;
 	}
 	/**
 	 * Get the difference of the should and be people days
@@ -56,13 +54,6 @@ public class Result implements Serializable {
 		return pdTotalDiff;
 	}
 
-	/**
-	 * Get the total external days
-	 * @return the pdTotalBeExt
-	 */
-	public int getPdTotalBeExt() {
-		return pdTotalBeExt;
-	}
 	/**
 	 * Get the total people days that should be there
 	 * @return the pdTotalShould
@@ -115,13 +106,13 @@ public class Result implements Serializable {
 		Puffer = puffer;
 	}
 	
-	public void setPdInt(int pdInt) {
-		this.pdInt = pdInt;
+	public void setPdIntBe(int pdInt) {
+		this.pdIntBe = pdInt;
 	}
 	
 	
-	public void setPdExt(int pdExt) {
-		this.pdExt = pdExt;
+	public void setPdExtBe(int pdExt) {
+		this.pdExtBe = pdExt;
 	}
 	
 	/**
@@ -130,14 +121,6 @@ public class Result implements Serializable {
 	 */
 	public void setPdTotalDiff(int pdTotalDiff) {
 		this.pdTotalDiff = pdTotalDiff;
-	}
-
-	/**
-	 * Set the total externaldays
-	 * @param pdTotalBeExt the ppdTotalBeExt to set
-	 */
-	public void setPdTotalBeExt(int pdTotalBeExt) {
-		this.pdTotalBeExt = pdTotalBeExt;
 	}
 	
 	/**
