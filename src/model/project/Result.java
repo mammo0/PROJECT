@@ -18,6 +18,8 @@ public class Result implements Serializable {
 	private int pdTotalBe;
 	// the total people days that should be there
 	private int pdTotalShould;
+	// the total people days that should be there calculated with Risk
+	private int pdTotalShouldRisk;
 	// the difference between the should and be people days
 	private int pdTotalDiff;
 	//the difference between the should and the ext people days
@@ -33,6 +35,10 @@ public class Result implements Serializable {
 	
 	public Result(){
 		years = new ArrayList<Year>();
+	}
+	
+	public int getPdTotalShouldRisk() {
+		return pdTotalShouldRisk;
 	}
 	
 	public int getPuffer() {
@@ -100,6 +106,10 @@ public class Result implements Serializable {
 	 */
 	public ArrayList<Year> getYears() {
 		return years;
+	}
+	
+	public void setPdTotalShouldRisk(int pdTotalShouldRisk) {
+		this.pdTotalShouldRisk = pdTotalShouldRisk;
 	}
 	
 	public void setPuffer(int puffer) {

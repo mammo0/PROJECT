@@ -169,7 +169,7 @@ public class Core extends ASingelton implements ICoreServer {
 
 		int numberofYears = enddateYear - startdateYear + 1;
 
-		for (int i = 0; i <numberofYears; i++) {
+		for (int i = 0; i < numberofYears; i++) {
 			year = new Year();
 			year.setYearDate(startdateYear + i);
 			result.addYear(year);
@@ -208,7 +208,7 @@ public class Core extends ASingelton implements ICoreServer {
 						.setQ3(quarter = new Quarter());
 				result.getYears().get(deltaYears)
 						.setQ4(quarter = new Quarter());
-				deltaYears=deltaYears-1;
+				deltaYears = deltaYears - 1;
 			}
 
 			endquarter = (enddate.getMonthValue() - 1) / 3 + 1;
@@ -321,9 +321,8 @@ public class Core extends ASingelton implements ICoreServer {
 		for (Skill skill : project.getSkills()) {
 
 			Result result = new Result();
-			Result resultRisk = new Result();
-			
-			
+
+			// set all temp variables
 			int _skillID = 0;
 			int _totalShould = 0;
 			int _totalShouldRisk = 0;
@@ -334,29 +333,31 @@ public class Core extends ASingelton implements ICoreServer {
 			int _pdExt = 0;
 			int _pdInt = 0;
 			int _totalDif = 0;
+			int _totalDifRisk = 0;
 			int _Puffer = 0;
+			float _costIntRisk = 0;
 			float _costInt = 0;
 			float _costExt = 0;
+			float _costExtRisk = 0;
 			float _costTotal = 0;
 			float _dayrateInt = skill.getDayRateInt();
 			float _dayrateExt = skill.getDayRateExt();
 			int _pdTotalBe = 0;
-			
 
-			
-			
 			// calculate the total needed mandays per skill
 			_skillID = skill.getSkillID();
 			for (Phase phases : project.getPhases()) {
 				Enumeration<Integer> enumKey = phases.getSkills().keys();
 				while (enumKey.hasMoreElements()) {
-					int temp = 0;
+					int tempRisk = 0;
 					int key = enumKey.nextElement();
 					if (key == _skillID) {
 						_totalShould = _totalShould
 								+ phases.getSkills().get(_skillID);
-							temp = (int) Math.round(phases.getRiskFactor()*0.01*_totalShould);
-							_totalShouldRisk = _totalShouldRisk+(temp+_totalShould);
+						tempRisk = (int) Math.round(phases.getRiskFactor()
+								* 0.01 * phases.getSkills().get(_skillID));
+						_totalShouldRisk = _totalShouldRisk
+								+ (tempRisk + phases.getSkills().get(_skillID));
 					}
 				}
 
@@ -384,14 +385,10 @@ public class Core extends ASingelton implements ICoreServer {
 			_totalBe = Math.round(_totalBe);
 			_totalBeExt = Math.round(_totalBeExt);
 
-//			result.setPdTotalBe((int) _totalBe);
-//			result.setPdTotalBeExt((int) _totalBeExt);
-
 			_availability = 0;
 			_availabilityExt = 0;
 
-			// calculate
-
+			// calculate the Difference between the should and be mandays
 			while (_totalShould > 0) {
 				while (_totalBeExt > 0 && _totalShould > 0) {
 					_pdExt = _pdExt + 1;
@@ -404,6 +401,8 @@ public class Core extends ASingelton implements ICoreServer {
 				if (_totalShould >= _totalBe) {
 					_pdInt = (int) Math.round(_totalBe);
 					_totalDif = _totalShould - (int) Math.round(_totalBe);
+					_totalDifRisk = _totalShouldRisk
+							- (int) Math.round(_totalBe);
 					_totalShould = 0;
 				} else {
 					_pdInt = (int) Math.round(_totalShould);
@@ -411,12 +410,17 @@ public class Core extends ASingelton implements ICoreServer {
 				}
 
 			}
-			
-			_costInt = _pdInt*_dayrateInt;
-			_costExt = _pdExt*_dayrateExt;
+
+			//calculate costs
+			_costIntRisk = _totalShouldRisk * _dayrateInt;
+			_costExt = _pdExt * _dayrateExt;
+			_costInt = _pdInt * _dayrateInt;
+			_costExt = _pdExt * _dayrateExt;
 			_costTotal = _costInt + _costExt;
 			_pdTotalBe = _pdInt + _pdExt;
+
 			
+			//set the result variables
 			result.setPdIntBe(_pdInt);
 			result.setPdExtBe(_pdExt);
 			result.setPdTotalBe(_pdTotalBe);
@@ -425,20 +429,18 @@ public class Core extends ASingelton implements ICoreServer {
 			result.setCostExt(_costExt);
 			result.setCostInt(_costInt);
 			result.setCostTotal(_costTotal);
-			
-			resultRisk.setPdTotalShould(_totalShouldRisk);
+			result.setPdTotalShouldRisk(_totalShouldRisk);
 
-			skill.setResultRisk(resultRisk);
 			skill.setResultWRisk(result);
 
 		}
 
 	}
-	
-	public void calculateResultProject(Project project){
-		
+
+	public void calculateResultProject(Project project) {
+
 		Result result = new Result();
-		calculateYearsQuarters(project,result);
+		calculateYearsQuarters(project, result);
 	}
 
 	// calculate the total amount of projectdays
@@ -453,7 +455,7 @@ public class Core extends ASingelton implements ICoreServer {
 			duration = project.getEndDate().getDayOfYear()
 					- project.getStartDate().getDayOfYear() + 1;
 			while (duration >= 30) {
-				workingdays = workingdays + 19;
+				workingdays = workingdays + 17;
 				duration = duration - 30;
 			}
 			workingdays = workingdays + (0.55835) * duration;
@@ -461,20 +463,20 @@ public class Core extends ASingelton implements ICoreServer {
 			years = project.getEndDate().getYear()
 					- project.getStartDate().getYear();
 			while (years > 1) {
-				workingdays = workingdays + 228;
+				workingdays = workingdays + 204;
 				years = years - 1;
 			}
 
 			startyear = 366 - project.getStartDate().getDayOfYear();
 			while (startyear >= 30) {
-				workingdays = workingdays + 19;
+				workingdays = workingdays + 17;
 				startyear = startyear - 30;
 			}
 			workingdays = workingdays + (0.55835) * startyear;
 
 			endyear = project.getEndDate().getDayOfYear();
 			while (endyear >= 30) {
-				workingdays = workingdays + 19;
+				workingdays = workingdays + 17;
 				endyear = endyear - 30;
 			}
 			workingdays = workingdays + (0.55835) * endyear;

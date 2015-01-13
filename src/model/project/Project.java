@@ -38,10 +38,6 @@ public class Project implements Serializable {
 	
 	// the project end Date
 	private LocalDate endDate;
-	
-	// the result of the project calculation including the risk factor
-	private Result resultRisk;
-	
 	// the result of the project calculation without the risk factor
 	private Result resultWRisk;
 	
@@ -137,15 +133,6 @@ public class Project implements Serializable {
 	public Result getResultWRisk() {
 		return resultWRisk;
 	}
-
-	/**
-	 * Get the calculated result including the risk factor
-	 * @return the resultRisk
-	 */
-	public Result getResultRisk() {
-		return resultRisk;
-	}
-
 	/**
 	 * Set the project name
 	 * @param projectName the projectName to set
@@ -217,15 +204,6 @@ public class Project implements Serializable {
 	public void addSkill(Skill skill){
 		this.skills.add(skill);
 	}
-
-	/**
-	 * Set the result calculated with the risk factor
-	 * @param resultRisk the resultRisk to set
-	 */
-	public void setResultRisk(Result resultRisk) {
-		this.resultRisk = resultRisk;
-	}
-
 	/**
 	 * Set the result calculated without the risk factor
 	 * @param resultWRisk the resultWRisk to set
