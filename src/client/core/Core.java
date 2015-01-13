@@ -242,7 +242,7 @@ public class Core extends ASingelton implements ICoreClient {
 		ArrayList<Skill> skills = new ArrayList<Skill>();
 		for(SkillPane pane : view.getSkillPanes()){
 			// check if all fields are filled out
-			if(pane.getSkillName().isEmpty() || Float.isNaN(pane.getDayRateInt())|| Float.isNaN(pane.getDayRateExt())){
+			if(pane.getSkillName().isEmpty()){
 				continue;
 			}else{
 				// build the new skill

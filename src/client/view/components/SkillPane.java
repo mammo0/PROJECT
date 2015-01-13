@@ -54,7 +54,7 @@ public class SkillPane extends AnchorPane implements IExpandableNode, ITester {
 		try{
 			return Float.valueOf(input);
 		}catch (Exception e){
-			return Float.NaN;
+			return 0f;
 		}
 	}
 
@@ -95,11 +95,15 @@ public class SkillPane extends AnchorPane implements IExpandableNode, ITester {
 	public boolean checkInput(Node node) {
 		if(node.equals(dayRateInt) || node.equals(dayRateExt)){
 			TextField txtField = (TextField) node;
-			float rate = castStringToFloat(txtField.getText());
-			if(Float.isNaN(rate) && !txtField.getText().isEmpty())
-				return false;
-			else
+			if(txtField.getText().isEmpty())
 				return true;
+			
+			try{
+				Float.valueOf(txtField.getText());
+				return true;
+			}catch (Exception e){
+				return false;
+			}
 		}else
 			return false;
 	}
