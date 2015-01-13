@@ -94,6 +94,18 @@ public class ProjectEditor extends TabPane implements IComponents {
 	
 	
 	
+	/**
+	 * This method displays the results on the result tab
+	 */
+	public void displayResults(){
+		resultTab.displayResults();
+		
+		// go to the results tab
+		this.getSelectionModel().select(tabResults);
+	}
+	
+	
+	
 	
 	@Override
 	public ArrayList<SkillPane> getSkillPanes(){

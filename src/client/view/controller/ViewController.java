@@ -10,12 +10,11 @@ import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.beans.value.WritableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
-import javafx.scene.effect.BoxBlur;
-import javafx.scene.effect.GaussianBlur;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 import client.core.Core;
@@ -80,6 +79,8 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 	@FXML
 	private void calculateProject(){
 		core.calculateProject();
+		
+		projectEditor.displayResults();
 	}
 	
 	@FXML
@@ -103,6 +104,20 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 	}
 	
 	
+	private <Property> void newSimpleAnimation(WritableValue<Property> targetProperty, Property startValue, Property endValue, int duration){
+		// set the start value if not null
+		if (startValue != null)
+			targetProperty.setValue(startValue);
+		
+		// start the animation
+		Timeline timeline = new Timeline();
+		KeyValue keyValue = new KeyValue(targetProperty, endValue);
+		KeyFrame endFrame = new KeyFrame(Duration.seconds(duration), keyValue);
+		timeline.getKeyFrames().add(endFrame);
+		timeline.play();
+	}
+	
+	
 	/**
 	 * This method displays a status text for a given period of time on the view
 	 * @param status the status message
@@ -112,11 +127,7 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 		lblStatus.setText(status);
 		
 		if(displayTime > 0){
-			Timeline timeline = new Timeline();
-			KeyValue endValue = new KeyValue(lblStatus.textProperty(), "");
-			KeyFrame endFrame = new KeyFrame(Duration.seconds(displayTime), endValue);
-			timeline.getKeyFrames().add(endFrame);
-			timeline.play();
+			newSimpleAnimation(lblStatus.textProperty(), null, "", displayTime);
 		}
 	}
 

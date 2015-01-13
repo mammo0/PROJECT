@@ -17,9 +17,12 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import model.project.Phase;
 import model.project.Project;
 import model.project.Resource;
+import model.project.Result;
 import model.project.Skill;
 import client.view.IViewClient;
 import client.view.View;
@@ -89,6 +92,10 @@ public class Core extends ASingelton implements ICoreClient {
 					this.serverPort = Integer.valueOf(line.split("=")[1]);
 				else if(line.startsWith("ADDR="))
 					this.serverAddress = line.split("=")[1];
+				else{
+					reader.close();
+					throw new IOException();
+				}
 			}
 			reader.close();
 			
@@ -98,6 +105,77 @@ public class Core extends ASingelton implements ICoreClient {
 				view.setStatus("Bitte die Servereinstellungen überprüfen.", 0);
 		}
 	}
+	
+	
+	// build the project object
+		private void buildProject(){
+			project = new Project();
+			
+			// first screen
+			project.setProjectName(view.getProjectName());
+			project.setProjectResponsible(view.getProjectResponsible());
+			project.setDescription(view.getProjectDescription());
+			
+			// second screen
+			for(SkillPane pane : view.getSkillPanes()){
+				Skill skill = new Skill();
+				skill.setSkillName(pane.getSkillName());
+				skill.setDayRateInt(pane.getDayRateInt());
+				skill.setDayRateExt(pane.getDayRateExt());
+				
+				project.addSkill(skill);
+			}
+			
+			// third screen
+			for(ResourcePaneWrapper paneWrapper : view.getResourcePanes()){
+				for(ResourcePane pane : paneWrapper.getResourcePanes()){
+					Resource resource = new Resource();
+					resource.setResourceName(pane.getResourceName());
+					resource.setSkill(paneWrapper.getSkill().getSkillID());
+					resource.setAvailability(pane.getAvailability());
+					resource.setSkillAmount(pane.getSkillAmount());
+					resource.setIntern(pane.isIntern());
+					
+					project.addResource(resource);
+				}
+			}
+			
+			// fourth screen
+			Hashtable<PhasePaneWrapper, ArrayList<PhasePaneWrapper>> phases = view.getPhasePanes();
+			Enumeration<PhasePaneWrapper> enumKey = phases.keys();
+			while(enumKey.hasMoreElements()){
+				PhasePaneWrapper main = enumKey.nextElement();
+				
+				Phase mainPhase = new Phase();
+				mainPhase.setPhaseName(main.getPhaseName());
+				if(phases.get(main).isEmpty()){
+					mainPhase.setStartDate(main.getPhaseBegin());
+					mainPhase.setEndDate(main.getPhaseEnd());
+					mainPhase.setRiskFactor(main.getRiskFactor());
+					
+					for(PhasePane phasePane : main.getPhasePanes()){
+						mainPhase.addSkill(phasePane.getPhaseSkillId(), phasePane.getPhaseDuration());
+					}
+					
+					project.addPhase(mainPhase);
+				}else{
+					for(PhasePaneWrapper sub : phases.get(main)){
+						Phase subPhase = new Phase();
+						subPhase.setPhaseName(sub.getPhaseName());
+						subPhase.setParent(mainPhase);
+						subPhase.setStartDate(sub.getPhaseBegin());
+						subPhase.setEndDate(sub.getPhaseEnd());
+						subPhase.setRiskFactor(sub.getRiskFactor());
+						
+						for(PhasePane phasePane : sub.getPhasePanes()){
+							subPhase.addSkill(phasePane.getPhaseSkillId(), phasePane.getPhaseDuration());
+						}
+						
+						project.addPhase(subPhase);
+					}
+				}
+			}
+		}
 	
 	
 	@Override
@@ -151,6 +229,12 @@ public class Core extends ASingelton implements ICoreClient {
 		return serverPort;
 	}
 	
+	
+	@Override
+	public Project getProject() {
+		return project;
+	}
+	
 
 
 	@Override
@@ -174,75 +258,60 @@ public class Core extends ASingelton implements ICoreClient {
 	}
 	
 	
-	// build the project object
-	private void buildProject(){
-		project = new Project();
+	
+	@Override
+	public ObservableList<pdTableModel> getPDTable(boolean withRisk){
+		ObservableList<pdTableModel> pdData = FXCollections.observableArrayList();
 		
-		// first screen
-		project.setProjectName(view.getProjectName());
-		project.setProjectResponsible(view.getProjectResponsible());
-		project.setDescription(view.getProjectDescription());
-		
-		// second screen
-		for(SkillPane pane : view.getSkillPanes()){
-			Skill skill = new Skill();
-			skill.setSkillName(pane.getSkillName());
-			skill.setDayRateInt(pane.getDayRateInt());
-			skill.setDayRateExt(pane.getDayRateExt());
-			
-			project.addSkill(skill);
-		}
-		
-		// third screen
-		for(ResourcePaneWrapper paneWrapper : view.getResourcePanes()){
-			for(ResourcePane pane : paneWrapper.getResourcePanes()){
-				Resource resource = new Resource();
-				resource.setResourceName(pane.getResourceName());
-				resource.setSkill(paneWrapper.getSkill().getSkillID());
-				resource.setAvailability(pane.getAvailability());
-				resource.setSkillAmount(pane.getSkillAmount());
-				resource.setIntern(pane.isIntern());
-				
-				project.addResource(resource);
-			}
-		}
-		
-		// fourth screen
-		Hashtable<PhasePaneWrapper, ArrayList<PhasePaneWrapper>> phases = view.getPhasePanes();
-		Enumeration<PhasePaneWrapper> enumKey = phases.keys();
-		while(enumKey.hasMoreElements()){
-			PhasePaneWrapper main = enumKey.nextElement();
-			
-			Phase mainPhase = new Phase();
-			mainPhase.setPhaseName(main.getPhaseName());
-			if(phases.get(main).isEmpty()){
-				mainPhase.setStartDate(main.getPhaseBegin());
-				mainPhase.setEndDate(main.getPhaseEnd());
-				mainPhase.setRiskFactor(main.getRiskFactor());
-				
-				for(PhasePane phasePane : main.getPhasePanes()){
-					mainPhase.addSkill(phasePane.getPhaseSkillId(), phasePane.getPhaseDuration());
+		for(Skill skill : project.getSkills()){
+			pdTableModel pdModel = new pdTableModel();
+			Result result = new Result();
+			if(withRisk){
+				if(skill.getResultRisk() != null){
+					// not implemented yet
 				}
-				
-				project.addPhase(mainPhase);
 			}else{
-				for(PhasePaneWrapper sub : phases.get(main)){
-					Phase subPhase = new Phase();
-					subPhase.setPhaseName(sub.getPhaseName());
-					subPhase.setParent(mainPhase);
-					subPhase.setStartDate(sub.getPhaseBegin());
-					subPhase.setEndDate(sub.getPhaseEnd());
-					subPhase.setRiskFactor(sub.getRiskFactor());
-					
-					for(PhasePane phasePane : sub.getPhasePanes()){
-						subPhase.addSkill(phasePane.getPhaseSkillId(), phasePane.getPhaseDuration());
-					}
-					
-					project.addPhase(subPhase);
+				if(skill.getResultWRisk() != null){
+					result = skill.getResultWRisk();
+					pdModel.skillName.set(skill.getSkillName());
+					pdModel.pdShould.set(result.getPdTotalShould());
+					pdModel.pdIs.set(result.getPdTotalBe());
+					pdModel.pdIsInt.set(result.getPdInt());
+					pdModel.pdIsExt.set(result.getPdExt());
 				}
 			}
+			pdData.add(pdModel);
 		}
+		
+		return pdData;
 	}
+	
+	@Override
+	public ObservableList<costTableModel> getCostTable(boolean withRisk){
+		ObservableList<costTableModel> costData = FXCollections.observableArrayList();
+		
+		for(Skill skill : project.getSkills()){
+			costTableModel costModel = new costTableModel();
+			Result result = new Result();
+			if(withRisk){
+				if(skill.getResultRisk() != null){
+					// not implemented yet
+				}
+			}else{
+				if(skill.getResultWRisk() != null){
+					result = skill.getResultWRisk();
+					costModel.skillName.set(skill.getSkillName());
+					costModel.costTotal.set(result.getCostTotal());
+					costModel.costInt.set(result.getCostInt());
+					costModel.costExt.set(result.getCostExt());
+				}
+			}
+			costData.add(costModel);
+		}
+		
+		return costData;
+	}
+	
 	
 	
 	@Override
@@ -255,5 +324,7 @@ public class Core extends ASingelton implements ICoreClient {
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
+		
+		project = result;
 	}
 }

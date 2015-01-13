@@ -2,6 +2,8 @@ package client.core;
 
 import java.util.ArrayList;
 
+import javafx.collections.ObservableList;
+import model.project.Project;
 import model.project.Skill;
 
 /**
@@ -28,6 +30,18 @@ public interface ICoreClient {
 	public void saveSettings(String serverAdress, int serverPort);
 	
 	/**
+	 * Get an array list with the pd results
+	 * @return the pd results
+	 */
+	public ObservableList<pdTableModel> getPDTable(boolean withRisk);
+	
+	/**
+	 * Get an array list with the cost results
+	 * @return the cost results
+	 */
+	public ObservableList<costTableModel> getCostTable(boolean withRisk);
+	
+	/**
 	 * Get the skills from the skill view
 	 * @return the skills
 	 */
@@ -45,6 +59,11 @@ public interface ICoreClient {
 	 */
 	public int getServerPort();
 	
+	/**
+	 * Get the project object
+	 * @return the project object
+	 */
+	public Project getProject();
 	
 	/**
 	 * Calculate the project object

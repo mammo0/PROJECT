@@ -13,13 +13,13 @@
               <tabs>
                 <Tab text="Aufwand (PT)">
                      <content>
-                        <TableView>
+                        <TableView fx:id="tblPD">
                           <columns>
-                            <TableColumn maxWidth="100000.0" minWidth="200.0" prefWidth="200.0" text="Kompetenz" />
-                            <TableColumn maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Soll" />
-                              <TableColumn maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Ist-Gesamt" />
-                              <TableColumn maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Ist-Intern" />
-                              <TableColumn maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Ist-Extern" />
+                            <TableColumn fx:id="colSkillPD" maxWidth="100000.0" minWidth="200.0" prefWidth="200.0" text="Kompetenz" />
+                            <TableColumn fx:id="colShouldPD" maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Soll" />
+                              <TableColumn fx:id="colIsPD" maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Ist-Gesamt" />
+                              <TableColumn fx:id="colIsPDInt" maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Ist-Intern" />
+                              <TableColumn fx:id="colIsPDExt" maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Ist-Extern" />
                           </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -29,12 +29,12 @@
                   </Tab>
                 <Tab text="Kosten (€/PT)">
                      <content>
-                        <TableView>
+                        <TableView fx:id="tblCost">
                           <columns>
-                            <TableColumn maxWidth="100000.0" minWidth="200.0" prefWidth="200.0" text="Kompetenz" />
-                            <TableColumn maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Gesamt" />
-                              <TableColumn maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Intern" />
-                              <TableColumn maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Extern" />
+                            <TableColumn fx:id="colSkillCost" maxWidth="100000.0" minWidth="200.0" prefWidth="200.0" text="Kompetenz" />
+                            <TableColumn fx:id="colTotalCost" maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Gesamt" />
+                              <TableColumn fx:id="colIntCost" maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Intern" />
+                              <TableColumn fx:id="colExtCost" maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Extern" />
                           </columns>
                            <columnResizePolicy>
                               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -48,17 +48,17 @@
                            <children>
                               <TableView VBox.vgrow="ALWAYS">
                                 <columns>
-                                  <TableColumn maxWidth="100000.0" minWidth="200.0" prefWidth="200.0" text="Kompetenz" />
+                                  <TableColumn fx:id="colSkillQuarter" maxWidth="100000.0" minWidth="200.0" prefWidth="200.0" text="Kompetenz" />
                                   <TableColumn maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Kosten">
                                        <columns>
-                                          <TableColumn maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Intern" />
-                                          <TableColumn maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Extern" />
+                                          <TableColumn fx:id="colIntCostQuarter" maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Intern" />
+                                          <TableColumn fx:id="colExtCostQuarter" maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Extern" />
                                        </columns>
                                     </TableColumn>
                                     <TableColumn maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Personentage">
                                        <columns>
-                                          <TableColumn maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Intern" />
-                                          <TableColumn maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Extern" />
+                                          <TableColumn fx:id="colIntPDQuarter" maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Intern" />
+                                          <TableColumn fx:id="colExtPDQuarter" maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Extern" />
                                        </columns>
                                     </TableColumn>
                                 </columns>
@@ -75,7 +75,7 @@
             </TabPane>
             <AnchorPane VBox.vgrow="NEVER">
                <children>
-                  <ToggleButton layoutX="111.0" layoutY="14.0" mnemonicParsing="false" prefWidth="175.0" text="Risikozuschlag EIN" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
+                  <ToggleButton fx:id="tbnRisk" layoutX="111.0" layoutY="14.0" mnemonicParsing="false" onAction="#tbnRiskClick" prefWidth="175.0" text="Risikozuschlag EIN" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
                </children>
             </AnchorPane>
          </children>
