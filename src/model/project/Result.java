@@ -52,7 +52,7 @@ public class Result implements Serializable {
 	 * Get the difference of the should and be people days
 	 * @return the pdTotalDiff
 	 */
-	public int getPdTotal() {
+	public int getPdTotalDiff() {
 		return pdTotalDiff;
 	}
 
@@ -128,7 +128,7 @@ public class Result implements Serializable {
 	 * Set the difference of the should and be people days
 	 * @param pdTotalDiff the pdTotal to set
 	 */
-	public void setPdTotal(int pdTotalDiff) {
+	public void setPdTotalDiff(int pdTotalDiff) {
 		this.pdTotalDiff = pdTotalDiff;
 	}
 

@@ -126,7 +126,7 @@ public class Core extends ASingelton implements ICoreServer {
 		calculateLenght(project);
 		calculateResultSkill(project);
 		// calculateProjectDays(project);
-		return null;
+		return project;
 	}
 
 	public Phase calculatePhase(Phase phase) {
@@ -333,6 +333,12 @@ public class Core extends ASingelton implements ICoreServer {
 			int _pdInt = 0;
 			int _totalDif = 0;
 			int _Puffer = 0;
+			float _costInt = 0;
+			float _costExt = 0;
+			float _costTotal = 0;
+			float _dayrateInt = skill.getDayRateInt();
+			float _dayrateExt = skill.getDayRateExt();
+			
 
 			
 			
@@ -399,10 +405,18 @@ public class Core extends ASingelton implements ICoreServer {
 				}
 
 			}
+			
+			_costInt = _pdInt*_dayrateInt;
+			_costExt = _pdExt*_dayrateExt;
+			_costTotal = _costInt + _costExt;
 
 			result.setPdInt(_pdInt);
 			result.setPdExt(_pdExt);
 			result.setPuffer(_Puffer);
+			result.setPdTotalDiff(_totalDif);
+			result.setCostExt(_costExt);
+			result.setCostInt(_costInt);
+			result.setCostTotal(_costTotal);
 
 			skill.setResultWRisk(result);
 
@@ -431,7 +445,7 @@ public class Core extends ASingelton implements ICoreServer {
 				workingdays = workingdays + 19;
 				duration = duration - 30;
 			}
-			workingdays = workingdays + (0.633333333333333) * duration;
+			workingdays = workingdays + (0.55835) * duration;
 		} else {
 			years = project.getEndDate().getYear()
 					- project.getStartDate().getYear();
@@ -445,14 +459,14 @@ public class Core extends ASingelton implements ICoreServer {
 				workingdays = workingdays + 19;
 				startyear = startyear - 30;
 			}
-			workingdays = workingdays + (0.633333333333333) * startyear;
+			workingdays = workingdays + (0.55835) * startyear;
 
 			endyear = project.getEndDate().getDayOfYear();
 			while (endyear >= 30) {
 				workingdays = workingdays + 19;
 				endyear = endyear - 30;
 			}
-			workingdays = workingdays + (0.633333333333333) * endyear;
+			workingdays = workingdays + (0.55835) * endyear;
 		}
 
 		finaldays = Math.round(workingdays);
