@@ -4,10 +4,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
-import client.view.IComponents;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.layout.AnchorPane;
+import client.view.IComponents;
 
 /**
  * This class represents the tab where the skills are entered

@@ -13,4 +13,11 @@ public interface IExpandableNode {
 	 * This method is called when the node will be removed from the expandable table
 	 */
 	public void removeNode();
+	
+	/**
+	 * Get a node by its name
+	 * @param fxmlName the name of the node
+	 * @return the node
+	 */
+	public Node getNode(String fxmlName);
 }

@@ -108,74 +108,157 @@ public class Core extends ASingelton implements ICoreClient {
 	
 	
 	// build the project object
-		private void buildProject(){
-			project = new Project();
-			
-			// first screen
-			project.setProjectName(view.getProjectName());
-			project.setProjectResponsible(view.getProjectResponsible());
-			project.setDescription(view.getProjectDescription());
-			
-			// second screen
-			for(SkillPane pane : view.getSkillPanes()){
-				Skill skill = new Skill();
-				skill.setSkillName(pane.getSkillName());
-				skill.setDayRateInt(pane.getDayRateInt());
-				skill.setDayRateExt(pane.getDayRateExt());
-				
-				project.addSkill(skill);
+	// returns true if it was successful
+	private boolean buildProject(){
+		project = new Project();
+		
+		// first screen
+		if(view.getProjectName().replaceAll(" ", "").isEmpty()){
+			view.markNode(null, "txtProjectName");
+			view.setStatus("Bitte einen Projektnamen angeben.", 10);
+			return false;
+		}
+		project.setProjectName(view.getProjectName());
+		if(view.getProjectResponsible().replaceAll(" ", "").isEmpty()){
+			view.markNode(null, "txtProjectResponsible");
+			view.setStatus("Bitte einen Projektverantwortlichen angeben.", 10);
+			return false;
+		}
+		project.setProjectResponsible(view.getProjectResponsible());
+		project.setDescription(view.getProjectDescription());
+		
+		// second screen
+		for(SkillPane pane : view.getSkillPanes()){
+			Skill skill = new Skill();
+			if(pane.getSkillName().replaceAll(" ", "").isEmpty()){
+				view.markNode(pane, "txtSkillName");
+				view.setStatus("Bitte einen Kompetenznamen angeben.", 10);
+				return false;
 			}
+			skill.setSkillName(pane.getSkillName());
+			skill.setDayRateInt(pane.getDayRateInt());
+			skill.setDayRateExt(pane.getDayRateExt());
 			
-			// third screen
-			for(ResourcePaneWrapper paneWrapper : view.getResourcePanes()){
-				for(ResourcePane pane : paneWrapper.getResourcePanes()){
-					Resource resource = new Resource();
-					resource.setResourceName(pane.getResourceName());
-					resource.setSkill(paneWrapper.getSkill().getSkillID());
-					resource.setAvailability(pane.getAvailability());
-					resource.setSkillAmount(pane.getSkillAmount());
-					resource.setIntern(pane.isIntern());
-					
-					project.addResource(resource);
+			project.addSkill(skill);
+		}
+		
+		// third screen
+		for(ResourcePaneWrapper paneWrapper : view.getResourcePanes()){
+			for(ResourcePane pane : paneWrapper.getResourcePanes()){
+				Resource resource = new Resource();
+				if(pane.getResourceName().replaceAll(" ", "").isEmpty()){
+					view.markNode(pane, "txtResourceName");
+					view.setStatus("Bitte einen Resourcennamen angeben.", 10);
+					return false;
 				}
-			}
-			
-			// fourth screen
-			Hashtable<PhasePaneWrapper, ArrayList<PhasePaneWrapper>> phases = view.getPhasePanes();
-			Enumeration<PhasePaneWrapper> enumKey = phases.keys();
-			while(enumKey.hasMoreElements()){
-				PhasePaneWrapper main = enumKey.nextElement();
+				resource.setResourceName(pane.getResourceName());
+				resource.setSkill(paneWrapper.getSkill().getSkillID());
+				if(pane.getAvailability() == -1){
+					view.markNode(pane, "txtAvailability");
+					view.setStatus("Bitte eine Verfügbarkeit angeben.", 10);
+					return false;
+				}
+				resource.setAvailability(pane.getAvailability());
+				if(pane.getSkillAmount() == -1){
+					view.markNode(pane, "txtSkillAmount");
+					view.setStatus("Bitte eine Anzahl angeben.", 10);
+					return false;
+				}
+				resource.setSkillAmount(pane.getSkillAmount());
+				resource.setIntern(pane.isIntern());
 				
-				Phase mainPhase = new Phase();
-				mainPhase.setPhaseName(main.getPhaseName());
-				if(phases.get(main).isEmpty()){
-					mainPhase.setStartDate(main.getPhaseBegin());
-					mainPhase.setEndDate(main.getPhaseEnd());
-					mainPhase.setRiskFactor(main.getRiskFactor());
-					
-					for(PhasePane phasePane : main.getPhasePanes()){
-						mainPhase.addSkill(phasePane.getPhaseSkillId(), phasePane.getPhaseDuration());
+				project.addResource(resource);
+			}
+		}
+		
+		// fourth screen
+		Hashtable<PhasePaneWrapper, ArrayList<PhasePaneWrapper>> phases = view.getPhasePanes();
+		Enumeration<PhasePaneWrapper> enumKey = phases.keys();
+		while(enumKey.hasMoreElements()){
+			PhasePaneWrapper main = enumKey.nextElement();
+			
+			Phase mainPhase = new Phase();
+			if(main.getPhaseName().replaceAll(" ", "").isEmpty()){
+				view.markNode(main, "txtPhaseName");
+				view.setStatus("Bitte einen Phasennamen angeben.", 10);
+				return false;
+			}
+			mainPhase.setPhaseName(main.getPhaseName());
+			if(phases.get(main).isEmpty()){
+				if(main.getPhaseBegin() == null){
+					view.markNode(main, "datPhaseBegin");
+					view.setStatus("Bitte einen Phasenbeginn angeben.", 10);
+					return false;
+				}
+				mainPhase.setStartDate(main.getPhaseBegin());
+				if(main.getPhaseEnd() == null){
+					view.markNode(main, "datPhaseEnd");
+					view.setStatus("Bitte ein Phasenende angeben.", 10);
+					return false;
+				}
+				mainPhase.setEndDate(main.getPhaseEnd());
+				mainPhase.setRiskFactor(main.getRiskFactor());
+				
+				for(PhasePane phasePane : main.getPhasePanes()){
+					if(phasePane.getPhaseSkillId() == -1){
+						view.markNode(phasePane, "cmbSkills");
+						view.setStatus("Bitte einen Skill auswählen.", 10);
+						return false;
 					}
+					if(phasePane.getPhaseDuration() == -1){
+						view.markNode(phasePane, "txtDuration");
+						view.setStatus("Bitte eine Dauer angeben.", 10);
+						return false;
+					}
+					mainPhase.addSkill(phasePane.getPhaseSkillId(), phasePane.getPhaseDuration());
+				}
+				
+				project.addPhase(mainPhase);
+			}else{
+				for(PhasePaneWrapper sub : phases.get(main)){
+					Phase subPhase = new Phase();
+					if(sub.getPhaseName().replaceAll(" ", "").isEmpty()){
+						view.markNode(sub, "txtPhaseName");
+						view.setStatus("Bitte einen Phasennamen angeben.", 10);
+						return false;
+					}
+					subPhase.setPhaseName(sub.getPhaseName());
+					subPhase.setParent(mainPhase);
+					if(sub.getPhaseBegin() == null){
+						view.markNode(sub, "datPhaseBegin");
+						view.setStatus("Bitte einen Phasenbeginn angeben.", 10);
+						return false;
+					}
+					subPhase.setStartDate(sub.getPhaseBegin());
+					if(sub.getPhaseEnd() == null){
+						view.markNode(sub, "datPhaseEnd");
+						view.setStatus("Bitte ein Phasenende angeben.", 10);
+						return false;
+					}
+					subPhase.setEndDate(sub.getPhaseEnd());
+					subPhase.setRiskFactor(sub.getRiskFactor());
 					
-					project.addPhase(mainPhase);
-				}else{
-					for(PhasePaneWrapper sub : phases.get(main)){
-						Phase subPhase = new Phase();
-						subPhase.setPhaseName(sub.getPhaseName());
-						subPhase.setParent(mainPhase);
-						subPhase.setStartDate(sub.getPhaseBegin());
-						subPhase.setEndDate(sub.getPhaseEnd());
-						subPhase.setRiskFactor(sub.getRiskFactor());
-						
-						for(PhasePane phasePane : sub.getPhasePanes()){
-							subPhase.addSkill(phasePane.getPhaseSkillId(), phasePane.getPhaseDuration());
+					for(PhasePane phasePane : sub.getPhasePanes()){
+						if(phasePane.getPhaseSkillId() == -1){
+							view.markNode(phasePane, "cmbSkills");
+							view.setStatus("Bitte einen Skill auswählen.", 10);
+							return false;
 						}
-						
-						project.addPhase(subPhase);
+						if(phasePane.getPhaseDuration() == -1){
+							view.markNode(phasePane, "txtDuration");
+							view.setStatus("Bitte eine Dauer angeben.", 10);
+							return false;
+						}
+						subPhase.addSkill(phasePane.getPhaseSkillId(), phasePane.getPhaseDuration());
 					}
+					
+					project.addPhase(subPhase);
 				}
 			}
 		}
+		
+		return true;
+	}
 	
 	
 	@Override
@@ -315,10 +398,11 @@ public class Core extends ASingelton implements ICoreClient {
 	
 	
 	@Override
-	public void calculateProject(){
+	public boolean calculateProject(){
 		Project result = null;
 		
-		buildProject();
+		if(!buildProject())
+			return false;
 		try {
 			result = server.calculateProject(project);
 		} catch (RemoteException e) {
@@ -326,5 +410,7 @@ public class Core extends ASingelton implements ICoreClient {
 		}
 		
 		project = result;
+		
+		return true;
 	}
 }

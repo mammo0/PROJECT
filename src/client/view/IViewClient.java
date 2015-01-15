@@ -26,4 +26,10 @@ public interface IViewClient extends IComponents {
 	 * @param displayTime the time how long the message is displayed
 	 */
 	public void setStatus(String status, int displayTime);
+	
+	/**
+	 * This method marks a node on the view to set an input
+	 * @param fxmlName the name of the node
+	 */
+	public void markNode(Node parent, String fxmlName);
 }

@@ -68,5 +68,5 @@ public interface ICoreClient {
 	/**
 	 * Calculate the project object
 	 */
-	public void calculateProject();
+	public boolean calculateProject();
 }

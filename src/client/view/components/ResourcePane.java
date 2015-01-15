@@ -83,6 +83,25 @@ public class ResourcePane extends AnchorPane implements IExpandableNode, ITester
 	
 	
 	
+	@Override
+	public Node getNode(String fxmlName) {
+		switch (fxmlName) {
+			case "txtResourceName":
+				return txtResourceName;
+			case "cmbIntExt":
+				return cmbIntExt;
+			case "txtAvailability":
+				return txtAvailability;
+			case "txtSkillAmount":
+				return txtSkillAmount;
+	
+			default:
+				return null;
+		}
+	}
+	
+	
+	
 	
 	/**
 	 * Get the resource name

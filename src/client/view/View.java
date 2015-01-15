@@ -66,6 +66,11 @@ public class View extends ASingelton implements IViewClient {
 		viewController.setStatus(status, displayTime);
 	}
 	
+	@Override
+	public void markNode(Node parent, String fxmlName){
+		viewController.markNode(parent, fxmlName);
+	}
+	
 	
 	
 	/**

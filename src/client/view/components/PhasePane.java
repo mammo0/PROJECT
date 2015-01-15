@@ -89,6 +89,20 @@ public class PhasePane extends AnchorPane implements IExpandableNode, ITester {
 	}
 	
 	
+	@Override
+	public Node getNode(String fxmlName) {
+		switch (fxmlName) {
+			case "cmbSkills":
+				return cmbSkills;
+			case "txtDuration":
+				return txtDuration;
+	
+			default:
+				return null;
+		}
+	}
+	
+	
 	
 	@Override
 	public boolean checkInput(Node node) {

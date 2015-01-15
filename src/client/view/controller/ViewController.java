@@ -10,9 +10,11 @@ import java.util.ResourceBundle;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
+import javafx.application.Platform;
 import javafx.beans.value.WritableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Node;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
@@ -22,8 +24,10 @@ import client.core.ICoreClient;
 import client.view.IComponents;
 import client.view.IViewClient;
 import client.view.View;
+import client.view.components.PhasePane;
 import client.view.components.PhasePaneWrapper;
 import client.view.components.ProjectEditor;
+import client.view.components.ResourcePane;
 import client.view.components.ResourcePaneWrapper;
 import client.view.components.SettingsMenu;
 import client.view.components.SkillPane;
@@ -78,9 +82,8 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 	
 	@FXML
 	private void calculateProject(){
-		core.calculateProject();
-		
-		projectEditor.displayResults();
+		if(core.calculateProject())
+			projectEditor.displayResults();
 	}
 	
 	@FXML
@@ -119,6 +122,63 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 	
 	
 	/**
+	 * This method marks a node on the view to set an input
+	 * @param fxmlName the name of the node
+	 */
+	public void markNode(Node parent, String fxmlName){
+		Node node = null;
+		if(parent == null){
+			node = projectEditor.getNode(fxmlName);
+			projectEditor.getSelectionModel().select(0);
+		}else if(parent instanceof SkillPane){
+			node = ((SkillPane)parent).getNode(fxmlName);
+			projectEditor.getSelectionModel().select(1);
+		}else if(parent instanceof ResourcePane){
+			node = ((ResourcePane)parent).getNode(fxmlName);
+			projectEditor.getSelectionModel().select(2);
+			Node resParent = parent.getParent();
+			while(!(resParent instanceof ResourcePaneWrapper))
+				resParent = resParent.getParent();
+			((ResourcePaneWrapper) resParent).setExpanded(true);
+		}else if(parent instanceof PhasePaneWrapper){
+			node = ((PhasePaneWrapper)parent).getNode(fxmlName);
+			projectEditor.getSelectionModel().select(3);
+			((PhasePaneWrapper) parent).setExpanded(true);
+		}else if(parent instanceof PhasePane){
+			node = ((PhasePane)parent).getNode(fxmlName);
+			projectEditor.getSelectionModel().select(3);
+			Node phaParent = parent.getParent();
+			while(!(phaParent instanceof PhasePaneWrapper))
+				phaParent = phaParent.getParent();
+			((PhasePaneWrapper) phaParent).setExpanded(true);
+		}
+		
+		final Node finalNode = node;
+		if(node != null){
+			new Thread(){
+				public void run(){
+					while(!finalNode.focusedProperty().get()){
+						try {
+							Thread.sleep(1);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						}
+						Platform.runLater(new Runnable() {
+						    @Override
+						    public void run() {
+						    	// TODO mark as red or something like that
+						    	
+						    	finalNode.requestFocus();
+						    }
+						});
+					}
+				}
+			}.start();
+		}
+	}
+	
+	
+	/**
 	 * This method displays a status text for a given period of time on the view
 	 * @param status the status message
 	 * @param displayTime the time how long the message is displayed
@@ -129,6 +189,14 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 		if(displayTime > 0){
 			newSimpleAnimation(lblStatus.textProperty(), null, "", displayTime);
 		}
+	}
+	
+	
+	/**
+	 * This method updates the resources view
+	 */
+	public void updateResoources(){
+		projectEditor.updateResources();
 	}
 
 	

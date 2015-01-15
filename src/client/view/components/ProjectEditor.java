@@ -6,6 +6,7 @@ import java.util.Hashtable;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
@@ -20,6 +21,8 @@ import client.view.IComponents;
  */
 public class ProjectEditor extends TabPane implements IComponents {
 	
+	@FXML
+	private Tab tabProject;
 	@FXML
 	private Tab tabSkills;
 	@FXML
@@ -78,17 +81,23 @@ public class ProjectEditor extends TabPane implements IComponents {
 	}
 	
 	
-	// this method is called when the resources tab is opened
-	// it updates the resources view
+
+	/**
+	 * This method is called when the resources tab is opened.
+	 * It updates the resources view
+	 */
 	@FXML
-	private void updateResources(){
+	public void updateResources(){
 		resourceTab.updateResources();
 	}
 	
-	// this method is called when the phases tab is opened
-	// it updates the phases view
+	
+	/**
+	 * This method is called when the phases tab is opened.
+	 * It updates the phases view
+	 */
 	@FXML
-	private void updatePhases(){
+	public void updatePhases(){
 		phaseTab.updatePhases();
 	}
 	
@@ -104,6 +113,26 @@ public class ProjectEditor extends TabPane implements IComponents {
 		this.getSelectionModel().select(tabResults);
 	}
 	
+	
+	
+	/**
+	 * Get a node by its name
+	 * @param fxmlName the name of the node
+	 * @return the node
+	 */
+	public Node getNode(String fxmlName){
+		switch (fxmlName) {
+			case "txtProjectName":
+				return txtProjectName;
+			case "txtProjectResponsible":
+				return txtProjectResponsible;
+			case "txtProjectDescription":
+				return txtProjectDescription;
+
+			default:
+				return null;
+		}
+	}
 	
 	
 	

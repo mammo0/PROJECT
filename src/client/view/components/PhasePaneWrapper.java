@@ -29,9 +29,9 @@ import javafx.scene.layout.Priority;
 public class PhasePaneWrapper extends TitledPane implements ITester {
 	
 	@FXML
-	private DatePicker datProjectBegin;
+	private DatePicker datPhaseBegin;
 	@FXML
-	private DatePicker datProjectEnd;
+	private DatePicker datPhaseEnd;
 	@FXML
 	private TextField txtRiskFactor;
 	@FXML
@@ -40,7 +40,7 @@ public class PhasePaneWrapper extends TitledPane implements ITester {
 	private PhaseTab parent;
 	
 	private ExpandableTable<PhasePane> phaseTable;
-	private TextField phaseName;
+	private TextField txtPhaseName;
 	private Button btnRemovePhase;
 	
 	private boolean subPhase;
@@ -73,6 +73,8 @@ public class PhasePaneWrapper extends TitledPane implements ITester {
 		    e.printStackTrace();
 		}
 		
+		final PhasePaneWrapper This = this;
+		
 		this.parent = parent;
 		this.subPhase = subPhase;
 		
@@ -82,16 +84,16 @@ public class PhasePaneWrapper extends TitledPane implements ITester {
 		core = Core.getInstance(Core.class);
 		
 		// build the titled pane header
-		phaseName = new TextField();
-		phaseName.setPromptText("Phasenname");
+		txtPhaseName = new TextField();
+		txtPhaseName.setPromptText("Phasenname");
 		
 		btnRemovePhase = new Button("-");
 		btnRemovePhase.setOnAction(this::btnRemovePhaseClick);
 		
         GridPane header = new GridPane();
-        header.add(phaseName, 0, 0);
+        header.add(txtPhaseName, 0, 0);
         header.add(btnRemovePhase, 1, 0);
-        GridPane.setConstraints(phaseName, 0, 0, 1, 1, HPos.LEFT, VPos.CENTER, Priority.SOMETIMES, Priority.NEVER, Insets.EMPTY);
+        GridPane.setConstraints(txtPhaseName, 0, 0, 1, 1, HPos.LEFT, VPos.CENTER, Priority.SOMETIMES, Priority.NEVER, Insets.EMPTY);
         GridPane.setConstraints(btnRemovePhase, 1, 0, 1, 1, HPos.RIGHT, VPos.CENTER, Priority.SOMETIMES, Priority.NEVER, Insets.EMPTY);
         
         // check if the wrapper contains a sub phase
@@ -114,20 +116,24 @@ public class PhasePaneWrapper extends TitledPane implements ITester {
 		AnchorPane.setLeftAnchor(phaseTable, 0d);
 		
 		// check that the dates are correct
-		datProjectBegin.valueProperty().addListener(new ChangeListener<LocalDate>(){
+		datPhaseBegin.valueProperty().addListener(new ChangeListener<LocalDate>(){
 			@Override
 			public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
 				if(newValue != null && (getPhaseEnd() == null || getPhaseEnd().isBefore(newValue)))
-					datProjectEnd.setValue(newValue);
+					datPhaseEnd.setValue(newValue);
+				else if(newValue != null)
+					parent.checkPhaseDates(This, newValue, null);
 			}
 		});
-		datProjectEnd.valueProperty().addListener(new ChangeListener<LocalDate>(){
+		datPhaseEnd.valueProperty().addListener(new ChangeListener<LocalDate>(){
 			@Override
 			public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
 				if(getPhaseBegin() == null)
-					datProjectBegin.setValue(newValue);
+					datPhaseBegin.setValue(newValue);
 				else if(newValue != null && newValue.isBefore(getPhaseBegin()))
-					datProjectEnd.setValue(getPhaseBegin());
+					datPhaseEnd.setValue(getPhaseBegin());
+				else if(newValue != null)
+					parent.checkPhaseDates(This, null, newValue);
 			}
 		});
 		
@@ -141,6 +147,29 @@ public class PhasePaneWrapper extends TitledPane implements ITester {
 			parent.removeSubPhase(this);
 		else
 			parent.removeMainPhase(this);
+	}
+	
+	
+	
+	/**
+	 * Get a node by its name
+	 * @param fxmlName the name of the node
+	 * @return the node
+	 */
+	public Node getNode(String fxmlName){
+		switch (fxmlName) {
+			case "datPhaseBegin":
+				return datPhaseBegin;
+			case "datPhaseEnd":
+				return datPhaseEnd;
+			case "txtRiskFactor":
+				return txtRiskFactor;
+			case "txtPhaseName":
+				return txtPhaseName;
+
+			default:
+				return null;
+		}
 	}
 	
 	
@@ -217,25 +246,41 @@ public class PhasePaneWrapper extends TitledPane implements ITester {
 	 * @return the phase name
 	 */
 	public String getPhaseName(){
-		return phaseName.getText();
+		return txtPhaseName.getText();
 	}
 	
 	
 	/**
-	 * Get the project begin date
+	 * Get the phase begin date
 	 * @return the begin date
 	 */
 	public LocalDate getPhaseBegin(){
-		return datProjectBegin.getValue();
+		return datPhaseBegin.getValue();
+	}
+	
+	/**
+	 * Set the phase begin date
+	 * @param date the begin date
+	 */
+	public void setPhaseBegin(LocalDate date){
+		datPhaseBegin.setValue(date);
 	}
 	
 	
 	/**
-	 * Get the project end date
+	 * Get the phase end date
 	 * @return the end date
 	 */
 	public LocalDate getPhaseEnd(){
-		return datProjectEnd.getValue();
+		return datPhaseEnd.getValue();
+	}
+	
+	/**
+	 * Set the phase end date
+	 * @param date the end date
+	 */
+	public void setPhaseEnd(LocalDate date){
+		datPhaseEnd.setValue(date);
 	}
 	
 	
@@ -247,8 +292,17 @@ public class PhasePaneWrapper extends TitledPane implements ITester {
 		try{
 			return Integer.valueOf(txtRiskFactor.getText());
 		}catch (Exception e){
-			return -1;
+			return 0;
 		}
+	}
+	
+	
+	/**
+	 * Returns true if it is a sub phase
+	 * @return
+	 */
+	public boolean isSubPhase(){
+		return subPhase;
 	}
 	
 	

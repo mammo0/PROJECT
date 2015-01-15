@@ -1,11 +1,12 @@
 package client.view.components;
 
 import java.io.IOException;
+import java.time.LocalDate;
+import java.time.Period;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-import client.view.IComponents;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -14,6 +15,7 @@ import javafx.scene.control.Accordion;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TitledPane;
+import client.view.IComponents;
 
 public class PhaseTab extends ScrollPane implements IComponents {
 	
@@ -69,6 +71,119 @@ public class PhaseTab extends ScrollPane implements IComponents {
 	}
 	
 	
+	/**
+	 * Check if the phases are overlapping. If so change the other phase dates.
+	 * @param phase the phase to be checked
+	 */
+	public void checkPhaseDates(PhasePaneWrapper phase){
+		checkPhaseDates(phase, phase.getPhaseBegin(), phase.getPhaseEnd());
+	}
+	
+	
+	/**
+	 * Check if the phases are overlapping. If so change the other phase dates.
+	 * @param phase the phase to be checked
+	 * @param phaseStart start date of the phase
+	 * @param phaseEnd end date of the phase
+	 */
+	public void checkPhaseDates(PhasePaneWrapper phase, LocalDate phaseStart, LocalDate phaseEnd){
+		// check above
+		LocalDate aboveEnd = getAboveEndDate(phase);
+		if(phaseStart == null && aboveEnd != null){
+			phase.setPhaseBegin(aboveEnd.plusDays(1));
+		}
+		else if(aboveEnd != null && phaseStart != null){
+			if(aboveEnd.isAfter(phaseStart) || aboveEnd.isEqual(phaseStart)){
+				PhasePaneWrapper above = getPhaseAbove(phase);
+				if(above.getPhaseBegin() != null && above.getPhaseEnd() != null){
+					// TODO dialog confirmation
+					
+					int aboveDuration = Period.between(above.getPhaseBegin(), above.getPhaseEnd()).getDays();
+					above.setPhaseBegin(phaseStart.minusDays(aboveDuration+1));
+					above.setPhaseEnd(phaseStart.minusDays(1));
+				}
+			}
+		}
+		
+		// check below
+		LocalDate belowStart = getBelowStartDate(phase);
+		if(phaseEnd == null && belowStart != null)
+			phase.setPhaseEnd(belowStart.minusDays(1));
+		else if(belowStart != null && phaseEnd != null){
+			if(belowStart.isBefore(phaseEnd) || belowStart.isEqual(phaseEnd)){
+				PhasePaneWrapper below = getPhaseBelow(phase);
+				if(below.getPhaseBegin() != null && below.getPhaseEnd() != null){
+					// TODO dialog confirmation
+					
+					int belowDuration = Period.between(below.getPhaseBegin(), below.getPhaseEnd()).getDays();
+					below.setPhaseEnd(phaseEnd.plusDays(belowDuration+1));
+					below.setPhaseBegin(phaseEnd.plusDays(1));
+				}
+			}
+		}
+	}
+	
+	
+	
+	// this method gets the phase below another
+	private PhasePaneWrapper getPhaseBelow(PhasePaneWrapper phase){
+		int index = accPhaseList.getPanes().indexOf(phase)+1;
+		while(index < accPhaseList.getPanes().size() && !(accPhaseList.getPanes().get(index) instanceof PhasePaneWrapper)){
+			index++;
+		}
+		if(index >= accPhaseList.getPanes().size())
+			return null;
+		
+		return (PhasePaneWrapper) accPhaseList.getPanes().get(index);
+	}
+	
+	// this method gets the phase above another
+	private PhasePaneWrapper getPhaseAbove(PhasePaneWrapper phase){
+		int index = accPhaseList.getPanes().indexOf(phase)-1;
+		while(index >=0 && !(accPhaseList.getPanes().get(index) instanceof PhasePaneWrapper)){
+			index--;
+		}
+		if(index < 0)
+			return null;
+		
+		return (PhasePaneWrapper) accPhaseList.getPanes().get(index);
+	}
+	
+	// this method returns the end date of the phase above
+	private LocalDate getAboveEndDate(PhasePaneWrapper phase){
+		LocalDate date = null;
+		PhasePaneWrapper above = getPhaseAbove(phase);
+		if(above == null)
+			return null;
+		
+		if(phase.isSubPhase() && !above.isSubPhase()){
+			date = getAboveEndDate(above);
+		}else{
+			date = above.getPhaseEnd();
+		}
+		
+		return date;
+	}
+	
+	// this method returns the start date of the phase below
+	private LocalDate getBelowStartDate(PhasePaneWrapper phase){
+		LocalDate date = null;
+		PhasePaneWrapper below = getPhaseBelow(phase);
+		if(below == null)
+			return null;
+		
+		if(!phase.isSubPhase() && below.isSubPhase()){
+			date = getBelowStartDate(below);
+		}else if(phase.isSubPhase() && !below.isSubPhase() && !subPhases.get(below).isEmpty()){
+			date = getBelowStartDate(below);
+		}else{
+			date = below.getPhaseBegin();
+		}
+		
+		return date;
+	}
+	
+	
 	
 	
 	/**
@@ -90,6 +205,8 @@ public class PhaseTab extends ScrollPane implements IComponents {
 		accPhaseList.getPanes().add(index+1, addSub);
 		accPhaseList.getPanes().add(index+2, addMain);
 		
+		checkPhaseDates(main);;
+		
 		mainPhases.add(main);
 	}
 
@@ -106,6 +223,8 @@ public class PhaseTab extends ScrollPane implements IComponents {
 		int index = accPhaseList.getPanes().indexOf(from);
 		
 		accPhaseList.getPanes().add(index, sub);
+		
+		checkPhaseDates(sub);
 		
 		ArrayList<PhasePaneWrapper> tempSubPhases = subPhases.get(mainPhases.get(mainPhases.indexOf(main)));
 		if(tempSubPhases == null)
@@ -276,7 +395,11 @@ public class PhaseTab extends ScrollPane implements IComponents {
 			panes.put(key, subPanes);
 		}
 		
-		return panes;
+		if(panes.isEmpty()){
+			addMainPhase(addMain);
+			return getPhasePanes();
+		}else
+			return panes;
 	}
 	
 

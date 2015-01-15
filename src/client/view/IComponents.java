@@ -26,7 +26,8 @@ public interface IComponents {
 	public ArrayList<ResourcePaneWrapper> getResourcePanes();
 	
 	/**
-	 * Get the phase panes from the project editor
+	 * Get the phase panes from the project editor.
+	 * If no phases exist, it creates an empty main phase.
 	 * @return the phase panes
 	 */
 	public Hashtable<PhasePaneWrapper, ArrayList<PhasePaneWrapper>> getPhasePanes();
