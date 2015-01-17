@@ -4,6 +4,7 @@ import global.IServerService;
 
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
+import java.util.ArrayList;
 
 import model.project.Project;
 
@@ -37,7 +38,7 @@ public class ProjectCalculator extends UnicastRemoteObject implements IServerSer
 	
 	
 	@Override
-	public String[] getAllProjectNames() throws RemoteException {
+	public ArrayList<String> getAllProjectNames() throws RemoteException {
 		return core.getAllProjectNames();
 	}
 

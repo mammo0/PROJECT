@@ -3,6 +3,7 @@ package server.core;
 import global.ASingelton;
 import global.IServerService;
 
+import java.io.File;
 import java.io.FileNotFoundException;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
@@ -43,6 +44,7 @@ public class Core extends ASingelton implements ICoreServer {
 	private int serverPort;
 	private String rmiUrl;
 	private Project project;
+	File f = new File("C:\\Users\\Kreistchen\\git\\PROJECT");
 
 	@Override
 	public int getServerPort() {
@@ -115,17 +117,29 @@ public class Core extends ASingelton implements ICoreServer {
 	}
 
 	@Override
-	public String[] getAllProjectNames() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public Project calculateProject(Project project) {
 		this.project = project;
 		calculateLenght(project);
 		calculateResultSkill(project);
-		// calculateProjectDays(project);
+
+		try {
+			writeProject(project);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (XMLStreamException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		calculateProjectDays(project);
+		
+		try {
+			getAllProjectNames();
+		} catch (RemoteException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
 		return project;
 	}
 
@@ -411,7 +425,7 @@ public class Core extends ASingelton implements ICoreServer {
 
 			}
 
-			//calculate costs
+			// calculate costs
 			_costIntRisk = _totalShouldRisk * _dayrateInt;
 			_costExt = _pdExt * _dayrateExt;
 			_costInt = _pdInt * _dayrateInt;
@@ -419,8 +433,7 @@ public class Core extends ASingelton implements ICoreServer {
 			_costTotal = _costInt + _costExt;
 			_pdTotalBe = _pdInt + _pdExt;
 
-			
-			//set the result variables
+			// set the result variables
 			result.setPdIntBe(_pdInt);
 			result.setPdExtBe(_pdExt);
 			result.setPdTotalBe(_pdTotalBe);
@@ -489,17 +502,52 @@ public class Core extends ASingelton implements ICoreServer {
 
 	public void writeProject(Project project) throws FileNotFoundException,
 			XMLStreamException {
-
+		createxml = new CreateXML();
 		createxml.setFile("" + project.getProjectName() + ".xml");
 		try {
 			createxml.saveConfig(project);
+			// createxml.startTagSkills();
+			// createxml.endTagSkills();
 			createxml.startTagPhasen();
+			for (int i = 0; i < project.getPhases().size(); i++) {
+				createxml.insertPhase(project, i);
+			}
 			createxml.endTagPhasen();
+			createxml.startTagSkills();
+			for (int j = 0; j < project.getSkills().size(); j++) {
+				createxml.insertSkill(project, j);
+			}
+			createxml.endTagSkills();
+			createxml.startTagResource();
+			for (int k = 0; k < project.getResources().size(); k++) {
+				createxml.insertResource(project, k);
+			}
+			createxml.endTagResource();
 			createxml.closeXML();
 
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public ArrayList<String> getAllProjectNames() throws RemoteException {
+		File dir = f;
+		ArrayList<String> Names = new ArrayList();
+		File[] files = dir.listFiles();
+		if (files != null) {
+			for (int i = 0; i < files.length; i++) {
+				if (files[i].getName().endsWith("xml") == true) {
+					String _fileName = files[i].getName();
+					String fileName = _fileName.substring(0,
+							_fileName.indexOf('.'));
+					Names.add(fileName);
+
+				}
+			}
+		}
+
+		return Names;
 	}
 
 	@Override

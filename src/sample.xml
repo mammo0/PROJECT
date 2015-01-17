@@ -19,7 +19,6 @@
 			<skillID></skillID>
 			<dayRateInt></dayRateInt>
 			<dayRateExt></dayRateExt>
-			<resultRisk></resultRisk>
 			<resultWRisk>
 				<pdInt></pdInt>
 				<pdExt></pdExt>
@@ -85,5 +84,4 @@
 			</year>
 		</years>
 	</resultRisk>
-	<resultWRisk></resultWRisk>
 </project>

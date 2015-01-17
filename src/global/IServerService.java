@@ -2,6 +2,7 @@ package global;
 
 import java.rmi.Remote;
 import java.rmi.RemoteException;
+import java.util.ArrayList;
 
 import model.project.Project;
 
@@ -19,7 +20,7 @@ public interface IServerService extends Remote{
 	 * @return all project names
 	 * @throws RemoteException 
 	 */
-	public String[] getAllProjectNames() throws RemoteException;
+	public ArrayList<String> getAllProjectNames() throws RemoteException;
 	
 	/**
 	 * This method calculates the costs and people days for a project
