@@ -140,7 +140,7 @@ public class CreateXML {
 				"", "skill");
 		eventWriter.add(configStartElementskill);
 		eventWriter.add(end);
-		createNode(eventWriter, "phaseName", project.getSkills().get(i).getSkillName());
+		createNode(eventWriter, "skillName", project.getSkills().get(i).getSkillName());
 		createNode(eventWriter, "skillID", "" + project.getSkills().get(i).getSkillID());
 		createNode(eventWriter, "dayRateInt", "" + project.getSkills().get(i).getDayRateInt());
 		createNode(eventWriter, "dayRateExt", "" + project.getSkills().get(i).getDayRateExt());

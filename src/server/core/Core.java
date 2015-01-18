@@ -44,6 +44,7 @@ public class Core extends ASingelton implements ICoreServer {
 	private int serverPort;
 	private String rmiUrl;
 	private Project project;
+	
 	File f = new File("C:\\Users\\Kreistchen\\git\\PROJECT");
 
 	@Override
@@ -75,6 +76,7 @@ public class Core extends ASingelton implements ICoreServer {
 	public void startGui() {
 		view = new View(this);
 		view.showFrame();
+		
 	}
 
 	@Override
@@ -121,31 +123,10 @@ public class Core extends ASingelton implements ICoreServer {
 		this.project = project;
 		calculateLenght(project);
 		calculateResultSkill(project);
-
-		try {
-			writeProject(project);
-		} catch (FileNotFoundException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (XMLStreamException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		calculateProjectDays(project);
-		
-		try {
-			getAllProjectNames();
-		} catch (RemoteException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		
 		return project;
 	}
 
-	public Phase calculatePhase(Phase phase) {
-		return null;
-	}
 
 	// calculate the length of the complete Project
 	public void calculateLenght(Project project) {
@@ -552,13 +533,21 @@ public class Core extends ASingelton implements ICoreServer {
 
 	@Override
 	public void saveProject(Project project) throws RemoteException {
-		// TODO Auto-generated method stub
+		try {
+			writeProject(project);
+		} catch (FileNotFoundException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (XMLStreamException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 	}
 
 	@Override
 	public Project loadProject(String projectName) throws RemoteException {
-		// TODO Auto-generated method stub
-		return null;
+		ReadXML xml = new ReadXML(projectName);
+		return xml.read();
 	}
 }

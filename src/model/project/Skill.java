@@ -14,6 +14,7 @@ public class Skill implements Serializable {
 	// the skillID calculated by the hash value of the skill name
 	private int skillID;
 	
+	
 	// the internal daily rate
 	private float dayRateInt;
 	
@@ -83,7 +84,10 @@ public class Skill implements Serializable {
 		return resultRisk;
 	}
 	
-	
+	public void setSkillID(int skillID) {
+		this.skillID = skillID;
+	}
+
 	
 	/**
 	 * Set the name of the Skill
