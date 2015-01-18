@@ -548,6 +548,9 @@ public class Core extends ASingelton implements ICoreServer {
 	@Override
 	public Project loadProject(String projectName) throws RemoteException {
 		ReadXML xml = new ReadXML(projectName);
-		return xml.read();
+		project = new Project();
+		project = xml.read();
+		calculateProject(project);
+		return project;
 	}
 }
