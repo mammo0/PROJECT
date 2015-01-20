@@ -30,7 +30,7 @@ public class ReadXML {
 		this.core = Core.getInstance(Core.class);
 		
 		//Pfad anpassen
-		new File(core.getProjectDirectory()+name+".xml");
+		file = new File(core.getProjectDirectory()+name+".xml");
 		
 	}
 	public Project read() {
