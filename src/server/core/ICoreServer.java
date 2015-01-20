@@ -39,4 +39,16 @@ public interface ICoreServer extends IServerService {
 	 * @param portNumber
 	 */
 	public void setServerPort(int portNumber);
+	
+	/**
+	 * Get the directory for the project files
+	 * @return the projectPath
+	 */
+	public String getProjectDirectory();
+	
+	/**
+	 * Set the directory for the project files
+	 * @param path
+	 */
+	public void setProjectDirectory(String path);
 }

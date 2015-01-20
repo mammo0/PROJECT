@@ -24,10 +24,13 @@ public class ReadXML {
 	Document doc = null;
 	File file;
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	private ICoreServer core;
 
 	public ReadXML(String name){
+		this.core = Core.getInstance(Core.class);
+		
 		//Pfad anpassen
-		new File("C:\\Users\\Kreistchen\\git\\PROJECT\\"+name+".xml");
+		new File(core.getProjectDirectory()+name+".xml");
 		
 	}
 	public Project read() {

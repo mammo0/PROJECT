@@ -24,12 +24,29 @@ public class View extends ASingelton implements IViewServer {
 	
 	private ICoreServer core;
 	
+	private Stage primaryStage;
+	
 	
 	/**
 	 * Constructor
 	 */
 	public View(ICoreServer core) {
 		this.core = core;
+	}
+	
+	
+	
+	// set the primary stage
+	private void setPrimaryStage(Stage primaryStage){
+		this.primaryStage = primaryStage;
+	}
+	
+	
+	
+	
+	@Override
+	public Stage getPrimaryStage(){
+		return primaryStage;
 	}
 	
 	
@@ -48,9 +65,11 @@ public class View extends ASingelton implements IViewServer {
 	public static class Frame extends Application {
 		
 		private static ICoreServer core;
+		private static View view;
 		
 		static{
-			Frame.core = (ICoreServer) Core.getInstance(Core.class);
+			Frame.core = Core.getInstance(Core.class);
+			Frame.view = View.getInstance(View.class);
 		}
 		
 		
@@ -62,6 +81,9 @@ public class View extends ASingelton implements IViewServer {
 	            primaryStage.setTitle("PROJECT Server");
 	            primaryStage.setScene(new Scene(root));
 	            primaryStage.setResizable(false);
+	            
+	            // set the primary stage
+	            view.setPrimaryStage(primaryStage);
 	            
 	            // handle the window close event
 	            primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {

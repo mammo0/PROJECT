@@ -10,15 +10,14 @@ import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
+import java.rmi.registry.Registry;
+import java.rmi.server.UnicastRemoteObject;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Enumeration;
-import java.util.Hashtable;
-import java.util.Iterator;
 
 import javax.xml.stream.XMLStreamException;
 
-import client.view.components.PhasePaneWrapper;
 import model.project.Phase;
 import model.project.Project;
 import model.project.Quarter;
@@ -38,14 +37,37 @@ public class Core extends ASingelton implements ICoreServer {
 
 	private View view;
 	private CreateXML createxml;
+	
+	private String projectPath;
 
 	// the server object
 	private IServerService server;
+	private Registry rmiRegistry;
 	private int serverPort;
 	private String rmiUrl;
 	private Project project;
 	
-	File f = new File("C:\\Users\\Kreistchen\\git\\PROJECT");
+	private File projectFilesDir;
+	
+	
+	public Core(){
+		this.projectPath = System.getProperty("user.dir");
+	}
+	
+	
+	@Override
+	public String getProjectDirectory(){
+		if(projectFilesDir == null)
+			return projectPath;
+		else
+			return projectFilesDir.getAbsolutePath();
+	}
+	
+	@Override
+	public void setProjectDirectory(String path){
+		this.projectPath = path;
+	}
+	
 
 	@Override
 	public int getServerPort() {
@@ -86,13 +108,16 @@ public class Core extends ASingelton implements ICoreServer {
 
 		// build the rmi url
 		this.rmiUrl = "rmi://localhost:" + serverPort + "/PROJECT";
+		
+		// set the server project path
+		this.projectFilesDir = new File(projectPath);
 
 		try {
 			// set up the server
 			server = new ProjectCalculator(this);
 
 			// start it
-			LocateRegistry.createRegistry(serverPort);
+			rmiRegistry = LocateRegistry.createRegistry(serverPort);
 			Naming.rebind(rmiUrl, server);
 			System.out.println("Server läuft.");
 		} catch (RemoteException | MalformedURLException e) {
@@ -107,6 +132,8 @@ public class Core extends ASingelton implements ICoreServer {
 
 		try {
 			Naming.unbind(rmiUrl);
+			UnicastRemoteObject.unexportObject(server, true);
+			UnicastRemoteObject.unexportObject(rmiRegistry, true);
 		} catch (RemoteException | MalformedURLException | NotBoundException e) {
 			// ignore the exception
 			// e.printStackTrace();
@@ -484,7 +511,7 @@ public class Core extends ASingelton implements ICoreServer {
 	public void writeProject(Project project) throws FileNotFoundException,
 			XMLStreamException {
 		createxml = new CreateXML();
-		createxml.setFile("" + project.getProjectName() + ".xml");
+		createxml.setFile(getProjectDirectory() + project.getProjectName() + ".xml");
 		try {
 			createxml.saveConfig(project);
 			// createxml.startTagSkills();
@@ -513,7 +540,7 @@ public class Core extends ASingelton implements ICoreServer {
 
 	@Override
 	public ArrayList<String> getAllProjectNames() throws RemoteException {
-		File dir = f;
+		File dir = projectFilesDir;
 		ArrayList<String> Names = new ArrayList();
 		File[] files = dir.listFiles();
 		if (files != null) {

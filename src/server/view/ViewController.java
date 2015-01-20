@@ -1,5 +1,6 @@
 package server.view;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 
@@ -11,9 +12,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import javafx.scene.input.InputMethodEvent;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
+import javafx.stage.DirectoryChooser;
 import server.core.Core;
 import server.core.ICoreServer;
 
@@ -26,6 +27,8 @@ public class ViewController implements Initializable{
 	
 	private ICoreServer core;
 	private IViewServer view;
+	
+	private String path;
 	
 	@FXML
 	private Circle statusInd;
@@ -40,6 +43,9 @@ public class ViewController implements Initializable{
 	@FXML
 	private TextField txtPort;
 	
+	@FXML
+	private TextField txtPath;
+	
 	
 	/**
 	 * The constructor looks for the singleton instances of the Core and View
@@ -47,6 +53,8 @@ public class ViewController implements Initializable{
 	public ViewController(){
 		this.core = (ICoreServer) Core.getInstance(Core.class);
 		this.view = (IViewServer) View.getInstance(View.class);
+		
+		this.path = core.getProjectDirectory();
 	}
 	
 	
@@ -62,6 +70,23 @@ public class ViewController implements Initializable{
 	/*
 	 * Button controller
 	 */
+	
+	/**
+	 * This method is called, when the path chooser button is hit.
+	 * It opens a directory chooser to select a directory for the project files.
+	 */
+	@FXML
+	private void btnPathChooserClick(ActionEvent event){
+		// show the directory chooser
+		DirectoryChooser directoryChooser = new DirectoryChooser();
+        File selectedDirectory = directoryChooser.showDialog(view.getPrimaryStage());
+        
+        if(selectedDirectory != null){
+        	txtPath.setText(selectedDirectory.getAbsolutePath());
+        	core.setProjectDirectory(selectedDirectory.getAbsolutePath());
+        }
+	}
+	
 	
 	/**
 	 * This method is called, when the start button is hit.
@@ -107,14 +132,6 @@ public class ViewController implements Initializable{
 		}
 	}
 	
-	/**
-	 * This method is called when the text has changed
-	 */
-	@FXML
-	public void txtPortChanged(InputMethodEvent event){
-		System.out.println();
-	}
-	
 	
 	
 	@Override
@@ -131,5 +148,8 @@ public class ViewController implements Initializable{
 		        }
 		    }
 		});
+		
+		// set the project path
+		txtPath.setText(path);
 	}
 }
