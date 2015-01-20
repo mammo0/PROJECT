@@ -58,9 +58,9 @@ public class Core extends ASingelton implements ICoreServer {
 	@Override
 	public String getProjectDirectory(){
 		if(projectFilesDir == null)
-			return projectPath;
+			return projectPath + "/";
 		else
-			return projectFilesDir.getAbsolutePath();
+			return projectFilesDir.getAbsolutePath()+"/";
 	}
 	
 	@Override
@@ -509,7 +509,7 @@ public class Core extends ASingelton implements ICoreServer {
 	}
 
 	public void writeProject(Project project) throws FileNotFoundException,
-			XMLStreamException {
+			XMLStreamException, NullPointerException{
 		createxml = new CreateXML();
 		createxml.setFile(getProjectDirectory() + project.getProjectName() + ".xml");
 		try {
@@ -560,6 +560,7 @@ public class Core extends ASingelton implements ICoreServer {
 
 	@Override
 	public void saveProject(Project project) throws RemoteException {
+		calculateLenght(project);
 		try {
 			writeProject(project);
 		} catch (FileNotFoundException e) {
@@ -567,6 +568,8 @@ public class Core extends ASingelton implements ICoreServer {
 			e.printStackTrace();
 		} catch (XMLStreamException e) {
 			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}catch (NullPointerException e){
 			e.printStackTrace();
 		}
 
