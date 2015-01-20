@@ -130,7 +130,7 @@ public class ReadXML {
 						skill.setDayRateInt(_dayRateInt);
 						float _dayRateExt = Float.parseFloat(dayRateExt.get(i)
 								.getText());
-						skill.setDayRateInt(_dayRateExt);
+						skill.setDayRateExt(_dayRateExt);
 						project.addSkill(skill);
 					}
 
