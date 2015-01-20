@@ -105,7 +105,7 @@ public class Core extends ASingelton implements ICoreServer {
 	public void startServer() {
 		if (serverPort == 0)
 			return;
-
+		
 		// build the rmi url
 		this.rmiUrl = "rmi://localhost:" + serverPort + "/PROJECT";
 		
@@ -122,6 +122,12 @@ public class Core extends ASingelton implements ICoreServer {
 			System.out.println("Server läuft.");
 		} catch (RemoteException | MalformedURLException e) {
 			System.err.println(e.getMessage());
+		}
+		try {
+			loadProject("Testprojekt");
+		} catch (RemoteException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
 		}
 	}
 

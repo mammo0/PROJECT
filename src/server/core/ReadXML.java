@@ -81,8 +81,8 @@ public class ReadXML {
 							.getChildText("riskFactor"));
 					phase.setRiskFactor(riskFactor);
 					
-					if(_phaseinhalt.getChildText("parent").isEmpty()){
-						
+					if(_phaseinhalt.getChildText("parent") == null){
+			
 					}else{
 						
 						Phase parent = new Phase();
