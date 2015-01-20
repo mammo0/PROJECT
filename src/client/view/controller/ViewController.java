@@ -103,7 +103,7 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 	
 	@FXML
 	private void saveProject(){
-		
+		core.saveProject();
 	}
 	
 	

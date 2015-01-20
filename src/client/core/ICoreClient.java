@@ -69,4 +69,9 @@ public interface ICoreClient {
 	 * Calculate the project object
 	 */
 	public boolean calculateProject();
+	
+	/**
+	 * Save all made entries
+	 */
+	public void saveProject();
 }
