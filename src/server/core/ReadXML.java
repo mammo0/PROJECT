@@ -81,7 +81,7 @@ public class ReadXML {
 							.getChildText("riskFactor"));
 					phase.setRiskFactor(riskFactor);
 
-					System.out.println(phase.getPhaseName());
+					//System.out.println(phase.getPhaseName());
 
 					// fill the Skill Hashtablet in the phases object
 					List<Element> phasenskills = _phaseinhalt
@@ -97,8 +97,8 @@ public class ReadXML {
 							int _amount = Integer.valueOf(duration.get(i)
 									.getText());
 							phase.addSkill(_skillID, _amount);
-							System.out.println(skillID.get(i).getText());
-							System.out.println(duration.get(i).getText());
+//							System.out.println(skillID.get(i).getText());
+//							System.out.println(duration.get(i).getText());
 						}
 					}
 					project.addPhase(phase);
