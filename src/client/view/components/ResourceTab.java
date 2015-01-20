@@ -125,6 +125,26 @@ public class ResourceTab extends AnchorPane implements IComponents {
 	
 	@Override
 	public ArrayList<SkillPane> getSkillPanes() {
+		return  null;
+	}
+	
+	@Override
+	public SkillPane addSkillPane(){
+		return null;
+	}
+	
+	@Override
+	public Hashtable<PhasePaneWrapper, ArrayList<PhasePaneWrapper>> getPhasePanes() {
+		return null;
+	}
+	
+	@Override
+	public PhasePaneWrapper addPhasePaneWrapper(String phaseName, int index, String parentName){
+		return null;
+	}
+	
+	@Override
+	public PhasePane addPhasePane(PhasePaneWrapper wrapper){
 		return null;
 	}
 
@@ -132,9 +152,16 @@ public class ResourceTab extends AnchorPane implements IComponents {
 	public ArrayList<ResourcePaneWrapper> getResourcePanes() {
 		return wrapperPanes;
 	}
-
+	
 	@Override
-	public Hashtable<PhasePaneWrapper, ArrayList<PhasePaneWrapper>> getPhasePanes() {
+	public ResourcePane addResourcePane(int parentSkillID){
+		updateResources();
+		
+		for(ResourcePaneWrapper pane : wrapperPanes){
+			if(pane.getSkill().getSkillID() == parentSkillID)
+				return pane.addResourcePane();
+		}
+		
 		return null;
 	}
 
@@ -142,14 +169,23 @@ public class ResourceTab extends AnchorPane implements IComponents {
 	public String getProjectName() {
 		return null;
 	}
+	
+	@Override
+	public void setProjectName(String projectName){}
 
 	@Override
 	public String getProjectResponsible() {
 		return null;
 	}
+	
+	@Override
+	public void setProjectResponsible(String projectResponsible){}
 
 	@Override
 	public String getProjectDescription() {
 		return null;
 	}
+	
+	@Override
+	public void setProjectDescription(String projectDescription){}
 }

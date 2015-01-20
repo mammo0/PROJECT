@@ -31,6 +31,7 @@ public interface ICoreClient {
 	
 	/**
 	 * Get an array list with the pd results
+	 * @param withRisk if the risk factor should be considered
 	 * @return the pd results
 	 */
 	public ObservableList<pdTableModel> getPDTable(boolean withRisk);
@@ -39,7 +40,13 @@ public interface ICoreClient {
 	 * Get an array list with the cost results
 	 * @return the cost results
 	 */
-	public ObservableList<costTableModel> getCostTable(boolean withRisk);
+	public ObservableList<costTableModel> getCostTable();
+	
+	/**
+	 * Get an array list with the quarter results
+	 * @return the quarter results
+	 */
+	public ObservableList<quarterTableModel> getQuarterTable();
 	
 	/**
 	 * Get the skills from the skill view
@@ -74,4 +81,10 @@ public interface ICoreClient {
 	 * Save all made entries
 	 */
 	public void saveProject();
+	
+	/**
+	 * Load a project
+	 * @param projectName
+	 */
+	public void loadProject(String projectName);
 }

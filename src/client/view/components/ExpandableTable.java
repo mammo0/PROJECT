@@ -81,7 +81,7 @@ public class ExpandableTable<Content extends Node> extends ScrollPane {
 	
 	
 	// this methods adds a row to the content view
-	private void contentListAddRow(){
+	private Content contentListAddRow(){
 		Content newContent = null;
 		try {
 			newContent = contentPane.newInstance();
@@ -106,6 +106,8 @@ public class ExpandableTable<Content extends Node> extends ScrollPane {
 		
 		// increase the row counter
 		contentListRowCount++;
+		
+		return newContent;
 	}
 		
 	// this method is called by the add button
@@ -208,5 +210,15 @@ public class ExpandableTable<Content extends Node> extends ScrollPane {
 	 */
 	public ArrayList<Content> getContents(){
 		return new ArrayList<Content>(contentPanes.values());
+	}
+	
+	/**
+	 * This method adds a new content line
+	 */
+	public Content addNewContentLine(){
+		if(((IExpandableNode)contentPanes.get(0)).isEmpty())
+			return contentPanes.get(0);
+		else
+			return contentListAddRow();
 	}
 }

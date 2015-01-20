@@ -74,4 +74,13 @@ public class ResourcePaneWrapper extends TitledPane {
 	public ArrayList<ResourcePane> getResourcePanes(){
 		return resourceTable.getContents();
 	}
+	
+	
+	/**
+	 * Add a new resource pane
+	 * @return the new resource pane
+	 */
+	public ResourcePane addResourcePane(){
+		return resourceTable.addNewContentLine();
+	}
 }

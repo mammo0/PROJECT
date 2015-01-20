@@ -14,6 +14,7 @@ import client.core.Core;
 import client.core.ICoreClient;
 import client.core.costTableModel;
 import client.core.pdTableModel;
+import client.core.quarterTableModel;
 
 public class ResultTab extends AnchorPane {
 	
@@ -42,7 +43,22 @@ public class ResultTab extends AnchorPane {
 	private TableColumn<costTableModel, Float> colIntCost;
 	@FXML
 	private TableColumn<costTableModel, Float> colExtCost;
-	private ObservableList<costTableModel>costData;
+	private ObservableList<costTableModel> costData;
+	
+	
+	@FXML
+	private TableView<quarterTableModel> tblQuarter;
+	@FXML
+	private TableColumn<quarterTableModel, String> colSkillQuarter;
+	@FXML
+	private TableColumn<quarterTableModel, Float> colIntCostQuarter;
+	@FXML
+	private TableColumn<quarterTableModel, Float> colExtCostQuarter;
+	@FXML
+	private TableColumn<quarterTableModel, Integer> colIntPDQuarter;
+	@FXML
+	private TableColumn<quarterTableModel, Integer> colExtPDQuarter;
+	private ObservableList<quarterTableModel> quarterData;
 	
 	
 	@FXML
@@ -116,6 +132,23 @@ public class ResultTab extends AnchorPane {
 		colExtCost.setCellValueFactory(
 			    new PropertyValueFactory<costTableModel, Float>("costExt")
 			);
+		
+		// Set up the quarter table
+		colSkillQuarter.setCellValueFactory(
+				new PropertyValueFactory<quarterTableModel, String>("skillName")
+			);
+		colIntCostQuarter.setCellValueFactory(
+				new PropertyValueFactory<quarterTableModel, Float>("costInt")
+			);
+		colExtCostQuarter.setCellValueFactory(
+				new PropertyValueFactory<quarterTableModel, Float>("costExt")
+			);
+		colIntPDQuarter.setCellValueFactory(
+				new PropertyValueFactory<quarterTableModel, Integer>("pdInt")
+			);
+		colExtPDQuarter.setCellValueFactory(
+				new PropertyValueFactory<quarterTableModel, Integer>("pdExt")
+			);
 	}
 	
 	
@@ -137,7 +170,10 @@ public class ResultTab extends AnchorPane {
 		pdData = core.getPDTable(tbnRisk.isSelected());
 		tblPD.setItems(pdData);
 		
-		costData = core.getCostTable(tbnRisk.isSelected());
+		costData = core.getCostTable();
 		tblCost.setItems(costData);
+		
+//		quarterData = core.getQuarterTable();
+//		tblQuarter.setItems(quarterData);
 	}
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.image.*?>
 <?import javafx.scene.web.*?>
 <?import javafx.scene.paint.*?>
 <?import javafx.scene.shape.*?>
@@ -11,9 +12,8 @@
 
 <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="700.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="client.view.controller.ViewController">
    <children>
-      <ListView fx:id="lstProjects" layoutX="14.0" layoutY="116.0" prefWidth="150.0" AnchorPane.bottomAnchor="54.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="116.0" />
-      <Label alignment="CENTER" layoutX="14.0" layoutY="14.0" prefHeight="89.0" prefWidth="150.0" style="-fx-background-color: red;" text="Logo" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
-      <AnchorPane fx:id="editorPane" layoutX="178.0" layoutY="116.0" prefHeight="570.0" prefWidth="608.0" AnchorPane.bottomAnchor="54.0" AnchorPane.leftAnchor="178.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="116.0" />
+      <ListView fx:id="lstProjects" layoutX="14.0" layoutY="157.0" prefHeight="489.0" prefWidth="165.0" AnchorPane.bottomAnchor="54.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="183.0" />
+      <AnchorPane fx:id="editorPane" layoutX="178.0" layoutY="116.0" prefHeight="570.0" prefWidth="608.0" AnchorPane.bottomAnchor="54.0" AnchorPane.leftAnchor="179.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="116.0" />
       <Button layoutX="728.0" layoutY="660.0" mnemonicParsing="false" onAction="#calculateProject" text="Berechnen" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" />
       <Button layoutX="619.0" layoutY="660.0" mnemonicParsing="false" onAction="#saveProject" text="Speichern" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="110.0" />
       <Button layoutX="14.0" layoutY="660.0" mnemonicParsing="false" onAction="#loadProject" prefWidth="150.0" text="Projekt laden" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" />
@@ -23,5 +23,11 @@
             <Label fx:id="lblStatus" layoutX="49.0" layoutY="5.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
          </children>
       </AnchorPane>
+      <ImageView fitHeight="90.0" fitWidth="150.0" layoutX="14.0" layoutY="14.0" pickOnBounds="true" preserveRatio="true" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
+      <StackPane layoutX="14.0" layoutY="118.0" prefHeight="65.0" prefWidth="165.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="118.0">
+         <children>
+            <Label layoutX="14.0" layoutY="25.0" text="Projekte" />
+         </children>
+      </StackPane>
    </children>
 </AnchorPane>

@@ -102,6 +102,15 @@ public class PhaseTab extends ScrollPane implements IComponents {
 					above.setPhaseBegin(phaseStart.minusDays(aboveDuration+1));
 					above.setPhaseEnd(phaseStart.minusDays(1));
 				}
+			}else if(!phaseStart.minusDays(1).isEqual(aboveEnd)){
+				PhasePaneWrapper above = getPhaseAbove(phase);
+				if(above.getPhaseBegin() != null && above.getPhaseEnd() != null){
+					// TODO dialog confirmation
+					
+					int aboveDuration = Period.between(above.getPhaseBegin(), above.getPhaseEnd()).getDays();
+					above.setPhaseEnd(phaseStart.minusDays(1));
+					above.setPhaseBegin(above.getPhaseEnd().minusDays(aboveDuration));
+				}
 			}
 		}
 		
@@ -119,7 +128,17 @@ public class PhaseTab extends ScrollPane implements IComponents {
 					below.setPhaseEnd(phaseEnd.plusDays(belowDuration+1));
 					below.setPhaseBegin(phaseEnd.plusDays(1));
 				}
+			}else if(!phaseEnd.plusDays(1).isEqual(belowStart)){
+				PhasePaneWrapper below = getPhaseBelow(phase);
+				if(below.getPhaseBegin() != null && below.getPhaseEnd() != null){
+					// TODO dialog confirmation
+					
+					int belowDuration = Period.between(below.getPhaseBegin(), below.getPhaseEnd()).getDays();
+					below.setPhaseBegin(phaseEnd.plusDays(1));
+					below.setPhaseEnd(phaseEnd.plusDays(belowDuration+1));
+				}
 			}
+				
 		}
 	}
 	
@@ -185,12 +204,24 @@ public class PhaseTab extends ScrollPane implements IComponents {
 	
 	
 	
+	// add a main phase by its index
+	private PhasePaneWrapper addMainPhase(int index){
+//		if(index == 0)
+//			return addMainPhase(addMain);
+//		else if(index > 0){
+//			int move = mainPhases.size() * 2;
+			AddPhaseWrapper add = (AddPhaseWrapper) accPhaseList.getPanes().get(accPhaseList.getPanes().size()-1);
+			return addMainPhase(add);
+//		}
+//		
+//		return null;
+	}
 	
 	/**
 	 * This method adds a new main phase
 	 * @param from the add pane wrapper calling this method
 	 */
-	public void addMainPhase(AddPhaseWrapper from){
+	public PhasePaneWrapper addMainPhase(AddPhaseWrapper from){
 		// create the new main phase
 		PhasePaneWrapper main = new PhasePaneWrapper(this);
 		
@@ -208,15 +239,31 @@ public class PhaseTab extends ScrollPane implements IComponents {
 		checkPhaseDates(main);;
 		
 		mainPhases.add(main);
+		
+		return main;
 	}
 
+	
+	// add a sub phase by its index
+	private PhasePaneWrapper addSubPhase(int index, PhasePaneWrapper main){
+//		if(index == 1){
+//			int move = (mainPhases.size() * 2) - 1;
+//			AddPhaseWrapper add = (AddPhaseWrapper) accPhaseList.getPanes().get(index+move);
+//			return addSubPhase(add, main);
+//		}else if(index > 1){
+			AddPhaseWrapper add = (AddPhaseWrapper) accPhaseList.getPanes().get(accPhaseList.getPanes().size()-2);
+			return addSubPhase(add, main);
+//		}
+		
+//		return null;
+	}
 	
 	/**
 	 * This method adds a new sub phase
 	 * @param from the add pane wrapper calling this method
 	 * @param main the main phase belonging to this sub phase
 	 */
-	public void addSubPhase(AddPhaseWrapper from, PhasePaneWrapper main){
+	public PhasePaneWrapper addSubPhase(AddPhaseWrapper from, PhasePaneWrapper main){
 		// create the new sub phase
 		PhasePaneWrapper sub = new PhasePaneWrapper(this, true);
 		
@@ -234,6 +281,8 @@ public class PhaseTab extends ScrollPane implements IComponents {
 		subPhases.put(mainPhases.get(mainPhases.indexOf(main)), tempSubPhases);
 		
 		this.checkMainPhases();
+		
+		return sub;
 	}
 	
 	
@@ -373,11 +422,14 @@ public class PhaseTab extends ScrollPane implements IComponents {
 	
 	@Override
 	public ArrayList<SkillPane> getSkillPanes() {
+		return  null;
+	}
+	
+	@Override
+	public SkillPane addSkillPane(){
 		return null;
 	}
 	
-
-
 	@Override
 	public Hashtable<PhasePaneWrapper, ArrayList<PhasePaneWrapper>> getPhasePanes() {
 		Hashtable<PhasePaneWrapper, ArrayList<PhasePaneWrapper>> panes = new Hashtable<PhasePaneWrapper, ArrayList<PhasePaneWrapper>>();
@@ -402,6 +454,50 @@ public class PhaseTab extends ScrollPane implements IComponents {
 			return panes;
 	}
 	
+	
+	@Override
+	public PhasePaneWrapper addPhasePaneWrapper(String phaseName, int index, String parentName){
+		if(parentName != null){
+			for(PhasePaneWrapper mainPane : mainPhases){
+				if(mainPane.getPhaseName().equals(parentName)){
+					return addSubPhase(index, mainPane);
+				}
+			}
+		}else{
+				return addMainPhase(index);
+		}
+		return null;
+	}
+	
+	@Override
+	public PhasePane addPhasePane(PhasePaneWrapper wrapper){
+		for(PhasePaneWrapper mainPane : mainPhases){
+			if(mainPane.equals(wrapper)){
+				return mainPane.addPhasePane();
+			}
+			ArrayList<PhasePaneWrapper> subPanes = subPhases.get(mainPane);
+			if(subPanes != null){
+				for(PhasePaneWrapper subPane : subPanes){
+					if(subPane.equals(wrapper)){
+						return subPane.addPhasePane();
+					}
+				}
+			}
+		}
+		
+		return null;
+	}
+
+	@Override
+	public ArrayList<ResourcePaneWrapper> getResourcePanes() {
+		return null;
+	}
+	
+	@Override
+	public ResourcePane addResourcePane(int parentSkillID){
+		return null;
+	}
+	
 
 
 	@Override
@@ -409,23 +505,22 @@ public class PhaseTab extends ScrollPane implements IComponents {
 		return null;
 	}
 	
-
+	@Override
+	public void setProjectName(String projectName){}
 
 	@Override
 	public String getProjectResponsible() {
 		return null;
 	}
 	
-
+	@Override
+	public void setProjectResponsible(String projectResponsible){}
 
 	@Override
 	public String getProjectDescription() {
 		return null;
 	}
-
-
+	
 	@Override
-	public ArrayList<ResourcePaneWrapper> getResourcePanes() {
-		return null;
-	}
+	public void setProjectDescription(String projectDescription){}
 }

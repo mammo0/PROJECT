@@ -51,33 +51,66 @@ public class SkillTab extends AnchorPane implements IComponents {
 	}
 	
 	
-	@Override
-	public ArrayList<SkillPane> getSkillPanes() {
-		return skillTable.getContents();
-	}
 
 	@Override
 	public String getProjectName() {
 		return null;
 	}
+	
+	@Override
+	public void setProjectName(String projectName){}
 
 	@Override
 	public String getProjectResponsible() {
 		return null;
 	}
+	
+	@Override
+	public void setProjectResponsible(String projectResponsible){}
 
 	@Override
 	public String getProjectDescription() {
 		return null;
 	}
+	
+	@Override
+	public void setProjectDescription(String projectDescription){}
 
+	
+	
+	
+	@Override
+	public ArrayList<SkillPane> getSkillPanes() {
+		return skillTable.getContents();
+	}
+	
+	@Override
+	public SkillPane addSkillPane(){
+		return skillTable.addNewContentLine();
+	}
+	
 	@Override
 	public Hashtable<PhasePaneWrapper, ArrayList<PhasePaneWrapper>> getPhasePanes() {
+		return null;
+	}
+	
+	@Override
+	public PhasePaneWrapper addPhasePaneWrapper(String phaseName, int index, String parentName){
+		return null;
+	}
+	
+	@Override
+	public PhasePane addPhasePane(PhasePaneWrapper wrapper){
 		return null;
 	}
 
 	@Override
 	public ArrayList<ResourcePaneWrapper> getResourcePanes() {
+		return null;
+	}
+	
+	@Override
+	public ResourcePane addResourcePane(int parentSkillID){
 		return null;
 	}
 }

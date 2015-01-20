@@ -111,6 +111,14 @@ public class SkillPane extends AnchorPane implements IExpandableNode, ITester {
 	public String getSkillName() {
 		return txtSkillName.getText();
 	}
+	
+	/**
+	 * Set the name of the skill
+	 * @param skillName
+	 */
+	public void setSkillName(String skillName){
+		txtSkillName.setText(skillName);
+	}
 
 	/**
 	 * Get the internal day rate of the skill
@@ -118,6 +126,14 @@ public class SkillPane extends AnchorPane implements IExpandableNode, ITester {
 	 */
 	public float getDayRateInt() {
 		return castStringToFloat(txtDayRateInt.getText());
+	}
+	
+	/**
+	 * Set the internal day rate of the skill
+	 * @param dayRateInt
+	 */
+	public void setDayRateInt(float dayRateInt){
+		txtDayRateInt.setText(String.valueOf(dayRateInt));
 	}
 
 	/**
@@ -127,6 +143,14 @@ public class SkillPane extends AnchorPane implements IExpandableNode, ITester {
 	public float getDayRateExt() {
 		return castStringToFloat(txtDayRateExt.getText());
 	}
+	
+	/**
+	 * Set the external day rate of the skill
+	 * @param dayrateExt
+	 */
+	public void setDayRateExt(float dayRateExt){
+		txtDayRateExt.setText(String.valueOf(dayRateExt));
+	}
 
 	
 	@Override
@@ -134,6 +158,14 @@ public class SkillPane extends AnchorPane implements IExpandableNode, ITester {
 
 	@Override
 	public void removeNode() {}
+	
+	@Override
+	public boolean isEmpty() {
+		if(txtSkillName.getText().isEmpty() && txtDayRateInt.getText().isEmpty() && txtDayRateExt.getText().isEmpty())
+			return true;
+		else
+			return false;
+	}
 
 	@Override
 	public boolean checkInput(Node node) {

@@ -13,7 +13,9 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import client.core.ICoreClient;
+import client.view.components.PhasePane;
 import client.view.components.PhasePaneWrapper;
+import client.view.components.ResourcePane;
 import client.view.components.ResourcePaneWrapper;
 import client.view.components.SkillPane;
 import client.view.controller.ViewController;
@@ -71,6 +73,11 @@ public class View extends ASingelton implements IViewClient {
 		viewController.markNode(parent, fxmlName);
 	}
 	
+	@Override
+	public void displayResults(){
+		viewController.displayResults();
+	}
+	
 	
 	
 	/**
@@ -110,14 +117,13 @@ public class View extends ASingelton implements IViewClient {
 	
 	
 	@Override
-	public ArrayList<SkillPane> getSkillPanes(){
-		return viewController.getSkillPanes();
-	}
-
-	
-	@Override
 	public String getProjectName() {
 		return viewController.getProjectName();
+	}
+	
+	@Override
+	public void setProjectName(String projectName){
+		viewController.setProjectName(projectName);
 	}
 
 
@@ -125,20 +131,57 @@ public class View extends ASingelton implements IViewClient {
 	public String getProjectResponsible() {
 		return viewController.getProjectResponsible();
 	}
+	
+	@Override
+	public void setProjectResponsible(String projectResponsible){
+		viewController.setProjectResponsible(projectResponsible);
+	}
 
 
 	@Override
 	public String getProjectDescription() {
 		return viewController.getProjectDescription();
 	}
+	
+	@Override
+	public void setProjectDescription(String projectDescription){
+		viewController.setProjectDescription(projectDescription);
+	}
 
+	
+	
+	@Override
+	public ArrayList<SkillPane> getSkillPanes(){
+		return viewController.getSkillPanes();
+	}
+	
+	@Override
+	public SkillPane addSkillPane(){
+		return viewController.addSkillPane();
+	}
+	
 	@Override
 	public Hashtable<PhasePaneWrapper, ArrayList<PhasePaneWrapper>> getPhasePanes() {
 		return viewController.getPhasePanes();
+	}
+	
+	@Override
+	public PhasePaneWrapper addPhasePaneWrapper(String phaseName, int index, String parentName){
+		return viewController.addPhasePaneWrapper(phaseName, index, parentName);
+	}
+	
+	@Override
+	public PhasePane addPhasePane(PhasePaneWrapper wrapper){
+		return viewController.addPhasePane(wrapper);
 	}
 
 	@Override
 	public ArrayList<ResourcePaneWrapper> getResourcePanes() {
 		return viewController.getResourcePanes();
+	}
+	
+	@Override
+	public ResourcePane addResourcePane(int parentSkillID){
+		return viewController.addResourcePane(parentSkillID);
 	}
 }

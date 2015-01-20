@@ -83,7 +83,7 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 	@FXML
 	private void calculateProject(){
 		if(core.calculateProject())
-			projectEditor.displayResults();
+			projectEditor.displayResults(true);
 	}
 	
 	@FXML
@@ -98,7 +98,7 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 	
 	@FXML
 	private void loadProject(){
-		
+		core.loadProject("Testprojekt");
 	}
 	
 	@FXML
@@ -179,6 +179,14 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 	
 	
 	/**
+	 * Display the results in the result tab
+	 */
+	public void displayResults(){
+		projectEditor.displayResults(false);
+	}
+	
+	
+	/**
 	 * This method displays a status text for a given period of time on the view
 	 * @param status the status message
 	 * @param displayTime the time how long the message is displayed
@@ -201,40 +209,74 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 
 	
 	
-	@Override
-	public ArrayList<SkillPane> getSkillPanes(){
-		return projectEditor.getSkillPanes();
-	}
 
 
 	@Override
 	public String getProjectName() {
 		return projectEditor.getProjectName();
 	}
-
+	
+	@Override
+	public void setProjectName(String projectName){
+		projectEditor.setProjectName(projectName);
+	}
 
 
 	@Override
 	public String getProjectResponsible() {
 		return projectEditor.getProjectResponsible();
 	}
-
+	
+	@Override
+	public void setProjectResponsible(String projectResponsible){
+		projectEditor.setProjectResponsible(projectResponsible);
+	}
 
 
 	@Override
 	public String getProjectDescription() {
 		return projectEditor.getProjectDescription();
 	}
+	
+	@Override
+	public void setProjectDescription(String projectDescription){
+		projectEditor.setProjectDescription(projectDescription);
+	}
 
+	
 
+	@Override
+	public ArrayList<SkillPane> getSkillPanes(){
+		return projectEditor.getSkillPanes();
+	}
+	
+	@Override
+	public SkillPane addSkillPane(){
+		return projectEditor.addSkillPane();
+	}
+	
 	@Override
 	public Hashtable<PhasePaneWrapper, ArrayList<PhasePaneWrapper>> getPhasePanes() {
 		return projectEditor.getPhasePanes();
 	}
-
+	
+	@Override
+	public PhasePaneWrapper addPhasePaneWrapper(String phaseName, int index, String parentName){
+		return projectEditor.addPhasePaneWrapper(phaseName, index, parentName);
+	}
+	
+	@Override
+	public PhasePane addPhasePane(PhasePaneWrapper wrapper){
+		return projectEditor.addPhasePane(wrapper);
+	}
 
 	@Override
 	public ArrayList<ResourcePaneWrapper> getResourcePanes() {
 		return projectEditor.getResourcePanes();
+	}
+	
+	@Override
+	public ResourcePane addResourcePane(int parentSkillID){
+		return projectEditor.addResourcePane(parentSkillID);
 	}
 }

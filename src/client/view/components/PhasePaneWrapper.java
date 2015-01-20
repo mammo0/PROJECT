@@ -119,21 +119,21 @@ public class PhasePaneWrapper extends TitledPane implements ITester {
 		datPhaseBegin.valueProperty().addListener(new ChangeListener<LocalDate>(){
 			@Override
 			public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
+				if(newValue != null)
+					parent.checkPhaseDates(This, newValue, null);
 				if(newValue != null && (getPhaseEnd() == null || getPhaseEnd().isBefore(newValue)))
 					datPhaseEnd.setValue(newValue);
-				else if(newValue != null)
-					parent.checkPhaseDates(This, newValue, null);
 			}
 		});
 		datPhaseEnd.valueProperty().addListener(new ChangeListener<LocalDate>(){
 			@Override
 			public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
+				if(newValue != null)
+					parent.checkPhaseDates(This, null, newValue);
 				if(getPhaseBegin() == null)
 					datPhaseBegin.setValue(newValue);
 				else if(newValue != null && newValue.isBefore(getPhaseBegin()))
 					datPhaseEnd.setValue(getPhaseBegin());
-				else if(newValue != null)
-					parent.checkPhaseDates(This, null, newValue);
 			}
 		});
 		
@@ -249,6 +249,14 @@ public class PhasePaneWrapper extends TitledPane implements ITester {
 		return txtPhaseName.getText();
 	}
 	
+	/**
+	 * Set the phase name
+	 * @param phaseName
+	 */
+	public void setPhaseName(String phaseName){
+		txtPhaseName.setText(phaseName);
+	}
+	
 	
 	/**
 	 * Get the phase begin date
@@ -260,10 +268,10 @@ public class PhasePaneWrapper extends TitledPane implements ITester {
 	
 	/**
 	 * Set the phase begin date
-	 * @param date the begin date
+	 * @param phaseBeginn the begin date
 	 */
-	public void setPhaseBegin(LocalDate date){
-		datPhaseBegin.setValue(date);
+	public void setPhaseBegin(LocalDate phaseBeginn){
+		datPhaseBegin.setValue(phaseBeginn);
 	}
 	
 	
@@ -277,10 +285,10 @@ public class PhasePaneWrapper extends TitledPane implements ITester {
 	
 	/**
 	 * Set the phase end date
-	 * @param date the end date
+	 * @param phaseEnd the end date
 	 */
-	public void setPhaseEnd(LocalDate date){
-		datPhaseEnd.setValue(date);
+	public void setPhaseEnd(LocalDate phaseEnd){
+		datPhaseEnd.setValue(phaseEnd);
 	}
 	
 	
@@ -294,6 +302,14 @@ public class PhasePaneWrapper extends TitledPane implements ITester {
 		}catch (Exception e){
 			return 0;
 		}
+	}
+	
+	/**
+	 * Set the risk factor for this phase
+	 * @param riskFactor
+	 */
+	public void setRiskFactor(int riskFactor){
+		txtRiskFactor.setText(String.valueOf(riskFactor));
 	}
 	
 	
@@ -312,5 +328,13 @@ public class PhasePaneWrapper extends TitledPane implements ITester {
 	 */
 	public ArrayList<PhasePane> getPhasePanes(){
 		return phaseTable.getContents();
+	}
+	
+	/**
+	 * Add a new phase pane
+	 * @return the new phase pane
+	 */
+	public PhasePane addPhasePane(){
+		return phaseTable.addNewContentLine();
 	}
 }

@@ -112,6 +112,14 @@ public class ResourcePane extends AnchorPane implements IExpandableNode, ITester
 	}
 	
 	/**
+	 * Set the resource name
+	 * @param resourceName
+	 */
+	public void setResourceName(String resourceName){
+		txtResourceName.setText(resourceName);
+	}
+	
+	/**
 	 * Is the resource internal or external
 	 * @return boolean
 	 */
@@ -120,6 +128,17 @@ public class ResourcePane extends AnchorPane implements IExpandableNode, ITester
 			return true;
 		else
 			return false;
+	}
+	
+	/**
+	 * Set the internal flag
+	 * @param intern
+	 */
+	public void setIntern(boolean intern){
+		if(intern)
+			cmbIntExt.getSelectionModel().select("Intern");
+		else
+			cmbIntExt.getSelectionModel().select("Extern");
 	}
 	
 	/**
@@ -135,6 +154,14 @@ public class ResourcePane extends AnchorPane implements IExpandableNode, ITester
 	}
 	
 	/**
+	 * Set the availability of a resource
+	 * @param availability
+	 */
+	public void setAvailability(int availability){
+		txtAvailability.setText(String.valueOf(availability));
+	}
+	
+	/**
 	 * Get the skill amount
 	 * @return the skillAmount
 	 */
@@ -145,6 +172,14 @@ public class ResourcePane extends AnchorPane implements IExpandableNode, ITester
 			return -1;
 		}
 	}
+	
+	/**
+	 * Set the skill amount
+	 * @param skillAmount
+	 */
+	public void setSkillAmount(int skillAmount){
+		txtSkillAmount.setText(String.valueOf(skillAmount));
+	}
 
 
 
@@ -154,4 +189,12 @@ public class ResourcePane extends AnchorPane implements IExpandableNode, ITester
 
 	@Override
 	public void removeNode() {}
+	
+	@Override
+	public boolean isEmpty() {
+		if(txtResourceName.getText().isEmpty() && txtAvailability.getText().isEmpty() && txtSkillAmount.getText().isEmpty())
+			return true;
+		else
+			return false;
+	}
 }

@@ -106,11 +106,12 @@ public class ProjectEditor extends TabPane implements IComponents {
 	/**
 	 * This method displays the results on the result tab
 	 */
-	public void displayResults(){
+	public void displayResults(boolean gotoTab){
 		resultTab.displayResults();
 		
 		// go to the results tab
-		this.getSelectionModel().select(tabResults);
+		if(gotoTab)
+			this.getSelectionModel().select(tabResults);
 	}
 	
 	
@@ -136,15 +137,16 @@ public class ProjectEditor extends TabPane implements IComponents {
 	
 	
 	
-	@Override
-	public ArrayList<SkillPane> getSkillPanes(){
-		return skillTab.getSkillPanes();
-	}
 
 
 	@Override
 	public String getProjectName() {
 		return txtProjectName.getText();
+	}
+	
+	@Override
+	public void setProjectName(String projectName){
+		txtProjectName.setText(projectName);
 	}
 
 
@@ -152,22 +154,57 @@ public class ProjectEditor extends TabPane implements IComponents {
 	public String getProjectResponsible() {
 		return txtProjectResponsible.getText();
 	}
+	
+	@Override
+	public void setProjectResponsible(String projectResponsible){
+		txtProjectResponsible.setText(projectResponsible);
+	}
 
 
 	@Override
 	public String getProjectDescription() {
 		return txtProjectDescription.getText();
 	}
+	
+	@Override
+	public void setProjectDescription(String projectDescription){
+		txtProjectDescription.setText(projectDescription);
+	}
 
 
+	
+	@Override
+	public ArrayList<SkillPane> getSkillPanes(){
+		return skillTab.getSkillPanes();
+	}
+	
+	@Override
+	public SkillPane addSkillPane(){
+		return skillTab.addSkillPane();
+	}
+	
 	@Override
 	public Hashtable<PhasePaneWrapper, ArrayList<PhasePaneWrapper>> getPhasePanes() {
 		return phaseTab.getPhasePanes();
 	}
-
+	
+	@Override
+	public PhasePaneWrapper addPhasePaneWrapper(String phaseName, int index, String parentName){
+		return phaseTab.addPhasePaneWrapper(phaseName, index, parentName);
+	}
+	
+	@Override
+	public PhasePane addPhasePane(PhasePaneWrapper wrapper){
+		return phaseTab.addPhasePane(wrapper);
+	}
 
 	@Override
 	public ArrayList<ResourcePaneWrapper> getResourcePanes() {
 		return resourceTab.getResourcePanes();
+	}
+	
+	@Override
+	public ResourcePane addResourcePane(int parentSkillID){
+		return resourceTab.addResourcePane(parentSkillID);
 	}
 }

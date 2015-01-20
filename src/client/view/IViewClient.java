@@ -32,4 +32,9 @@ public interface IViewClient extends IComponents {
 	 * @param fxmlName the name of the node
 	 */
 	public void markNode(Node parent, String fxmlName);
+	
+	/**
+	 * Display the results in the result tab
+	 */
+	public void displayResults();
 }

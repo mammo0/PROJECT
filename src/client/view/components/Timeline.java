@@ -157,6 +157,7 @@ public class Timeline extends ScrollPane {
 		
 		StackPane buttonPane = new StackPane();
 		ToggleButton btnQuarter = new ToggleButton("Q"+quarterNumber);
+		btnQuarter.setOnAction(this::btnQuarterClick);
 		if(quarterPanes.get(yearNumber) == null){
 			ArrayList<ToggleButton> buttons = new ArrayList<ToggleButton>();
 			quarterPanes.put(yearNumber, buttons);
@@ -178,7 +179,7 @@ public class Timeline extends ScrollPane {
 	
 	
 	
-	// this method 
+	// this method is called when a year toggle button is clicked
 	private void btnYearClick(ActionEvent event){
 		ArrayList<ToggleButton> buttons = quarterPanes.get(Integer.valueOf(((Button)event.getSource()).getText()));
 		
@@ -194,5 +195,11 @@ public class Timeline extends ScrollPane {
 			else
 				button.setSelected(true);
 		}
+	}
+	
+	
+	// this method is called when a quarter toggle button is clicked
+	private void btnQuarterClick(ActionEvent event){
+		
 	}
 }

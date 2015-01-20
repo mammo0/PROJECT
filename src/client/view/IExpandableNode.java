@@ -20,4 +20,10 @@ public interface IExpandableNode {
 	 * @return the node
 	 */
 	public Node getNode(String fxmlName);
+	
+	/**
+	 * Tests if the node is empty
+	 * @return true if the node is empty
+	 */
+	public boolean isEmpty();
 }

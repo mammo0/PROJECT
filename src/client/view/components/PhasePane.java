@@ -179,9 +179,22 @@ public class PhasePane extends AnchorPane implements IExpandableNode, ITester {
 		return -1;
 	}
 	
+	/**
+	 * Set the selected skill for this phase
+	 * @param skillId the skill id
+	 */
+	public void setPhaseSkillId(int skillId){
+		for(Skill skill : core.getSkills()){
+			if(skill.getSkillID() == skillId){
+				cmbSkills.getSelectionModel().select(skill.getSkillName());
+				break;
+			}
+		}
+	}
+	
 	
 	/**
-	 * Get the phase duration
+	 * Get the skill duration
 	 * @return the duration
 	 */
 	public int getPhaseDuration(){
@@ -190,6 +203,14 @@ public class PhasePane extends AnchorPane implements IExpandableNode, ITester {
 		}catch (Exception e){
 			return -1;
 		}
+	}
+	
+	/**
+	 * Set the skill duration
+	 * @param duration
+	 */
+	public void setPhaseDuration(int duration){
+		txtDuration.setText(String.valueOf(duration));
 	}
 
 
@@ -205,5 +226,14 @@ public class PhasePane extends AnchorPane implements IExpandableNode, ITester {
 	public void removeNode() {
 		parent.removeSkillInUse(cmbSkills.getSelectionModel().getSelectedItem());
 		parent.updateSkillDropDown();
+	}
+	
+	
+	@Override
+	public boolean isEmpty() {
+		if(txtDuration.getText().isEmpty() && cmbSkills.getSelectionModel().isEmpty())
+			return true;
+		else
+			return false;
 	}
 }
