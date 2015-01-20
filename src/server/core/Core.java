@@ -123,12 +123,6 @@ public class Core extends ASingelton implements ICoreServer {
 		} catch (RemoteException | MalformedURLException e) {
 			System.err.println(e.getMessage());
 		}
-		try {
-			loadProject("Testprojekt");
-		} catch (RemoteException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
 	}
 
 	@Override
