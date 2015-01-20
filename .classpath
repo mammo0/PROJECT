@@ -1,7 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <classpath>
 	<classpathentry excluding="/" kind="src" path="src"/>
+	<classpathentry kind="src" path="lib"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry kind="lib" path="C:/Users/Kreistchen/Downloads/jdom-2.0.5.jar"/>
+	<classpathentry kind="lib" path="lib/jdom-2.0.5/jdom-2.0.5.jar" sourcepath="lib/jdom-2.0.5/jdom-2.0.5-sources.jar">
+		<attributes>
+			<attribute name="javadoc_location" value="jar:platform:/resource/PROJECT/lib/jdom-2.0.5/jdom-2.0.5-javadoc.jar!/"/>
+		</attributes>
+	</classpathentry>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
