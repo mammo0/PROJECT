@@ -1,11 +1,15 @@
 package client.view.components;
 
 import java.io.IOException;
+import java.util.Comparator;
 
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -103,15 +107,59 @@ public class ResultTab extends AnchorPane {
 		
 		
 		// Set up the pd table
+		prepareTable(tblPD);
+		PropertyValueFactory<pdTableModel, Integer> pdShould = new PropertyValueFactory<pdTableModel, Integer>("pdShould");
+		PropertyValueFactory<pdTableModel, Integer> pdIs = new PropertyValueFactory<pdTableModel, Integer>("pdIs");
+		
 		colSkillPD.setCellValueFactory(
 				new PropertyValueFactory<pdTableModel, String>("skillName")
 			);
-		colShouldPD.setCellValueFactory(
-			    new PropertyValueFactory<pdTableModel, Integer>("pdShould")
-			);
-		colIsPD.setCellValueFactory(
-			    new PropertyValueFactory<pdTableModel, Integer>("pdIs")
-			);
+		colShouldPD.setCellValueFactory(pdShould);
+		colShouldPD.setCellFactory(column -> {
+		    return new TableCell<pdTableModel, Integer>() {
+		        @Override
+		        protected void updateItem(Integer item, boolean empty) {
+		            super.updateItem(item, empty);
+
+		            if (item == null || empty) {
+		                setText(null);
+		                setStyle("");
+		            }else{
+		            	int pdIsValue = pdIs.call(new CellDataFeatures<pdTableModel, Integer>(tblPD, colIsPD, pdData.get(getIndex()))).getValue();
+		            	if(pdIsValue<item){
+		            		setStyle("-fx-background-color: red; -fx-text-fill: white;");
+		            	}else if(getIndex() == pdData.size()-1)
+		            		setStyle("-fx-background-color: lightgrey");
+		            	else
+		            		setStyle("");
+                        setText(String.valueOf(item));
+                    }
+		        }
+		    };
+		});
+		colIsPD.setCellValueFactory(pdIs);
+		colIsPD.setCellFactory(column -> {
+		    return new TableCell<pdTableModel, Integer>() {
+		        @Override
+		        protected void updateItem(Integer item, boolean empty) {
+		            super.updateItem(item, empty);
+
+		            if (item == null || empty) {
+		                setText(null);
+		                setStyle("");
+		            }else{
+		            	int pdShouldValue = pdShould.call(new CellDataFeatures<pdTableModel, Integer>(tblPD, colShouldPD, pdData.get(getIndex()))).getValue();
+		            	if(pdShouldValue>item){
+		            		setStyle("-fx-background-color: red; -fx-text-fill: white;");
+		            	}else if(getIndex() == pdData.size()-1)
+		            		setStyle("-fx-background-color: lightgrey");
+		            	else
+		            		setStyle("");
+                        setText(String.valueOf(item));
+                    }
+		        }
+		    };
+		});
 		colIsPDInt.setCellValueFactory(
 			    new PropertyValueFactory<pdTableModel, Integer>("pdIsInt")
 			);
@@ -120,6 +168,7 @@ public class ResultTab extends AnchorPane {
 			);
 		
 		// Set up the cost table
+		prepareTable(tblCost);
 		colSkillCost.setCellValueFactory(
 				new PropertyValueFactory<costTableModel, String>("skillName")
 			);
@@ -160,6 +209,44 @@ public class ResultTab extends AnchorPane {
 			tbnRisk.setText("Risikozuschlag EIN");
 		
 //		displayResults();
+	}
+	
+	
+	// prepare the table
+	private <Model, Type> void prepareTable(TableView<Model> table){
+		// exclude the last line from the sorting
+		table.sortPolicyProperty().set(t -> {
+		    Comparator<Model> comparator = (r1, r2) -> 
+		         r1 == table.getItems().get(table.getItems().size()-1) ? 1 //TOTAL at the bottom
+		       : r2 == table.getItems().get(table.getItems().size()-1) ? -1 //TOTAL at the bottom
+		       : t.getComparator() == null ? 0 //no column sorted: don't change order
+		       : t.getComparator().compare(r1, r2); //columns are sorted: sort accordingly
+		    FXCollections.sort(t.getItems(), comparator);
+		    return true;
+		});
+		
+		// mark the last line in the table
+		for(TableColumn<Model, ?> columns : table.getColumns()){
+			columns.setCellFactory(column -> {
+			    return new TableCell<Model, Type>() {
+			        @Override
+			        protected void updateItem(Type item, boolean empty) {
+			            super.updateItem(item, empty);
+	
+			            if (item == null || empty) {
+			                setText(null);
+			                setStyle("");
+			            }else{
+			            	if(getIndex() == pdData.size()-1)
+			            		setStyle("-fx-background-color: lightgrey");
+			            	else
+			            		setStyle("");
+	                        setText(String.valueOf(item));
+	                    }
+			        }
+			    };
+			});
+		}
 	}
 	
 	

@@ -471,6 +471,16 @@ public class Core extends ASingelton implements ICoreClient {
 			pdData.add(pdModel);
 		}
 		
+		// summary line
+		Result result = project.getResultWRisk();
+		pdTableModel pdModel = new pdTableModel();
+		pdModel.skillName.set("Gesamt");
+//		pdModel.pdShould.set(result.getPdTotalShould());
+//		pdModel.pdIs.set(result.getPdTotalBe());
+//		pdModel.pdIsInt.set(result.getPdInt());
+//		pdModel.pdIsExt.set(result.getPdExt());
+		pdData.add(pdModel);
+		
 		return pdData;
 	}
 	
@@ -490,6 +500,15 @@ public class Core extends ASingelton implements ICoreClient {
 			}
 			costData.add(costModel);
 		}
+		
+		// summary line
+		Result result = project.getResultWRisk();
+		costTableModel costModel = new costTableModel();
+		costModel.skillName.set("Gesamt");
+//		costModel.costTotal.set(result.getCostTotal());
+//		costModel.costInt.set(result.getCostInt());
+//		costModel.costExt.set(result.getCostExt());
+		costData.add(costModel);
 		
 		return costData;
 	}
