@@ -148,6 +148,7 @@ public class Core extends ASingelton implements ICoreServer {
 		calculateLenght(project);
 		calculateResultSkill(project);
 		calculateProjectDays(project);
+		calculateQuarterResults(project);
 		return project;
 	}
 
@@ -461,6 +462,7 @@ public class Core extends ASingelton implements ICoreServer {
 
 			LocalDate startdate = phases.getStartDate();
 			LocalDate enddate = phases.getEndDate();
+			//Gesamte Tage der Phase
 			int _diffdate =enddate.getDayOfYear()-startdate.getDayOfYear();
 			int _skillID = 0;
 			int _startyear = phases.getStartDate().getYear();
@@ -468,6 +470,10 @@ public class Core extends ASingelton implements ICoreServer {
 			int _startquarter = (phases.getStartDate().getMonthValue() - 1) / 3 + 1;
 			int _endquarter = (phases.getEndDate().getMonthValue() - 1) / 3 + 1;
 			int _numberQuarters = 0;
+			int _availIntern=0;
+			int _availExtern=0;
+			int daysInQ1=0;
+			int daysInQ2=0;
 
 			for (Skill skill : project.getSkills()) {
 				_skillID = skill.getSkillID();
@@ -500,9 +506,67 @@ public class Core extends ASingelton implements ICoreServer {
 								
 								LocalDate enddatequarter = LocalDate.of(_endyear, 3, 31);
 							//Tage die im ersten Quartal liegen
-								int daysInQ1 = enddatequarter.getDayOfYear()-startdate.getDayOfYear();
+								 daysInQ1 = enddatequarter.getDayOfYear()-startdate.getDayOfYear();
 							//Restliche tage folglich im 2 quartal	
-								int daysInQ2 = _diffdate - daysInQ1;
+								 daysInQ2 = _diffdate - daysInQ1;
+								
+							
+								for( int i = 0; i<project.getResources().size(); i++){
+									if (project.getResources().get(i).getSkillID()==_skillID){
+										if(project.getResources().get(i).isIntern()==true){
+											
+											_availIntern= _availIntern + project.getResources().get(i).getAvailability();
+											
+										}
+										else
+										{
+											_availExtern= _availExtern + project.getResources().get(i).getAvailability();
+										}
+									}
+								}
+								
+								
+								//Summe der Verfügbarkeiten in Faktor umrechnen, mit welchem dann zuerest die externen Tage berechnet werden
+								float faktor = 0;
+								faktor = _availIntern/_availExtern;
+								faktor = faktor +1;
+								
+								
+								//Benötigte Tage pro Skill und Phase auslesen
+								
+								 int neededDaysPerSkillAndPhase = phases.getSkills().get(_skillID);
+								 
+								 //Externe Tage berechen
+								 float extDaysPerPhaseAndSkill= 0;
+								 extDaysPerPhaseAndSkill=neededDaysPerSkillAndPhase/faktor;
+								 
+								 //interne Tage berechnen
+								 float intDaysPerPhaseAndSkill=neededDaysPerSkillAndPhase-extDaysPerPhaseAndSkill;
+								 
+								//Tage auf die Quartale verteilen
+								 //Wie viele SkillTage verteilen sich auf einen DateDiff Tag
+								 //Also wenn die Phase Datediff 90 tage dauert und man einen internen mit 30 tagen verplanen muss
+								 //dann ist an einem Datedifftag 0,333 des internen verbraucht
+								 //diese Zahl dann mal die anzahl der arbeitstage im Q1 udn in Q2
+								 
+								 
+								 //Faktor, also wie oben beschrieben zb 0,33 brechenen
+								 //intern
+								 float dayfactorintern = 0;
+								 dayfactorintern = intDaysPerPhaseAndSkill/_diffdate;
+								 float internalDaysPerSkillInQ1 = 0;
+								 float internalDaysPerSkillInQ2 = 0;
+								 internalDaysPerSkillInQ1 = daysInQ1*dayfactorintern;
+								 internalDaysPerSkillInQ2 = daysInQ2*dayfactorintern;
+								 
+								 //extern
+								 
+								 float dayfactorextern = 0;
+								 dayfactorextern = intDaysPerPhaseAndSkill/_diffdate;
+								 float externalDaysPerSkillInQ1 = 0;
+								 float externalDaysPerSkillInQ2 = 0;
+								 externalDaysPerSkillInQ1 = daysInQ1*dayfactorextern;
+								 externalDaysPerSkillInQ2 = daysInQ2*dayfactorextern;
 								
 								
 								}
@@ -513,7 +577,7 @@ public class Core extends ASingelton implements ICoreServer {
 								
 								LocalDate enddatequarter = LocalDate.of(_endyear, 6, 31);
 							//Tage die im zweiten Quartal liegen
-								int daysInQ2 = enddatequarter.getDayOfYear()-startdate.getDayOfYear();
+								daysInQ2 = enddatequarter.getDayOfYear()-startdate.getDayOfYear();
 							//Restliche tage folglich im 3 quartal	
 								int daysInQ3 = _diffdate - daysInQ2;
 								}
@@ -529,7 +593,15 @@ public class Core extends ASingelton implements ICoreServer {
 								int daysInQ4 = _diffdate - daysInQ3;
 								}
 	
-							} else if (_endquarter - _startquarter == 2) {
+							} 
+							
+							
+							
+							
+							
+							
+							
+							else if (_endquarter - _startquarter == 2) {
 								
 
 							} else if (_endquarter - _startquarter == 3) {
