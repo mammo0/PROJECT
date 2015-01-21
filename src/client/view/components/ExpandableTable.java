@@ -2,6 +2,7 @@ package client.view.components;
 
 import java.util.ArrayList;
 import java.util.Collection;
+import java.util.Enumeration;
 import java.util.Hashtable;
 
 import client.view.IExpandableNode;
@@ -109,17 +110,11 @@ public class ExpandableTable<Content extends Node> extends ScrollPane {
 		
 		return newContent;
 	}
-		
-	// this method is called by the add button
-	private void btnContentAddClick(ActionEvent event){
-		contentListAddRow();
-	}
 	
-	// this method is called by the remove button
+	
+	// remove a specific row from the table
 	@SuppressWarnings("unchecked")
-	private void btnContentRemoveClick(ActionEvent event){
-		int deleteRowIndex = btnContentRemoves.get(event.getSource());
-		
+	private void contentListRemoveRow(int deleteRowIndex){
 		// build a new row only if one row is left
 		if(contentListRowCount == 1){
 			for(Node child : contentList.getChildren()){
@@ -139,7 +134,14 @@ public class ExpandableTable<Content extends Node> extends ScrollPane {
 		tempGrid.getColumnConstraints().addAll(columnConstraints);
 		
 		// clear the hashtables (will be rebuilt)
-		btnContentRemoves.remove(event.getSource());
+		Enumeration<Button> enumKey = btnContentRemoves.keys();
+		while(enumKey.hasMoreElements()){
+			Button btn = enumKey.nextElement();
+			if(btnContentRemoves.get(btn) == deleteRowIndex){
+				btnContentRemoves.remove(btn);
+			}
+		}
+//		btnContentRemoves.remove(event.getSource());
 		contentPanes.clear();
 		
 		// special case on deleting the first line
@@ -203,6 +205,19 @@ public class ExpandableTable<Content extends Node> extends ScrollPane {
 	}
 	
 	
+		
+	// this method is called by the add button
+	private void btnContentAddClick(ActionEvent event){
+		contentListAddRow();
+	}
+	
+	// this method is called by the remove button
+	private void btnContentRemoveClick(ActionEvent event){
+		int deleteRowIndex = btnContentRemoves.get(event.getSource());
+		contentListRemoveRow(deleteRowIndex);
+	}
+	
+	
 	
 	/**
 	 * This method returns all entered contents
@@ -220,5 +235,21 @@ public class ExpandableTable<Content extends Node> extends ScrollPane {
 			return contentPanes.get(0);
 		else
 			return contentListAddRow();
+	}
+	
+	
+	
+	/**
+	 * Clear all inputs
+	 */
+	public void clearAll(){
+		int before = contentListRowCount;
+		for(int i=0;i<contentListRowCount;i++){
+			contentListRemoveRow(i);
+			if(before != contentListRowCount){
+				i--;
+				before = contentListRowCount;
+			}
+		}
 	}
 }

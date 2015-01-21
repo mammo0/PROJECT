@@ -109,9 +109,9 @@ public class ResourceTab extends AnchorPane implements IComponents {
 			if(deleted){
 				accSkillList.getPanes().remove(pane);
 				wrapperPanes.remove(pane);
-				deleted = true;
 				i--;
 			}
+			deleted = true;
 		}
 		
 		// disable the accordion pane if it has no children
@@ -121,6 +121,16 @@ public class ResourceTab extends AnchorPane implements IComponents {
 			accSkillList.setDisable(false);
 	}
 
+	
+	
+	@Override
+	public void clearAll(){
+		for(ResourcePaneWrapper wrapper : wrapperPanes){
+			wrapper.clearAll();
+		}
+//		accSkillList.getPanes().clear();
+//		updateResources();
+	}
 
 	
 	@Override

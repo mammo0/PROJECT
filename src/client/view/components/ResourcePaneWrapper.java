@@ -57,6 +57,14 @@ public class ResourcePaneWrapper extends TitledPane {
 		AnchorPane.setLeftAnchor(resourceTable, 0d);
 	}
 	
+
+	/**
+	 * Clear all inputs
+	 */
+	public void clearAll(){
+		resourceTable.clearAll();
+	}
+	
 	
 	/**
 	 * Get the skill corresponding to the wrapper pane

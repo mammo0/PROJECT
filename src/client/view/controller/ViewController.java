@@ -209,6 +209,10 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 
 	
 	
+	@Override
+	public void clearAll(){
+		projectEditor.clearAll();
+	}
 
 
 	@Override

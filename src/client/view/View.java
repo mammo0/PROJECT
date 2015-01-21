@@ -115,6 +115,11 @@ public class View extends ASingelton implements IViewClient {
 	
 	
 	
+	@Override
+	public void clearAll(){
+		viewController.clearAll();
+	}
+	
 	
 	@Override
 	public String getProjectName() {

@@ -16,6 +16,11 @@ import client.view.components.SkillPane;
  */
 public interface IComponents {
 	/**
+	 * Clear all inputs
+	 */
+	public void clearAll();
+	
+	/**
 	 * Get the skill panes from the project editor
 	 * @return the skill panes
 	 */
@@ -50,7 +55,7 @@ public interface IComponents {
 	/**
 	 * Add a new phase pane wrapper
 	 * @param phaseName
-	 * @param index TODO
+	 * @param index
 	 * @param parentName
 	 * @return the new phase pane wrapper
 	 */

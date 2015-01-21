@@ -546,6 +546,8 @@ public class Core extends ASingelton implements ICoreClient {
 	
 	@Override
 	public void loadProject(String projectName){
+		view.clearAll();
+		
 		try {
 			project = server.loadProject(projectName);
 		} catch (RemoteException e) {

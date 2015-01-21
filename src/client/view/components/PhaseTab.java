@@ -206,15 +206,8 @@ public class PhaseTab extends ScrollPane implements IComponents {
 	
 	// add a main phase by its index
 	private PhasePaneWrapper addMainPhase(int index){
-//		if(index == 0)
-//			return addMainPhase(addMain);
-//		else if(index > 0){
-//			int move = mainPhases.size() * 2;
-			AddPhaseWrapper add = (AddPhaseWrapper) accPhaseList.getPanes().get(accPhaseList.getPanes().size()-1);
-			return addMainPhase(add);
-//		}
-//		
-//		return null;
+		AddPhaseWrapper add = (AddPhaseWrapper) accPhaseList.getPanes().get(accPhaseList.getPanes().size()-1);
+		return addMainPhase(add);
 	}
 	
 	/**
@@ -246,16 +239,8 @@ public class PhaseTab extends ScrollPane implements IComponents {
 	
 	// add a sub phase by its index
 	private PhasePaneWrapper addSubPhase(int index, PhasePaneWrapper main){
-//		if(index == 1){
-//			int move = (mainPhases.size() * 2) - 1;
-//			AddPhaseWrapper add = (AddPhaseWrapper) accPhaseList.getPanes().get(index+move);
-//			return addSubPhase(add, main);
-//		}else if(index > 1){
-			AddPhaseWrapper add = (AddPhaseWrapper) accPhaseList.getPanes().get(accPhaseList.getPanes().size()-2);
-			return addSubPhase(add, main);
-//		}
-		
-//		return null;
+		AddPhaseWrapper add = (AddPhaseWrapper) accPhaseList.getPanes().get(accPhaseList.getPanes().size()-2);
+		return addSubPhase(add, main);
 	}
 	
 	/**
@@ -417,6 +402,21 @@ public class PhaseTab extends ScrollPane implements IComponents {
 
 
 
+	@Override
+	public void clearAll(){
+		for(int i=0;i<mainPhases.size();i++){
+			PhasePaneWrapper mainPhase = mainPhases.get(i);
+			removeMainPhase(mainPhase);
+			ArrayList<PhasePaneWrapper> subPanes;
+			if((subPanes = subPhases.get(mainPhase)) != null){
+				for(int j=0;j< subPanes.size();j++){
+					removeSubPhase(subPanes.get(j));
+					j--;
+				}
+			}
+			i--;
+		}
+	}
 	
 	
 	

@@ -164,6 +164,19 @@ public class ResultTab extends AnchorPane {
 	
 	
 	/**
+	 * Clear all inputs
+	 */
+	public void clearAll(){
+		if(pdData != null)
+			pdData.clear();
+		if(costData != null)
+			costData.clear();
+		if(quarterData != null)
+			quarterData.clear();
+	}
+	
+	
+	/**
 	 * This method displays the results in the tables
 	 */
 	public void displayResults(){

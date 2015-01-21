@@ -51,6 +51,12 @@ public class SkillTab extends AnchorPane implements IComponents {
 	}
 	
 	
+	
+	@Override
+	public void clearAll(){
+		skillTable.clearAll();
+	}
+	
 
 	@Override
 	public String getProjectName() {
