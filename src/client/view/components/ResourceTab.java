@@ -73,10 +73,6 @@ public class ResourceTab extends AnchorPane implements IComponents {
 		// get the entered skills
 		ArrayList<Skill> skills = core.getSkills();
 		
-		// return if no skills are entered
-		if(skills == null)
-			return;
-		
 		// define a temporary wrapper list
 		ArrayList<ResourcePaneWrapper> wrappersToAdd = new ArrayList<ResourcePaneWrapper>();
 		

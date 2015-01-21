@@ -12,6 +12,7 @@ import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
 import javafx.beans.value.WritableValue;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
@@ -98,7 +99,7 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 	
 	@FXML
 	private void loadProject(){
-		core.loadProject("Testprojekt");
+		core.loadProject(lstProjects.getSelectionModel().getSelectedItem());
 	}
 	
 	@FXML
@@ -107,6 +108,14 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 	}
 	
 	
+	@FXML
+	private void deleteProject(){
+		//TODO confirmation dialog
+		core.deleteProject(lstProjects.getSelectionModel().getSelectedItem());
+	}
+	
+	
+	// create a new simple animation
 	private <Property> void newSimpleAnimation(WritableValue<Property> targetProperty, Property startValue, Property endValue, int duration){
 		// set the start value if not null
 		if (startValue != null)
@@ -118,6 +127,16 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 		KeyFrame endFrame = new KeyFrame(Duration.seconds(duration), keyValue);
 		timeline.getKeyFrames().add(endFrame);
 		timeline.play();
+	}
+	
+	
+	
+	/**
+	 * Display the project in the right list view
+	 * @param projectNames
+	 */
+	public void displayProjects(ArrayList<String> projectNames){
+		lstProjects.setItems(FXCollections.observableArrayList(projectNames).sorted());
 	}
 	
 	

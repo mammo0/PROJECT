@@ -34,6 +34,8 @@ public class SkillPane extends AnchorPane implements IExpandableNode, ITester {
 	
 	private ViewController viewController;
 	
+	private SkillTab parent;
+	
 	
 	/**
 	 * The constructor
@@ -56,6 +58,7 @@ public class SkillPane extends AnchorPane implements IExpandableNode, ITester {
 	    
 	    
 	    // update the third screen (resources) if a new skill is added
+	    txtSkillName.textProperty().addListener(new InputTester(this, txtSkillName));
 	    txtSkillName.textProperty().addListener(new ChangeListener<String>() {
 			@Override
 			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -154,7 +157,9 @@ public class SkillPane extends AnchorPane implements IExpandableNode, ITester {
 
 	
 	@Override
-	public void setParentNode(Node parent) {}
+	public void setParentNode(Node parent) {
+		this.parent = (SkillTab) parent;
+	}
 
 	@Override
 	public void removeNode() {}
@@ -180,6 +185,14 @@ public class SkillPane extends AnchorPane implements IExpandableNode, ITester {
 			}catch (Exception e){
 				return false;
 			}
+		}else if(node.equals(txtSkillName)){
+			for(String skillName : parent.getAllSkillNames(txtSkillName.getText())){
+				if(txtSkillName.getText().equalsIgnoreCase(skillName))
+					return false;
+				else
+					return true;
+			}
+			return true;
 		}else
 			return false;
 	}

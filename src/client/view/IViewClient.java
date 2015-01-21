@@ -1,5 +1,7 @@
 package client.view;
 
+import java.util.ArrayList;
+
 import javafx.scene.Node;
 
 
@@ -37,4 +39,10 @@ public interface IViewClient extends IComponents {
 	 * Display the results in the result tab
 	 */
 	public void displayResults();
+	
+	/**
+	 * Display the project in the right list view
+	 * @param projectNames
+	 */
+	public void displayProjects(ArrayList<String> projectNames);
 }

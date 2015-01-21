@@ -87,4 +87,10 @@ public interface ICoreClient {
 	 * @param projectName
 	 */
 	public void loadProject(String projectName);
+	
+	/**
+	 * Delete a project
+	 * @param projectName
+	 */
+	public void deleteProject(String projectName);
 }

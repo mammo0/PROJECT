@@ -44,4 +44,11 @@ public interface IServerService extends Remote{
 	 * @throws RemoteException
 	 */
 	public Project loadProject(String projectName) throws RemoteException;
+	
+	/**
+	 * This method deletes a project
+	 * @param projectName the name of the project
+	 * @throws RemoteException
+	 */
+	public void deleteProject(String projectName) throws RemoteException;
 }

@@ -46,7 +46,7 @@
                      <content>
                         <VBox>
                            <children>
-                              <TableView VBox.vgrow="ALWAYS">
+                              <TableView fx:id="tblQuarter" VBox.vgrow="ALWAYS">
                                 <columns>
                                   <TableColumn fx:id="colSkillQuarter" maxWidth="100000.0" minWidth="200.0" prefWidth="200.0" text="Kompetenz" />
                                   <TableColumn maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Kosten">

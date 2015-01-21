@@ -52,6 +52,26 @@ public class SkillTab extends AnchorPane implements IComponents {
 	
 	
 	
+	/**
+	 * This method returns an array list with all skill names
+	 * @param except
+	 * @return all skill names
+	 */
+	public ArrayList<String> getAllSkillNames(String except){
+		ArrayList<String> names = new ArrayList<String>();
+		
+		for(SkillPane skill : skillTable.getContents()){
+			names.add(skill.getSkillName());
+		}
+		
+		// remove the ecept string
+		names.remove(except);
+		
+		return names;
+	}
+	
+	
+	
 	@Override
 	public void clearAll(){
 		skillTable.clearAll();

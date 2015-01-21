@@ -27,7 +27,7 @@
                 <RowConstraints prefHeight="25.0" vgrow="NEVER" />
               </rowConstraints>
                <children>
-                  <Label text="Kompetenz" />
+                  <Label text="Ressourcenname" />
                   <Label text="Intern/Extern" GridPane.columnIndex="1" />
                   <Label text="Verfügbarkeit (%)" GridPane.columnIndex="2" />
                   <Label text="Anzahl" GridPane.columnIndex="3" />

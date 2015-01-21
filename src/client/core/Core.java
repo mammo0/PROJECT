@@ -75,6 +75,8 @@ public class Core extends ASingelton implements ICoreClient {
 		// open a new one
 		try {
 			server = (IServerService) Naming.lookup(buildRmiurl(serverAddress));
+			if(view != null)
+				view.displayProjects(server.getAllProjectNames());
 		} catch (MalformedURLException | RemoteException | NotBoundException e) {
 			if(view != null)
 				view.setStatus("Keine Verbindung zum Server möglich.", 0);
@@ -538,6 +540,7 @@ public class Core extends ASingelton implements ICoreClient {
 		if(buildProject(true)){
 			try {
 				server.saveProject(project);
+				view.displayProjects(server.getAllProjectNames());
 			} catch (RemoteException e) {
 				e.printStackTrace();
 			}
@@ -556,5 +559,15 @@ public class Core extends ASingelton implements ICoreClient {
 		}
 		
 		showProject();
+	}
+	
+	@Override
+	public void deleteProject(String projectName){
+		try {
+			server.deleteProject(projectName);
+			view.displayProjects(server.getAllProjectNames());
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 	}
 }

@@ -29,6 +29,6 @@
 	      <Tab fx:id="tabSkills" text="Kompetenzen anlegen" />
 	      <Tab fx:id="tabResources" onSelectionChanged="#updateResources" text="Ressourcenplanung" />
 	      <Tab fx:id="tabPhases" onSelectionChanged="#updatePhases" text="Phasenplanung" />
-      <Tab fx:id="tabResults" text="Ergebinsse" />
+      <Tab fx:id="tabResults" text="Ergebnisse" />
 	   </tabs>
 	</fx:root>
