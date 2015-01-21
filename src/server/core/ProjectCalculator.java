@@ -56,4 +56,9 @@ public class ProjectCalculator extends UnicastRemoteObject implements IServerSer
 	public Project loadProject(String projectName) throws RemoteException {
 		return core.loadProject(projectName);
 	}
+
+	@Override
+	public void deleteProject(String projectName) throws RemoteException {
+		core.deleteProject(projectName);
+	}
 }
