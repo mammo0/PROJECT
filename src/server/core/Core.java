@@ -37,7 +37,7 @@ public class Core extends ASingelton implements ICoreServer {
 
 	private View view;
 	private CreateXML createxml;
-	
+
 	private String projectPath;
 
 	// the server object
@@ -46,28 +46,25 @@ public class Core extends ASingelton implements ICoreServer {
 	private int serverPort;
 	private String rmiUrl;
 	private Project project;
-	
+
 	private File projectFilesDir;
-	
-	
-	public Core(){
+
+	public Core() {
 		this.projectPath = System.getProperty("user.dir");
 	}
-	
-	
+
 	@Override
-	public String getProjectDirectory(){
-		if(projectFilesDir == null)
+	public String getProjectDirectory() {
+		if (projectFilesDir == null)
 			return projectPath + "/";
 		else
-			return projectFilesDir.getAbsolutePath()+"/";
+			return projectFilesDir.getAbsolutePath() + "/";
 	}
-	
+
 	@Override
-	public void setProjectDirectory(String path){
+	public void setProjectDirectory(String path) {
 		this.projectPath = path;
 	}
-	
 
 	@Override
 	public int getServerPort() {
@@ -98,17 +95,17 @@ public class Core extends ASingelton implements ICoreServer {
 	public void startGui() {
 		view = new View(this);
 		view.showFrame();
-		
+
 	}
 
 	@Override
 	public void startServer() {
 		if (serverPort == 0)
 			return;
-		
+
 		// build the rmi url
 		this.rmiUrl = "rmi://localhost:" + serverPort + "/PROJECT";
-		
+
 		// set the server project path
 		this.projectFilesDir = new File(projectPath);
 
@@ -153,7 +150,6 @@ public class Core extends ASingelton implements ICoreServer {
 		calculateProjectDays(project);
 		return project;
 	}
-
 
 	// calculate the length of the complete Project
 	public void calculateLenght(Project project) {
@@ -380,6 +376,7 @@ public class Core extends ASingelton implements ICoreServer {
 								* 0.01 * phases.getSkills().get(_skillID));
 						_totalShouldRisk = _totalShouldRisk
 								+ (tempRisk + phases.getSkills().get(_skillID));
+
 					}
 				}
 
@@ -458,6 +455,99 @@ public class Core extends ASingelton implements ICoreServer {
 
 	}
 
+	public void calculateQuarterResults(Project project) {
+
+		for (Phase phases : project.getPhases()) {
+
+			LocalDate startdate = phases.getStartDate();
+			LocalDate enddate = phases.getEndDate();
+			int _diffdate =enddate.getDayOfYear()-startdate.getDayOfYear();
+			int _skillID = 0;
+			int _startyear = phases.getStartDate().getYear();
+			int _endyear = phases.getEndDate().getYear();
+			int _startquarter = (phases.getStartDate().getMonthValue() - 1) / 3 + 1;
+			int _endquarter = (phases.getEndDate().getMonthValue() - 1) / 3 + 1;
+			int _numberQuarters = 0;
+
+			for (Skill skill : project.getSkills()) {
+				_skillID = skill.getSkillID();
+				Enumeration<Integer> enumKey = phases.getSkills().keys();
+				while (enumKey.hasMoreElements()) {
+					int key = enumKey.nextElement();
+					if (key == _skillID) {
+
+						if (_startyear == _endyear
+								&& _startquarter == _endquarter) {
+
+							if (_startquarter == 1 && _endquarter == 1) {
+
+							} else if (_startquarter == 2 && _endquarter == 2) {
+
+							} else if (_startquarter == 3 && _endquarter == 3) {
+
+							} else if (_startquarter == 4 && _endquarter == 4) {
+
+							}
+						} else {
+							//Phasen, die länger als ein Quartal dauern, bzw die Quartalsgrenzen überschreiten
+							
+							//_endquarter - _startquarter = 1 besagt, dass die Phase in Qn beginnt und in Qn+1 endet
+							if (_endquarter - _startquarter == 1) {
+								//Q1
+								if (startdate.getMonthValue() == 1
+										|| startdate.getMonthValue() == 2
+										|| startdate.getMonthValue() == 3){
+								
+								LocalDate enddatequarter = LocalDate.of(_endyear, 3, 31);
+							//Tage die im ersten Quartal liegen
+								int daysInQ1 = enddatequarter.getDayOfYear()-startdate.getDayOfYear();
+							//Restliche tage folglich im 2 quartal	
+								int daysInQ2 = _diffdate - daysInQ1;
+								
+								
+								}
+								//Q2
+								else if (startdate.getMonthValue() == 4
+										|| startdate.getMonthValue() == 5
+										|| startdate.getMonthValue() == 6){
+								
+								LocalDate enddatequarter = LocalDate.of(_endyear, 6, 31);
+							//Tage die im zweiten Quartal liegen
+								int daysInQ2 = enddatequarter.getDayOfYear()-startdate.getDayOfYear();
+							//Restliche tage folglich im 3 quartal	
+								int daysInQ3 = _diffdate - daysInQ2;
+								}
+								//Q3
+								else if (startdate.getMonthValue() == 7
+										|| startdate.getMonthValue() == 8
+										|| startdate.getMonthValue() == 9){
+								
+								LocalDate enddatequarter = LocalDate.of(_endyear, 9, 30);
+							//Tage die im dritten Quartal liegen
+								int daysInQ3 = enddatequarter.getDayOfYear()-startdate.getDayOfYear();
+							//Restliche tage folglich im 4 quartal	
+								int daysInQ4 = _diffdate - daysInQ3;
+								}
+	
+							} else if (_endquarter - _startquarter == 2) {
+								
+
+							} else if (_endquarter - _startquarter == 3) {
+								
+
+							}
+
+						}
+
+					}
+
+				}
+
+			}
+		}
+
+	}
+
 	public void calculateResultProject(Project project) {
 
 		Result result = new Result();
@@ -509,9 +599,10 @@ public class Core extends ASingelton implements ICoreServer {
 	}
 
 	public void writeProject(Project project) throws FileNotFoundException,
-			XMLStreamException, NullPointerException{
+			XMLStreamException, NullPointerException {
 		createxml = new CreateXML();
-		createxml.setFile(getProjectDirectory() + project.getProjectName() + ".xml");
+		createxml.setFile(getProjectDirectory() + project.getProjectName()
+				+ ".xml");
 		try {
 			createxml.saveConfig(project);
 			// createxml.startTagSkills();
@@ -560,6 +651,7 @@ public class Core extends ASingelton implements ICoreServer {
 
 	@Override
 	public void saveProject(Project project) throws RemoteException {
+
 		calculateLenght(project);
 		try {
 			writeProject(project);
@@ -569,7 +661,7 @@ public class Core extends ASingelton implements ICoreServer {
 		} catch (XMLStreamException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
-		}catch (NullPointerException e){
+		} catch (NullPointerException e) {
 			e.printStackTrace();
 		}
 
@@ -580,7 +672,17 @@ public class Core extends ASingelton implements ICoreServer {
 		ReadXML xml = new ReadXML(projectName);
 		project = new Project();
 		project = xml.read();
-		calculateProject(project);
+		try {
+			calculateProject(project);
+		} catch (NullPointerException e) {
+			e.printStackTrace();
+		}
 		return project;
+	}
+
+	@Override
+	public void deleteProject(String projectName) throws RemoteException {
+		// TODO Auto-generated method stub
+		
 	}
 }
