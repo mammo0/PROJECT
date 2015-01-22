@@ -477,11 +477,9 @@ public class Core extends ASingelton implements ICoreServer {
 			int _diffdate =enddate.getDayOfYear()-startdate.getDayOfYear()+1;
 			
 			int _skillID = 0;
-			int _startyear = phases.getStartDate().getYear();
 			int _endyear = phases.getEndDate().getYear();
 			int _startquarter = (phases.getStartDate().getMonthValue() - 1) / 3 + 1;
 			int _endquarter = (phases.getEndDate().getMonthValue() - 1) / 3 + 1;
-			int _numberQuarters = 0;
 			float _availIntern=0;
 			float _availExtern=0;
 			int daysInQ1=0;
@@ -491,31 +489,11 @@ public class Core extends ASingelton implements ICoreServer {
 			int daysInYStart=0;
 			int daysInYEnd=0;
 			double faktor=0;
-			float internalDaysPerSkillInQ1 = 0;
-			 float internalDaysPerSkillInQ2 = 0;
-			 float internalDaysPerSkillInQ3 = 0;
-			 float internalDaysPerSkillInQ4 = 0;
-			 
-			 float externalDaysPerSkillInQ1 = 0;
-			 float externalDaysPerSkillInQ2 = 0;
-			 float externalDaysPerSkillInQ3 = 0;
-			 float externalDaysPerSkillInQ4 = 0;
-			 
-			 float internalCostsPerSkillInQ1 = 0;
-			 float internalCostsPerSkillInQ2 = 0;
-			 float internalCostsPerSkillInQ3 = 0;
-			 float internalCostsPerSkillInQ4 = 0;
-			 
-			 float externalCostsPerSkillInQ1 = 0;
-			 float externalCostsPerSkillInQ2 = 0;
-			 float externalCostsPerSkillInQ3 = 0;
-			 float externalCostsPerSkillInQ4 = 0;
-			 
-			 float dayfactorintern = 0;
-			 float dayfactorextern = 0;
-			 
-			 
-
+			
+			float extDaysPerPhaseAndSkill= 0;
+			float dayfactorintern = 0;
+			float dayfactorextern = 0;
+			
 			for (Skill skill : project.getSkills()) {
 				
 				Result result = skill.getResult();
@@ -537,22 +515,21 @@ public class Core extends ASingelton implements ICoreServer {
 								}
 							}
 						}
+					
+						//Ben�tigte Tage pro Skill und Phase auslesen
+						int neededDaysPerSkillAndPhase = phases.getSkills().get(_skillID);
 						//Summe der Verf�gbarkeiten in Faktor umrechnen, mit welchem dann zuerest die externen Tage berechnet werden
+						if(_availExtern!=0){
 						faktor = _availIntern / _availExtern;
 						faktor = faktor +1;
-						
-						//Ben�tigte Tage pro Skill und Phase auslesen
-						 int neededDaysPerSkillAndPhase = phases.getSkills().get(_skillID);
-						 
-						 //Externe Tage berechen
-						 float extDaysPerPhaseAndSkill= 0;
+						//Externe Tage berechen
 						 extDaysPerPhaseAndSkill=(float) (neededDaysPerSkillAndPhase/faktor);
-						 
+						}
 						//interne Tage berechnen
 						 float intDaysPerPhaseAndSkill=neededDaysPerSkillAndPhase-extDaysPerPhaseAndSkill;
 						 
 						 dayfactorintern = intDaysPerPhaseAndSkill/_diffdate;
-						 dayfactorextern = intDaysPerPhaseAndSkill/_diffdate;
+						 dayfactorextern = extDaysPerPhaseAndSkill/_diffdate;
 						//Start und Ende in einem Quartal
 						if (result.getYears().size()==1){
 								if( _startquarter == _endquarter) {
@@ -701,11 +678,9 @@ public class Core extends ASingelton implements ICoreServer {
 									 createQ4(daysInQ4, startdate.getYear(), dayfactorintern, 
 												dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 							}
-
 						}
-
 					}
-						}
+				}
 						//Abschluss der if Abfrage ob es sich um das gleiche jahr handelt
 						else if(result.getYears().size()==2){
 							daysInYStart = 365-startdate.getDayOfYear();
@@ -819,21 +794,18 @@ public class Core extends ASingelton implements ICoreServer {
 									dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 							}
 						}
-			
+					}
 				}
-
-			}
 			}
 		}
-
 	}
 
 	
-	public int calculateIndexOfStartYear(int startyear, Result result){
+	public int calculateIndexOfStartYear(int year, Result result){
 		
 		int i;
 		for (i=0; i<result.getYears().size(); i++){
-			if(result.getYears().get(i).getYearDate()==startyear){
+			if(result.getYears().get(i).getYearDate()==year){
 				return i;
 			}
 				
@@ -862,7 +834,15 @@ public class Core extends ASingelton implements ICoreServer {
 		result.getYears().get(yearindex).getQ1().setPdInt((int) Math.round(tempIntDays + internalDaysPerSkillInQ1));
 		result.getYears().get(yearindex).getQ1().setPdExt((int) Math.round(tempExtDays + externalDaysPerSkillInQ1));
 		result.getYears().get(yearindex).getQ1().setCostInt(tempIntCosts + internalCostsPerSkillInQ1);
-		result.getYears().get(yearindex).getQ1().setCostInt(tempExtCosts + externalCostsPerSkillInQ1);
+		result.getYears().get(yearindex).getQ1().setCostExt(tempExtCosts + externalCostsPerSkillInQ1);
+		
+		//Totals setzen
+		
+		result.getYears().get(yearindex).getQ1().setCostTotal(result.getYears().
+				get(yearindex).getQ1().getCostExt()+result.getYears().get(yearindex).getQ1().getCostInt());
+		result.getYears().get(yearindex).getQ1().setPdTotal(result.getYears().
+				get(yearindex).getQ1().getPdExt()+result.getYears().get(yearindex).getQ1().getPdInt());
+		
 	}
 	public void createQ2(int daysInQ2, int year,float dayfactorintern, float dayfactorextern, Skill skill, 
 			float intDaysPerPhaseAndSkill, float extDaysPerPhaseAndSkill, Result result){
@@ -884,7 +864,16 @@ public class Core extends ASingelton implements ICoreServer {
 		result.getYears().get(yearindex).getQ2().setPdInt((int) Math.round(tempIntDays + internalDaysPerSkillInQ2));
 		result.getYears().get(yearindex).getQ2().setPdExt((int) Math.round(tempExtDays + externalDaysPerSkillInQ2));
 		result.getYears().get(yearindex).getQ2().setCostInt(tempIntCosts + internalCostsPerSkillInQ2);
-		result.getYears().get(yearindex).getQ2().setCostInt(tempExtCosts + externalCostsPerSkillInQ2);
+		result.getYears().get(yearindex).getQ2().setCostExt(tempExtCosts + externalCostsPerSkillInQ2);
+		
+		//Totals setzen
+		
+				result.getYears().get(yearindex).getQ2().setCostTotal(result.getYears().
+						get(yearindex).getQ2().getCostExt()+result.getYears().get(yearindex).getQ2().getCostInt());
+				result.getYears().get(yearindex).getQ2().setPdTotal(result.getYears().
+						get(yearindex).getQ2().getPdExt()+result.getYears().get(yearindex).getQ2().getPdInt());
+		
+		
 	}
 	
 	public void createQ3(int daysInQ3, int year,float dayfactorintern, float dayfactorextern, Skill skill, 
@@ -907,7 +896,14 @@ public class Core extends ASingelton implements ICoreServer {
 		result.getYears().get(yearindex).getQ3().setPdInt((int) Math.round(tempIntDays + internalDaysPerSkillInQ3));
 		result.getYears().get(yearindex).getQ3().setPdExt((int) Math.round(tempExtDays + externalDaysPerSkillInQ3));
 		result.getYears().get(yearindex).getQ3().setCostInt(tempIntCosts + internalCostsPerSkillInQ3);
-		result.getYears().get(yearindex).getQ3().setCostInt(tempExtCosts + externalCostsPerSkillInQ3);
+		result.getYears().get(yearindex).getQ3().setCostExt(tempExtCosts + externalCostsPerSkillInQ3);
+		
+		//Totals setzen
+		
+				result.getYears().get(yearindex).getQ3().setCostTotal(result.getYears().
+						get(yearindex).getQ3().getCostExt()+result.getYears().get(yearindex).getQ3().getCostInt());
+				result.getYears().get(yearindex).getQ3().setPdTotal(result.getYears().
+						get(yearindex).getQ3().getPdExt()+result.getYears().get(yearindex).getQ3().getPdInt());
 	}
 	
 	
@@ -931,10 +927,17 @@ public class Core extends ASingelton implements ICoreServer {
 		result.getYears().get(yearindex).getQ4().setPdInt((int) Math.round(tempIntDays + internalDaysPerSkillInQ4));
 		result.getYears().get(yearindex).getQ4().setPdExt((int) Math.round(tempExtDays + externalDaysPerSkillInQ4));
 		result.getYears().get(yearindex).getQ4().setCostInt(tempIntCosts + internalCostsPerSkillInQ4);
-		result.getYears().get(yearindex).getQ4().setCostInt(tempExtCosts + externalCostsPerSkillInQ4);
+		result.getYears().get(yearindex).getQ4().setCostExt(tempExtCosts + externalCostsPerSkillInQ4);
+		
+		//Totals setzen
+		
+				result.getYears().get(yearindex).getQ4().setCostTotal(result.getYears().
+						get(yearindex).getQ4().getCostExt()+result.getYears().get(yearindex).getQ4().getCostInt());
+				result.getYears().get(yearindex).getQ4().setPdTotal(result.getYears().
+						get(yearindex).getQ4().getPdExt()+result.getYears().get(yearindex).getQ4().getPdInt());
 	}
 
-	// calculate the total amount of projectdays
+	// calculate the total amount 3f projectdays
 	public int calculateProjectDays(Project project) {
 		int duration = 0;
 		long finaldays = 0;
