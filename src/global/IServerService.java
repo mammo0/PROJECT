@@ -1,5 +1,6 @@
 package global;
 
+import java.io.File;
 import java.rmi.Remote;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
@@ -51,4 +52,12 @@ public interface IServerService extends Remote{
 	 * @throws RemoteException
 	 */
 	public void deleteProject(String projectName) throws RemoteException;
+	
+	/**
+	 * This method returns a CSV file from the project 
+	 * @param projectName the project
+	 * @return a CSV file object
+	 * @throws RemoteException
+	 */
+	public File getProjectCSV(String projectName) throws RemoteException;
 }
