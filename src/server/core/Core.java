@@ -145,15 +145,15 @@ public class Core extends ASingelton implements ICoreServer {
 	@Override
 	public Project calculateProject(Project project) {
 		this.project = project;
-		if(project.getEndDate()!= null){
+		//if(project.getEndDate()!= null){
 		calculateLenght(project);
 		calculateResultSkill(project);
 		calculateProjectDays(project);
 		calculateQuarterResults(project);
-		}
-		else{
-			
-		}
+//		}
+//		else{
+//			
+//		}
 		return project;
 	}
 
@@ -1870,7 +1870,7 @@ public class Core extends ASingelton implements ICoreServer {
 		int years = 0;
 		int startyear = 0;
 		int endyear = 0;
-		if(project.getEndDate() != null){
+//		if(project.getEndDate() != null){
 		if (project.getEndDate().getYear() == project.getStartDate().getYear()) {
 			duration = project.getEndDate().getDayOfYear()
 					- project.getStartDate().getDayOfYear() + 1;
@@ -1899,17 +1899,18 @@ public class Core extends ASingelton implements ICoreServer {
 				workingdays = workingdays + 17;
 				endyear = endyear - 30;
 			}
-			workingdays = workingdays + (0.55835) * endyear;
-			finaldays = Math.round(workingdays);
-		}
-		}else{
+			
+			
 			
 		}
-
-		
+		workingdays = workingdays + (0.55835) * endyear;
+		finaldays = Math.round(workingdays);
 		return (int) finaldays;
-
 	}
+//		else{
+//			
+//		}
+
 
 	public void writeProject(Project project) throws FileNotFoundException,
 			XMLStreamException, NullPointerException {
@@ -1987,11 +1988,7 @@ public class Core extends ASingelton implements ICoreServer {
 		ReadXML xml = new ReadXML(projectName);
 		project = new Project();
 		project = xml.read();
-		try {
-			calculateProject(project);
-		} catch (NullPointerException e) {
-			e.printStackTrace();
-		}
+		calculateProject(project);
 		return project;
 	}
 

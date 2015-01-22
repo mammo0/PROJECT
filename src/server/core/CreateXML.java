@@ -122,8 +122,13 @@ public class CreateXML {
 		while (enumKey.hasMoreElements()) {
 			int key = enumKey.nextElement();
 			createNode(eventWriter, "phaseskill", "" + key);
+			if(phases.getSkills().get(key) == -1){
+				createNode(eventWriter, "skillDuration", ""
+						+ 1);
+			}else{
 			createNode(eventWriter, "skillDuration", ""
 					+ phases.getSkills().get(key));
+			}
 
 		}
 		eventWriter.add(eventFactory.createEndElement("", "", "phaseskills"));
