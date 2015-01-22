@@ -147,7 +147,7 @@ public class Core extends ASingelton implements ICoreServer {
 	@Override
 	public Project calculateProject(Project project) {
 		this.project = project;
-		if(project.getStartDate()!=null){
+		if(project.getPhases().size()!= 0){
 		calculateLenght(project);
 		calculateResultSkill(project);
 		calculateProjectDays(project);
@@ -399,10 +399,10 @@ public class Core extends ASingelton implements ICoreServer {
 				if (resource.getSkillID() == skill.getSkillID()) {
 					if (resource.isIntern()) {
 						_availability = _availability
-								+ resource.getAvailability();
+								+ (resource.getSkillAmount() * resource.getAvailability());
 					} else {
 						_availabilityExt = _availabilityExt
-								+ resource.getAvailability();
+								+ (resource.getSkillAmount() * resource.getAvailability());
 					}
 				}
 
