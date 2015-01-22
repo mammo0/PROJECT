@@ -153,7 +153,7 @@ public class ResourceTab extends AnchorPane implements IComponents {
 	}
 	
 	@Override
-	public PhasePaneWrapper addPhasePaneWrapper(String phaseName, int index, String parentName){
+	public PhasePaneWrapper addPhasePaneWrapper(String phaseName, String parentName){
 		return null;
 	}
 	

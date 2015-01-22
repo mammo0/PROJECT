@@ -230,8 +230,8 @@ public class ProjectEditor extends TabPane implements IComponents {
 	}
 	
 	@Override
-	public PhasePaneWrapper addPhasePaneWrapper(String phaseName, int index, String parentName){
-		return phaseTab.addPhasePaneWrapper(phaseName, index, parentName);
+	public PhasePaneWrapper addPhasePaneWrapper(String phaseName, String parentName){
+		return phaseTab.addPhasePaneWrapper(phaseName, parentName);
 	}
 	
 	@Override

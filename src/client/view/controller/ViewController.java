@@ -309,8 +309,8 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 	}
 	
 	@Override
-	public PhasePaneWrapper addPhasePaneWrapper(String phaseName, int index, String parentName){
-		return projectEditor.addPhasePaneWrapper(phaseName, index, parentName);
+	public PhasePaneWrapper addPhasePaneWrapper(String phaseName, String parentName){
+		return projectEditor.addPhasePaneWrapper(phaseName, parentName);
 	}
 	
 	@Override

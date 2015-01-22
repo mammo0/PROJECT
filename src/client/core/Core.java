@@ -198,7 +198,7 @@ public class Core extends ASingelton implements ICoreClient {
 		// fourth screen
 		Hashtable<PhasePaneWrapper, ArrayList<PhasePaneWrapper>> phases = view.getPhasePanes();
 		if(phases.isEmpty() && !ignoreErrors){
-			view.addPhasePaneWrapper("", 0, null);
+			view.addPhasePaneWrapper("", null);
 		}
 		Enumeration<PhasePaneWrapper> enumKey = phases.keys();
 		while(enumKey.hasMoreElements()){
@@ -319,9 +319,6 @@ public class Core extends ASingelton implements ICoreClient {
 		view.setProjectDescription(project.getDescription());
 		
 		view.setProjectTimeStamp(project.getTimestamp());
-		if(project.isFinished()){
-			view.disableWrite(true);
-		}
 		
 		// second screen
 		for(Skill skill : project.getSkills()){
@@ -352,18 +349,18 @@ public class Core extends ASingelton implements ICoreClient {
 			Phase phase = phases.get(i);
 			PhasePaneWrapper wrapper;
 			if(phase.getParent() == null){
-				wrapper = view.addPhasePaneWrapper(phase.getPhaseName(), i, null);
+				wrapper = view.addPhasePaneWrapper(phase.getPhaseName(), null);
 				firstSub = true;
 			}else{
 				if(firstSub){
-					wrapper = view.addPhasePaneWrapper(phase.getParent().getPhaseName(), i, null);
+					wrapper = view.addPhasePaneWrapper(phase.getParent().getPhaseName(), null);
 					wrapper.setPhaseName(phase.getParent().getPhaseName());
 					phases.add(i, phase.getParent());
 					firstSub = false;
 					continue;
 				}
 				
-				wrapper = view.addPhasePaneWrapper(phase.getPhaseName(), i, phase.getParent().getPhaseName());
+				wrapper = view.addPhasePaneWrapper(phase.getPhaseName(), phase.getParent().getPhaseName());
 			}
 			wrapper.setPhaseName(phase.getPhaseName());
 			wrapper.setPhaseBegin(phase.getStartDate());
@@ -383,6 +380,11 @@ public class Core extends ASingelton implements ICoreClient {
 		// fifth screen
 		if(buildProject(false, true))
 			view.displayResults();
+		
+		// disable write if the project is finished
+		if(project.isFinished()){
+			view.disableWrite(true);
+		}
 	}
 	
 	// sort the phases ascending (by their start date)

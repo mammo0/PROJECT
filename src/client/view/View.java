@@ -189,8 +189,8 @@ public class View extends ASingelton implements IViewClient {
 	}
 	
 	@Override
-	public PhasePaneWrapper addPhasePaneWrapper(String phaseName, int index, String parentName){
-		return viewController.addPhasePaneWrapper(phaseName, index, parentName);
+	public PhasePaneWrapper addPhasePaneWrapper(String phaseName, String parentName){
+		return viewController.addPhasePaneWrapper(phaseName, parentName);
 	}
 	
 	@Override

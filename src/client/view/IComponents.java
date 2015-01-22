@@ -62,11 +62,10 @@ public interface IComponents {
 	/**
 	 * Add a new phase pane wrapper
 	 * @param phaseName
-	 * @param index
 	 * @param parentName
 	 * @return the new phase pane wrapper
 	 */
-	public PhasePaneWrapper addPhasePaneWrapper(String phaseName, int index, String parentName);
+	public PhasePaneWrapper addPhasePaneWrapper(String phaseName, String parentName);
 	
 	/**
 	 * Add a new phase pane
