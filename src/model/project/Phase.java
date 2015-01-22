@@ -7,43 +7,40 @@ import java.util.Hashtable;
 
 /**
  * This class represents a phase of the project
+ * 
  * @author Ammon
  *
  */
 public class Phase implements Serializable {
+
 	// the name of the phase
 	private String phaseName;
-	
+
 	// set a parent phase if this phase is a sub phase (default is null)
 	private Phase parent = null;
-	
+
 	// the start date of the phase
 	private LocalDate startDate;
-	
+
 	// the end date of the phase
 	private LocalDate endDate;
-	
+
 	// the risk factor for the phase
 	private int riskFactor;
-	
+
 	// the required skills of the phase with the required duration
 	private Hashtable<Integer, Integer> skills;
-	
-	
-	
-	
-	
+
 	/**
 	 * Constructor
 	 */
-	public Phase(){
+	public Phase() {
 		skills = new Hashtable<Integer, Integer>();
 	}
 
-	
-	
 	/**
 	 * Get the name of the phase
+	 * 
 	 * @return the phaseName
 	 */
 	public String getPhaseName() {
@@ -52,6 +49,7 @@ public class Phase implements Serializable {
 
 	/**
 	 * Get the parent of a sub phase (null if it is a main phase)
+	 * 
 	 * @return the parent
 	 */
 	public Phase getParent() {
@@ -60,6 +58,7 @@ public class Phase implements Serializable {
 
 	/**
 	 * Get the starting date of the phase
+	 * 
 	 * @return the startDate
 	 */
 	public LocalDate getStartDate() {
@@ -68,6 +67,7 @@ public class Phase implements Serializable {
 
 	/**
 	 * Get the ending date of the phase
+	 * 
 	 * @return the endDate
 	 */
 	public LocalDate getEndDate() {
@@ -76,6 +76,7 @@ public class Phase implements Serializable {
 
 	/**
 	 * Get the risk factor of the phase
+	 * 
 	 * @return the riskFactor
 	 */
 	public int getRiskFactor() {
@@ -84,6 +85,7 @@ public class Phase implements Serializable {
 
 	/**
 	 * Get the skills required by this phase with their duration
+	 * 
 	 * @return the skills
 	 */
 	public Hashtable<Integer, Integer> getSkills() {
@@ -92,7 +94,9 @@ public class Phase implements Serializable {
 
 	/**
 	 * Set the name of the phase
-	 * @param phaseName the phaseName to set
+	 * 
+	 * @param phaseName
+	 *            the phaseName to set
 	 */
 	public void setPhaseName(String phaseName) {
 		this.phaseName = phaseName;
@@ -100,7 +104,9 @@ public class Phase implements Serializable {
 
 	/**
 	 * Set the parent of the sub phase
-	 * @param parent the parent to set
+	 * 
+	 * @param parent
+	 *            the parent to set
 	 */
 	public void setParent(Phase parent) {
 		this.parent = parent;
@@ -108,7 +114,9 @@ public class Phase implements Serializable {
 
 	/**
 	 * Set the starting date of the phase
-	 * @param startDate the startDate to set
+	 * 
+	 * @param startDate
+	 *            the startDate to set
 	 */
 	public void setStartDate(LocalDate startDate) {
 		this.startDate = startDate;
@@ -116,7 +124,9 @@ public class Phase implements Serializable {
 
 	/**
 	 * Set the ending date of the phase
-	 * @param endDate the endDate to set
+	 * 
+	 * @param endDate
+	 *            the endDate to set
 	 */
 	public void setEndDate(LocalDate endDate) {
 		this.endDate = endDate;
@@ -124,7 +134,9 @@ public class Phase implements Serializable {
 
 	/**
 	 * Set the risk factor of the phase
-	 * @param riskFactor the riskFactor to set
+	 * 
+	 * @param riskFactor
+	 *            the riskFactor to set
 	 */
 	public void setRiskFactor(int riskFactor) {
 		this.riskFactor = riskFactor;
@@ -132,8 +144,11 @@ public class Phase implements Serializable {
 
 	/**
 	 * Add a new skill to the phase with its duration
-	 * @param amount the amount of that skill
-	 * @param skill the skill
+	 * 
+	 * @param amount
+	 *            the amount of that skill
+	 * @param skill
+	 *            the skill
 	 */
 	public void addSkill(int skillID, int amount) {
 		this.skills.put(skillID, amount);
