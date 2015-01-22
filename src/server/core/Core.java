@@ -462,18 +462,24 @@ public class Core extends ASingelton implements ICoreServer {
 
 			LocalDate startdate = phases.getStartDate();
 			LocalDate enddate = phases.getEndDate();
-			//Gesamte Tage der Phase
+			
+			//Gesamte Tage der Phase gilt nur wenn alles in eniem jahr ist!!
 			int _diffdate =enddate.getDayOfYear()-startdate.getDayOfYear();
+			
 			int _skillID = 0;
 			int _startyear = phases.getStartDate().getYear();
 			int _endyear = phases.getEndDate().getYear();
 			int _startquarter = (phases.getStartDate().getMonthValue() - 1) / 3 + 1;
 			int _endquarter = (phases.getEndDate().getMonthValue() - 1) / 3 + 1;
 			int _numberQuarters = 0;
-			int _availIntern=0;
-			int _availExtern=0;
+			float _availIntern=0;
+			float _availExtern=0;
 			int daysInQ1=0;
 			int daysInQ2=0;
+			int daysInQ3=0;
+			int daysInQ4=0;
+			int daysInYStart=0;
+			int daysInYEnd=0;
 
 			for (Skill skill : project.getSkills()) {
 				_skillID = skill.getSkillID();
@@ -482,16 +488,159 @@ public class Core extends ASingelton implements ICoreServer {
 					int key = enumKey.nextElement();
 					if (key == _skillID) {
 
-						if (_startyear == _endyear
-								&& _startquarter == _endquarter) {
+						if (_startyear == _endyear){
+								if( _startquarter == _endquarter) {
 
 							if (_startquarter == 1 && _endquarter == 1) {
+								
+								for( int i = 0; i<project.getResources().size(); i++){
+									if (project.getResources().get(i).getSkillID()==_skillID){
+										if(project.getResources().get(i).isIntern()==true){
+											_availIntern= _availIntern + project.getResources().get(i).getAvailability();
+										}
+										else
+										{
+											_availExtern= _availExtern + project.getResources().get(i).getAvailability();
+										}
+									}
+								}
+								//Summe der Verfügbarkeiten in Faktor umrechnen, mit welchem dann zuerest die externen Tage berechnet werden
+								
+							
+								double faktor = _availIntern / _availExtern;
+								faktor = faktor +1;
+								
+								//Benötigte Tage pro Skill und Phase auslesen
+								
+								 int neededDaysPerSkillAndPhase = phases.getSkills().get(_skillID);
+								 
+								 //Externe Tage berechen
+								 float extDaysPerPhaseAndSkill= 0;
+								 extDaysPerPhaseAndSkill=(float) (neededDaysPerSkillAndPhase/faktor);
+								 
+								//interne Tage berechnen
+								 float intDaysPerPhaseAndSkill=neededDaysPerSkillAndPhase-extDaysPerPhaseAndSkill;
+								 //Kosten berechnen
+								 float CostsPerPhaseAndSkillIntern = 0;
+								 float CostsPerPhaseAndSkillExtern = 0;
+								 
+								 CostsPerPhaseAndSkillIntern=intDaysPerPhaseAndSkill*skill.getDayRateInt();
+								 CostsPerPhaseAndSkillExtern=extDaysPerPhaseAndSkill*skill.getDayRateExt();
+								 //extDaysPerPhaseAndSkill und intDaysPerPhaseAndSkill ins Result (q1) schreiben und auch die kosten
+							
+								 
+								
 
 							} else if (_startquarter == 2 && _endquarter == 2) {
 
+								for( int i = 0; i<project.getResources().size(); i++){
+									if (project.getResources().get(i).getSkillID()==_skillID){
+										if(project.getResources().get(i).isIntern()==true){
+											_availIntern= _availIntern + project.getResources().get(i).getAvailability();
+										}
+										else
+										{
+											_availExtern= _availExtern + project.getResources().get(i).getAvailability();
+										}
+									}
+								}
+								//Summe der Verfügbarkeiten in Faktor umrechnen, mit welchem dann zuerest die externen Tage berechnet werden
+								
+							
+								double faktor = _availIntern / _availExtern;
+								faktor = faktor +1;
+								
+								//Benötigte Tage pro Skill und Phase auslesen
+								
+								 int neededDaysPerSkillAndPhase = phases.getSkills().get(_skillID);
+								 
+								 //Externe Tage berechen
+								 float extDaysPerPhaseAndSkill= 0;
+								 extDaysPerPhaseAndSkill=(float) (neededDaysPerSkillAndPhase/faktor);
+								 
+								//interne Tage berechnen
+								 float intDaysPerPhaseAndSkill=neededDaysPerSkillAndPhase-extDaysPerPhaseAndSkill;
+								 //Kosten berechnen
+								 float CostsPerPhaseAndSkillIntern = 0;
+								 float CostsPerPhaseAndSkillExtern = 0;
+								 
+								 CostsPerPhaseAndSkillIntern=intDaysPerPhaseAndSkill*skill.getDayRateInt();
+								 CostsPerPhaseAndSkillExtern=extDaysPerPhaseAndSkill*skill.getDayRateExt();
+								 //extDaysPerPhaseAndSkill und intDaysPerPhaseAndSkill ins Result (q2) schreiben und auch die kosten
+
 							} else if (_startquarter == 3 && _endquarter == 3) {
 
+								for( int i = 0; i<project.getResources().size(); i++){
+									if (project.getResources().get(i).getSkillID()==_skillID){
+										if(project.getResources().get(i).isIntern()==true){
+											_availIntern= _availIntern + project.getResources().get(i).getAvailability();
+										}
+										else
+										{
+											_availExtern= _availExtern + project.getResources().get(i).getAvailability();
+										}
+									}
+								}
+								//Summe der Verfügbarkeiten in Faktor umrechnen, mit welchem dann zuerest die externen Tage berechnet werden
+								
+							
+								double faktor = _availIntern / _availExtern;
+								faktor = faktor +1;
+								
+								//Benötigte Tage pro Skill und Phase auslesen
+								
+								 int neededDaysPerSkillAndPhase = phases.getSkills().get(_skillID);
+								 
+								 //Externe Tage berechen
+								 float extDaysPerPhaseAndSkill= 0;
+								 extDaysPerPhaseAndSkill=(float) (neededDaysPerSkillAndPhase/faktor);
+								 
+								//interne Tage berechnen
+								 float intDaysPerPhaseAndSkill=neededDaysPerSkillAndPhase-extDaysPerPhaseAndSkill;
+								 //Kosten berechnen
+								 float CostsPerPhaseAndSkillIntern = 0;
+								 float CostsPerPhaseAndSkillExtern = 0;
+								 
+								 CostsPerPhaseAndSkillIntern=intDaysPerPhaseAndSkill*skill.getDayRateInt();
+								 CostsPerPhaseAndSkillExtern=extDaysPerPhaseAndSkill*skill.getDayRateExt();
+								 //extDaysPerPhaseAndSkill und intDaysPerPhaseAndSkill ins Result (q3) schreiben und auch die kosten
+
 							} else if (_startquarter == 4 && _endquarter == 4) {
+
+								for( int i = 0; i<project.getResources().size(); i++){
+									if (project.getResources().get(i).getSkillID()==_skillID){
+										if(project.getResources().get(i).isIntern()==true){
+											_availIntern= _availIntern + project.getResources().get(i).getAvailability();
+										}
+										else
+										{
+											_availExtern= _availExtern + project.getResources().get(i).getAvailability();
+										}
+									}
+								}
+								//Summe der Verfügbarkeiten in Faktor umrechnen, mit welchem dann zuerest die externen Tage berechnet werden
+								
+							
+								double faktor = _availIntern / _availExtern;
+								faktor = faktor +1;
+								
+								//Benötigte Tage pro Skill und Phase auslesen
+								
+								 int neededDaysPerSkillAndPhase = phases.getSkills().get(_skillID);
+								 
+								 //Externe Tage berechen
+								 float extDaysPerPhaseAndSkill= 0;
+								 extDaysPerPhaseAndSkill=(float) (neededDaysPerSkillAndPhase/faktor);
+								 
+								//interne Tage berechnen
+								 float intDaysPerPhaseAndSkill=neededDaysPerSkillAndPhase-extDaysPerPhaseAndSkill;
+								 //Kosten berechnen
+								 float CostsPerPhaseAndSkillIntern = 0;
+								 float CostsPerPhaseAndSkillExtern = 0;
+								 
+								 CostsPerPhaseAndSkillIntern=intDaysPerPhaseAndSkill*skill.getDayRateInt();
+								 CostsPerPhaseAndSkillExtern=extDaysPerPhaseAndSkill*skill.getDayRateExt();
+								 //extDaysPerPhaseAndSkill und intDaysPerPhaseAndSkill ins Result (q4) schreiben und auch die kosten
 
 							}
 						} else {
@@ -527,8 +676,9 @@ public class Core extends ASingelton implements ICoreServer {
 								
 								
 								//Summe der Verfügbarkeiten in Faktor umrechnen, mit welchem dann zuerest die externen Tage berechnet werden
-								float faktor = 0;
-								faktor = _availIntern/_availExtern;
+								
+								//faktor = _availIntern/_availExtern
+								double faktor = _availIntern / _availExtern;
 								faktor = faktor +1;
 								
 								
@@ -538,7 +688,7 @@ public class Core extends ASingelton implements ICoreServer {
 								 
 								 //Externe Tage berechen
 								 float extDaysPerPhaseAndSkill= 0;
-								 extDaysPerPhaseAndSkill=neededDaysPerSkillAndPhase/faktor;
+								 extDaysPerPhaseAndSkill=(float) (neededDaysPerSkillAndPhase/faktor);
 								 
 								 //interne Tage berechnen
 								 float intDaysPerPhaseAndSkill=neededDaysPerSkillAndPhase-extDaysPerPhaseAndSkill;
@@ -567,7 +717,25 @@ public class Core extends ASingelton implements ICoreServer {
 								 float externalDaysPerSkillInQ2 = 0;
 								 externalDaysPerSkillInQ1 = daysInQ1*dayfactorextern;
 								 externalDaysPerSkillInQ2 = daysInQ2*dayfactorextern;
-								
+								 
+								 
+								 //Kosten
+								 float internalCostsPerSkillInQ1 = 0;
+								 float internalCostsPerSkillInQ2 = 0;
+								 
+								 float externalCostsPerSkillInQ1 = 0;
+								 float externalCostsPerSkillInQ2 = 0;
+								 
+								 internalCostsPerSkillInQ1=internalDaysPerSkillInQ1*skill.getDayRateInt();
+								 internalCostsPerSkillInQ2=internalDaysPerSkillInQ2*skill.getDayRateInt();
+								 
+								 externalCostsPerSkillInQ1 = externalDaysPerSkillInQ1*skill.getDayRateExt();
+								 externalCostsPerSkillInQ2 = externalDaysPerSkillInQ2*skill.getDayRateExt();
+								 
+								 
+								 
+								 //Ergebnisse müssen hier noch in Quartale geschrieben werden(external/internalDaysPerSkillInQ1,
+								 //external/internalDaysPerSkillInQ2, internal/externalCostsPerSkillInQ1, internal/externalCostsPerSkillInQ2
 								
 								}
 								//Q2
@@ -575,11 +743,86 @@ public class Core extends ASingelton implements ICoreServer {
 										|| startdate.getMonthValue() == 5
 										|| startdate.getMonthValue() == 6){
 								
-								LocalDate enddatequarter = LocalDate.of(_endyear, 6, 31);
+								LocalDate enddatequarter = LocalDate.of(_endyear, 6, 30);
 							//Tage die im zweiten Quartal liegen
 								daysInQ2 = enddatequarter.getDayOfYear()-startdate.getDayOfYear();
 							//Restliche tage folglich im 3 quartal	
-								int daysInQ3 = _diffdate - daysInQ2;
+								daysInQ3 = _diffdate - daysInQ2;
+								
+									for( int i = 0; i<project.getResources().size(); i++){
+										if (project.getResources().get(i).getSkillID()==_skillID){
+											if(project.getResources().get(i).isIntern()==true){
+												
+												_availIntern= _availIntern + project.getResources().get(i).getAvailability();
+												
+											}
+											else
+											{
+												_availExtern= _availExtern + project.getResources().get(i).getAvailability();
+											}
+										}
+									}
+									
+									
+									//Summe der Verfügbarkeiten in Faktor umrechnen, mit welchem dann zuerest die externen Tage berechnet werden
+									
+									//faktor = _availIntern/_availExtern
+									double faktor = _availIntern / _availExtern;
+									faktor = faktor +1;
+									
+									
+									//Benötigte Tage pro Skill und Phase auslesen
+									
+									 int neededDaysPerSkillAndPhase = phases.getSkills().get(_skillID);
+									 
+									 //Externe Tage berechen
+									 float extDaysPerPhaseAndSkill= 0;
+									 extDaysPerPhaseAndSkill=(float) (neededDaysPerSkillAndPhase/faktor);
+									 
+									 //interne Tage berechnen
+									 float intDaysPerPhaseAndSkill=neededDaysPerSkillAndPhase-extDaysPerPhaseAndSkill;
+									 
+									//Tage auf die Quartale verteilen
+									 //Wie viele SkillTage verteilen sich auf einen DateDiff Tag
+									 //Also wenn die Phase Datediff 90 tage dauert und man einen internen mit 30 tagen verplanen muss
+									 //dann ist an einem Datedifftag 0,333 des internen verbraucht
+									 //diese Zahl dann mal die anzahl der arbeitstage im Q1 udn in Q2
+									 
+									 
+									 //Faktor, also wie oben beschrieben zb 0,33 brechenen
+									 //intern
+									 float dayfactorintern = 0;
+									 dayfactorintern = intDaysPerPhaseAndSkill/_diffdate;
+									 float internalDaysPerSkillInQ2 = 0;
+									 float internalDaysPerSkillInQ3 = 0;
+									 internalDaysPerSkillInQ2 = daysInQ2*dayfactorintern;
+									 internalDaysPerSkillInQ3 = daysInQ3*dayfactorintern;
+									 
+									 //extern
+									 
+									 float dayfactorextern = 0;
+									 dayfactorextern = intDaysPerPhaseAndSkill/_diffdate;
+									 float externalDaysPerSkillInQ2 = 0;
+									 float externalDaysPerSkillInQ3 = 0;
+									 externalDaysPerSkillInQ2 = daysInQ2*dayfactorextern;
+									 externalDaysPerSkillInQ3 = daysInQ3*dayfactorextern;
+									 //Ergebnisse müssen hier noch in Quartale geschrieben werden	
+
+									 //Kosten
+									 float internalCostsPerSkillInQ3 = 0;
+									 float internalCostsPerSkillInQ2 = 0;
+									 
+									 float externalCostsPerSkillInQ3 = 0;
+									 float externalCostsPerSkillInQ2 = 0;
+									 
+									 internalCostsPerSkillInQ2=internalDaysPerSkillInQ2*skill.getDayRateInt();
+									 internalCostsPerSkillInQ3=internalDaysPerSkillInQ3*skill.getDayRateInt();
+									 
+									 externalCostsPerSkillInQ2 = externalDaysPerSkillInQ2*skill.getDayRateExt();
+									 externalCostsPerSkillInQ3 = externalDaysPerSkillInQ3*skill.getDayRateExt();
+								
+					
+								
 								}
 								//Q3
 								else if (startdate.getMonthValue() == 7
@@ -588,38 +831,705 @@ public class Core extends ASingelton implements ICoreServer {
 								
 								LocalDate enddatequarter = LocalDate.of(_endyear, 9, 30);
 							//Tage die im dritten Quartal liegen
-								int daysInQ3 = enddatequarter.getDayOfYear()-startdate.getDayOfYear();
+								daysInQ3 = enddatequarter.getDayOfYear()-startdate.getDayOfYear();
 							//Restliche tage folglich im 4 quartal	
-								int daysInQ4 = _diffdate - daysInQ3;
+								 daysInQ4 = _diffdate - daysInQ3;
+									
+										for( int i = 0; i<project.getResources().size(); i++){
+											if (project.getResources().get(i).getSkillID()==_skillID){
+												if(project.getResources().get(i).isIntern()==true){
+													
+													_availIntern= _availIntern + project.getResources().get(i).getAvailability();
+													
+												}
+												else
+												{
+													_availExtern= _availExtern + project.getResources().get(i).getAvailability();
+												}
+											}
+										}
+										
+										
+										//Summe der Verfügbarkeiten in Faktor umrechnen, mit welchem dann zuerest die externen Tage berechnet werden
+										
+										//faktor = _availIntern/_availExtern
+										double faktor = _availIntern / _availExtern;
+										faktor = faktor +1;
+										
+										
+										//Benötigte Tage pro Skill und Phase auslesen
+										
+										 int neededDaysPerSkillAndPhase = phases.getSkills().get(_skillID);
+										 
+										 //Externe Tage berechen
+										 float extDaysPerPhaseAndSkill= 0;
+										 extDaysPerPhaseAndSkill=(float) (neededDaysPerSkillAndPhase/faktor);
+										 
+										 //interne Tage berechnen
+										 float intDaysPerPhaseAndSkill=neededDaysPerSkillAndPhase-extDaysPerPhaseAndSkill;
+										 
+										//Tage auf die Quartale verteilen
+										 //Wie viele SkillTage verteilen sich auf einen DateDiff Tag
+										 //Also wenn die Phase Datediff 90 tage dauert und man einen internen mit 30 tagen verplanen muss
+										 //dann ist an einem Datedifftag 0,333 des internen verbraucht
+										 //diese Zahl dann mal die anzahl der arbeitstage im Q1 udn in Q2
+										 
+										 
+										 //Faktor, also wie oben beschrieben zb 0,33 brechenen
+										 //intern
+										 float dayfactorintern = 0;
+										 dayfactorintern = intDaysPerPhaseAndSkill/_diffdate;
+										 float internalDaysPerSkillInQ3 = 0;
+										 float internalDaysPerSkillInQ4 = 0;
+										 internalDaysPerSkillInQ3 = daysInQ3*dayfactorintern;
+										 internalDaysPerSkillInQ4 = daysInQ4*dayfactorintern;
+										 
+										 //extern
+										 
+										 float dayfactorextern = 0;
+										 dayfactorextern = intDaysPerPhaseAndSkill/_diffdate;
+										 float externalDaysPerSkillInQ3 = 0;
+										 float externalDaysPerSkillInQ4 = 0;
+										 externalDaysPerSkillInQ3 = daysInQ3*dayfactorextern;
+										 externalDaysPerSkillInQ4 = daysInQ4*dayfactorextern;
+										 //Ergebnisse müssen hier noch in Quartale geschrieben werden	
+
+										 //Kosten
+										 float internalCostsPerSkillInQ3 = 0;
+										 float internalCostsPerSkillInQ4 = 0;
+										 
+										 float externalCostsPerSkillInQ3 = 0;
+										 float externalCostsPerSkillInQ4 = 0;
+										 
+										 internalCostsPerSkillInQ3=internalDaysPerSkillInQ3*skill.getDayRateInt();
+										 internalCostsPerSkillInQ4=internalDaysPerSkillInQ4*skill.getDayRateInt();
+										 
+										 externalCostsPerSkillInQ3 = externalDaysPerSkillInQ3*skill.getDayRateExt();
+										 externalCostsPerSkillInQ4 = externalDaysPerSkillInQ4*skill.getDayRateExt();
+						
 								}
 	
 							} 
-							
-							
-							
-							
-							
-							
-							
+//Wenn ein gesamtes Quartal dabei ist					
 							else if (_endquarter - _startquarter == 2) {
+								//Q1
+								if (startdate.getMonthValue() == 1
+										|| startdate.getMonthValue() == 2
+										|| startdate.getMonthValue() == 3){
 								
-
+								LocalDate enddatequarter = LocalDate.of(_endyear, 3, 31);
+							//Tage die im ersten Quartal liegen
+								 daysInQ1 = enddatequarter.getDayOfYear()-startdate.getDayOfYear();
+							//Tage im gesamten 2. Quartal
+								 daysInQ2 = 91;
+							// Tage im 3 Quartal
+								 daysInQ3=_diffdate - daysInQ1 - daysInQ2;
+								 
+								
+							
+								for( int i = 0; i<project.getResources().size(); i++){
+									if (project.getResources().get(i).getSkillID()==_skillID){
+										if(project.getResources().get(i).isIntern()==true){
+											
+											_availIntern= _availIntern + project.getResources().get(i).getAvailability();
+											
+										}
+										else
+										{
+											_availExtern= _availExtern + project.getResources().get(i).getAvailability();
+										}
+									}
+								}
+								
+								
+								//Summe der Verfügbarkeiten in Faktor umrechnen, mit welchem dann zuerest die externen Tage berechnet werden
+								
+								//faktor = _availIntern/_availExtern
+								double faktor = _availIntern / _availExtern;
+								faktor = faktor +1;
+								
+								
+								//Benötigte Tage pro Skill und Phase auslesen
+								
+								 int neededDaysPerSkillAndPhase = phases.getSkills().get(_skillID);
+								 
+								 //Externe Tage berechen
+								 float extDaysPerPhaseAndSkill= 0;
+								 extDaysPerPhaseAndSkill=(float) (neededDaysPerSkillAndPhase/faktor);
+								 
+								 //interne Tage berechnen
+								 float intDaysPerPhaseAndSkill=neededDaysPerSkillAndPhase-extDaysPerPhaseAndSkill;
+								 
+								//Tage auf die Quartale verteilen
+								 //Wie viele SkillTage verteilen sich auf einen DateDiff Tag
+								 //Also wenn die Phase Datediff 90 tage dauert und man einen internen mit 30 tagen verplanen muss
+								 //dann ist an einem Datedifftag 0,333 des internen verbraucht
+								 //diese Zahl dann mal die anzahl der arbeitstage im Q1 udn in Q2
+								 
+								 
+								 //Faktor, also wie oben beschrieben zb 0,33 brechenen
+								 //intern
+								 float dayfactorintern = 0;
+								 dayfactorintern = intDaysPerPhaseAndSkill/_diffdate;
+								 float internalDaysPerSkillInQ1 = 0;
+								 float internalDaysPerSkillInQ2 = 0;
+								 float internalDaysPerSkillInQ3 = 0;
+								 internalDaysPerSkillInQ1 = daysInQ1*dayfactorintern;
+								 internalDaysPerSkillInQ2 = daysInQ2*dayfactorintern;
+								 internalDaysPerSkillInQ3 = daysInQ3*dayfactorintern;
+								 
+								 //extern
+								 
+								 float dayfactorextern = 0;
+								 dayfactorextern = intDaysPerPhaseAndSkill/_diffdate;
+								 float externalDaysPerSkillInQ1 = 0;
+								 float externalDaysPerSkillInQ2 = 0;
+								 float externalDaysPerSkillInQ3 = 0;
+								 externalDaysPerSkillInQ1 = daysInQ1*dayfactorextern;
+								 externalDaysPerSkillInQ2 = daysInQ2*dayfactorextern;
+								 externalDaysPerSkillInQ3 = daysInQ3*dayfactorextern;
+								 
+								 //Kosten
+								 float internalCostsPerSkillInQ1 = 0;
+								 float internalCostsPerSkillInQ2 = 0;
+								 float internalCostsPerSkillInQ3 = 0;
+								 
+								 float externalCostsPerSkillInQ1 = 0;
+								 float externalCostsPerSkillInQ2 = 0;
+								 float externalCostsPerSkillInQ3 = 0;
+								 
+								 internalCostsPerSkillInQ1=internalDaysPerSkillInQ1*skill.getDayRateInt();
+								 internalCostsPerSkillInQ2=internalDaysPerSkillInQ2*skill.getDayRateInt();
+								 internalCostsPerSkillInQ3=internalDaysPerSkillInQ3*skill.getDayRateInt();
+								 
+								 externalCostsPerSkillInQ1 = externalDaysPerSkillInQ1*skill.getDayRateExt();
+								 externalCostsPerSkillInQ2 = externalDaysPerSkillInQ2*skill.getDayRateExt();
+								 externalCostsPerSkillInQ3 = externalDaysPerSkillInQ3*skill.getDayRateExt();
+								 
+								 
+								 
+								 //Ergebnisse müssen hier noch in Quartale geschrieben werden(external/internalDaysPerSkillInQ1,Q2,Q3
+								 // internal/externalCostsPerSkillInQ1, Q2, Q3
+								
+								}
+								else if (startdate.getMonthValue() == 4
+										|| startdate.getMonthValue() == 5
+										|| startdate.getMonthValue() == 6){
+									
+									
+									LocalDate enddatequarter = LocalDate.of(_endyear, 6, 30);
+									//Tage die im ersten Quartal liegen
+										 daysInQ2 = enddatequarter.getDayOfYear()-startdate.getDayOfYear();
+									//Tage im gesamten 2. Quartal
+										 daysInQ3 = 92;
+									// Tage im 3 Quartal
+										 daysInQ4=_diffdate - daysInQ2 - daysInQ3;
+										 
+										
+									
+										for( int i = 0; i<project.getResources().size(); i++){
+											if (project.getResources().get(i).getSkillID()==_skillID){
+												if(project.getResources().get(i).isIntern()==true){
+													
+													_availIntern= _availIntern + project.getResources().get(i).getAvailability();
+													
+												}
+												else
+												{
+													_availExtern= _availExtern + project.getResources().get(i).getAvailability();
+												}
+											}
+										}
+										
+										
+										//Summe der Verfügbarkeiten in Faktor umrechnen, mit welchem dann zuerest die externen Tage berechnet werden
+										
+										//faktor = _availIntern/_availExtern
+										double faktor = _availIntern / _availExtern;
+										faktor = faktor +1;
+										
+										
+										//Benötigte Tage pro Skill und Phase auslesen
+										
+										 int neededDaysPerSkillAndPhase = phases.getSkills().get(_skillID);
+										 
+										 //Externe Tage berechen
+										 float extDaysPerPhaseAndSkill= 0;
+										 extDaysPerPhaseAndSkill=(float) (neededDaysPerSkillAndPhase/faktor);
+										 
+										 //interne Tage berechnen
+										 float intDaysPerPhaseAndSkill=neededDaysPerSkillAndPhase-extDaysPerPhaseAndSkill;
+										 
+										//Tage auf die Quartale verteilen
+										 //Wie viele SkillTage verteilen sich auf einen DateDiff Tag
+										 //Also wenn die Phase Datediff 90 tage dauert und man einen internen mit 30 tagen verplanen muss
+										 //dann ist an einem Datedifftag 0,333 des internen verbraucht
+										 //diese Zahl dann mal die anzahl der arbeitstage im Q1 udn in Q2
+										 
+										 
+										 //Faktor, also wie oben beschrieben zb 0,33 brechenen
+										 //intern
+										 float dayfactorintern = 0;
+										 dayfactorintern = intDaysPerPhaseAndSkill/_diffdate;
+										 float internalDaysPerSkillInQ2 = 0;
+										 float internalDaysPerSkillInQ3 = 0;
+										 float internalDaysPerSkillInQ4 = 0;
+										 internalDaysPerSkillInQ2 = daysInQ2*dayfactorintern;
+										 internalDaysPerSkillInQ3 = daysInQ3*dayfactorintern;
+										 internalDaysPerSkillInQ4 = daysInQ4*dayfactorintern;
+										 
+										 //extern
+										 
+										 float dayfactorextern = 0;
+										 dayfactorextern = intDaysPerPhaseAndSkill/_diffdate;
+										 float externalDaysPerSkillInQ2 = 0;
+										 float externalDaysPerSkillInQ3 = 0;
+										 float externalDaysPerSkillInQ4 = 0;
+										 externalDaysPerSkillInQ2 = daysInQ2*dayfactorextern;
+										 externalDaysPerSkillInQ3 = daysInQ3*dayfactorextern;
+										 externalDaysPerSkillInQ4 = daysInQ4*dayfactorextern;
+										 
+										 //Kosten
+										 float internalCostsPerSkillInQ2 = 0;
+										 float internalCostsPerSkillInQ3 = 0;
+										 float internalCostsPerSkillInQ4 = 0;
+										 
+										 float externalCostsPerSkillInQ2 = 0;
+										 float externalCostsPerSkillInQ3 = 0;
+										 float externalCostsPerSkillInQ4 = 0;
+										 
+										 internalCostsPerSkillInQ2=internalDaysPerSkillInQ2*skill.getDayRateInt();
+										 internalCostsPerSkillInQ3=internalDaysPerSkillInQ3*skill.getDayRateInt();
+										 internalCostsPerSkillInQ4=internalDaysPerSkillInQ4*skill.getDayRateInt();
+										 
+										 externalCostsPerSkillInQ2 = externalDaysPerSkillInQ2*skill.getDayRateExt();
+										 externalCostsPerSkillInQ3 = externalDaysPerSkillInQ3*skill.getDayRateExt();
+										 externalCostsPerSkillInQ4 = externalDaysPerSkillInQ4*skill.getDayRateExt();
+										 
+										 
+										 
+										 //Ergebnisse müssen hier noch in Quartale geschrieben werden(external/internalDaysPerSkillInQ2,Q3,Q4
+										 // internal/externalCostsPerSkillInQ2, Q3, Q4
+							
+								}
+				
 							} else if (_endquarter - _startquarter == 3) {
 								
+								LocalDate enddatequarter = LocalDate.of(_endyear, 3, 31);
+								//Tage die im ersten Quartal liegen
+									 daysInQ1 = enddatequarter.getDayOfYear()-startdate.getDayOfYear();
+								//Tage im gesamten 2. Quartal
+									 daysInQ2 = 91;
+								// Tage im 3 Quartal
+									 daysInQ3=92;
+								// Tage im 4 Quartale
+									 daysInQ4= _diffdate-daysInQ1-daysInQ2-daysInQ3;
+									 
+									
+								
+									for( int i = 0; i<project.getResources().size(); i++){
+										if (project.getResources().get(i).getSkillID()==_skillID){
+											if(project.getResources().get(i).isIntern()==true){
+												
+												_availIntern= _availIntern + project.getResources().get(i).getAvailability();
+												
+											}
+											else
+											{
+												_availExtern= _availExtern + project.getResources().get(i).getAvailability();
+											}
+										}
+									}
+									
+									
+									//Summe der Verfügbarkeiten in Faktor umrechnen, mit welchem dann zuerest die externen Tage berechnet werden
+									
+									//faktor = _availIntern/_availExtern
+									double faktor = _availIntern / _availExtern;
+									faktor = faktor +1;
+									
+									
+									//Benötigte Tage pro Skill und Phase auslesen
+									
+									 int neededDaysPerSkillAndPhase = phases.getSkills().get(_skillID);
+									 
+									 //Externe Tage berechen
+									 float extDaysPerPhaseAndSkill= 0;
+									 extDaysPerPhaseAndSkill=(float) (neededDaysPerSkillAndPhase/faktor);
+									 
+									 //interne Tage berechnen
+									 float intDaysPerPhaseAndSkill=neededDaysPerSkillAndPhase-extDaysPerPhaseAndSkill;
+									 
+									//Tage auf die Quartale verteilen
+									 //Wie viele SkillTage verteilen sich auf einen DateDiff Tag
+									 //Also wenn die Phase Datediff 90 tage dauert und man einen internen mit 30 tagen verplanen muss
+									 //dann ist an einem Datedifftag 0,333 des internen verbraucht
+									 //diese Zahl dann mal die anzahl der arbeitstage im Q1 udn in Q2
+									 
+									 
+									 //Faktor, also wie oben beschrieben zb 0,33 brechenen
+									 //intern
+									 float dayfactorintern = 0;
+									 dayfactorintern = intDaysPerPhaseAndSkill/_diffdate;
+									 float internalDaysPerSkillInQ1 = 0;
+									 float internalDaysPerSkillInQ2 = 0;
+									 float internalDaysPerSkillInQ3 = 0;
+									 float internalDaysPerSkillInQ4 = 0;
+									 internalDaysPerSkillInQ1 = daysInQ1*dayfactorintern;
+									 internalDaysPerSkillInQ2 = daysInQ2*dayfactorintern;
+									 internalDaysPerSkillInQ3 = daysInQ3*dayfactorintern;
+									 internalDaysPerSkillInQ4 = daysInQ4*dayfactorintern;
+									 
+									 //extern
+									 
+									 float dayfactorextern = 0;
+									 dayfactorextern = intDaysPerPhaseAndSkill/_diffdate;
+									 float externalDaysPerSkillInQ1 = 0;
+									 float externalDaysPerSkillInQ2 = 0;
+									 float externalDaysPerSkillInQ3 = 0;
+									 float externalDaysPerSkillInQ4 = 0;
+									 externalDaysPerSkillInQ1 = daysInQ1*dayfactorextern;
+									 externalDaysPerSkillInQ2 = daysInQ2*dayfactorextern;
+									 externalDaysPerSkillInQ3 = daysInQ3*dayfactorextern;
+									 externalDaysPerSkillInQ4 = daysInQ4*dayfactorextern;
+									 
+									 //Kosten
+									 float internalCostsPerSkillInQ1 = 0;
+									 float internalCostsPerSkillInQ2 = 0;
+									 float internalCostsPerSkillInQ3 = 0;
+									 float internalCostsPerSkillInQ4 = 0;
+									 
+									 float externalCostsPerSkillInQ1 = 0;
+									 float externalCostsPerSkillInQ2 = 0;
+									 float externalCostsPerSkillInQ3 = 0;
+									 float externalCostsPerSkillInQ4 = 0;
+									 
+									 internalCostsPerSkillInQ1=internalDaysPerSkillInQ1*skill.getDayRateInt();
+									 internalCostsPerSkillInQ2=internalDaysPerSkillInQ2*skill.getDayRateInt();
+									 internalCostsPerSkillInQ3=internalDaysPerSkillInQ3*skill.getDayRateInt();
+									 internalCostsPerSkillInQ4=internalDaysPerSkillInQ4*skill.getDayRateInt();
+									 
+									 externalCostsPerSkillInQ1 = externalDaysPerSkillInQ1*skill.getDayRateExt();
+									 externalCostsPerSkillInQ2 = externalDaysPerSkillInQ2*skill.getDayRateExt();
+									 externalCostsPerSkillInQ3 = externalDaysPerSkillInQ3*skill.getDayRateExt();
+									 externalCostsPerSkillInQ4 = externalDaysPerSkillInQ4*skill.getDayRateExt();
+							 
+									 //Ergebnisse müssen hier noch in Quartale geschrieben werden(external/internalDaysPerSkillInQ1,Q2,Q3,Q4
+									 // internal/externalCostsPerSkillInQ1, Q2, Q3, Q4
 
 							}
 
 						}
 
 					}
+						//Abschluss der if Abfrage ob es sich um das gleiche jahr handelt
+						else if(enddate.getYear()-startdate.getYear()==1){
+							
+							LocalDate enddateyear = LocalDate.of(_endyear, 12, 31);
+							
+							daysInYStart = 365-startdate.getDayOfYear();
+							daysInYEnd = enddate.getDayOfYear();
+							
+							for( int i = 0; i<project.getResources().size(); i++){
+								if (project.getResources().get(i).getSkillID()==_skillID){
+									if(project.getResources().get(i).isIntern()==true){
+										
+										_availIntern= _availIntern + project.getResources().get(i).getAvailability();
+										
+									}
+									else
+									{
+										_availExtern= _availExtern + project.getResources().get(i).getAvailability();
+									}
+								}
+							}
+							
+
+							//Benötigte Tage pro Skill und Phase auslesen
+							
+							 int neededDaysPerSkillAndPhase = phases.getSkills().get(_skillID);
+							 
+							//Summe der Verfügbarkeiten in Faktor umrechnen, mit welchem dann zuerest die externen Tage berechnet werden
+								
+							//faktor = _availIntern/_availExtern
+							double faktor = _availIntern / _availExtern;
+							faktor = faktor +1;
+							 
+							 //Externe Tage berechen
+							 float extDaysPerPhaseAndSkill= 0;
+							 extDaysPerPhaseAndSkill=(float) (neededDaysPerSkillAndPhase/faktor);
+							 
+							 //interne Tage berechnen
+							 float intDaysPerPhaseAndSkill=neededDaysPerSkillAndPhase-extDaysPerPhaseAndSkill;
+							 float dayfactorintern = 0;
+							 dayfactorintern = intDaysPerPhaseAndSkill/_diffdate;
+							 
+							 float dayfactorextern = 0;
+							 dayfactorextern = intDaysPerPhaseAndSkill/_diffdate;
+							 
+							if (daysInYStart<=92){
+								//Dann nur Q4
+								 daysInQ4=daysInYStart;
+								 //Intern
+								
+								 float internalDaysPerSkillInQ4 = 0;
+								 internalDaysPerSkillInQ4 = daysInQ4*dayfactorintern;
+								 //Extern
+								 
+								
+								 float externalDaysPerSkillInQ4 = 0;
+								 externalDaysPerSkillInQ4 = daysInQ4*dayfactorextern;
+								 
+								 //Kosten berechnen
+								 float CostsPerPhaseAndSkillIntern = 0;
+								 float CostsPerPhaseAndSkillExtern = 0;
+								 
+								 CostsPerPhaseAndSkillIntern=intDaysPerPhaseAndSkill*skill.getDayRateInt();
+								 CostsPerPhaseAndSkillExtern=extDaysPerPhaseAndSkill*skill.getDayRateExt();
+								 //extDaysPerPhaseAndSkill und intDaysPerPhaseAndSkill ins Result (q4) schreiben und auch die kosten
+								
+							}
+							else if (daysInYStart <= 184){
+								//Q4 und Q3
+								daysInQ4=92;
+								daysInQ3=daysInYStart-daysInQ4;
+								
+								//Tage
+								 
+								 float internalDaysPerSkillInQ3 = 0;
+								 float internalDaysPerSkillInQ4 = 0;
+								 internalDaysPerSkillInQ3 = daysInQ3*dayfactorintern;
+								 internalDaysPerSkillInQ4 = daysInQ4*dayfactorintern;
+								
+								 float externalDaysPerSkillInQ3 = 0;
+								 float externalDaysPerSkillInQ4 = 0;
+								 externalDaysPerSkillInQ3 = daysInQ3*dayfactorextern;
+								 externalDaysPerSkillInQ4 = daysInQ4*dayfactorextern;
+							
+								 //Kosten
+								
+								 float internalCostsPerSkillInQ3 = 0;
+								 float internalCostsPerSkillInQ4 = 0;
+								 float externalCostsPerSkillInQ3 = 0;
+								 float externalCostsPerSkillInQ4 = 0;
+								
+								 internalCostsPerSkillInQ3 = internalDaysPerSkillInQ3*skill.getDayRateInt();
+								 internalCostsPerSkillInQ4 = internalDaysPerSkillInQ4*skill.getDayRateInt();
+								 externalCostsPerSkillInQ3 = externalDaysPerSkillInQ3*skill.getDayRateExt();
+								 externalCostsPerSkillInQ4 = externalDaysPerSkillInQ4*skill.getDayRateExt();
+							
+							}
+							else if (daysInYStart <=275){
+								//Q4, Q3, Q2
+								
+								daysInQ4=92;
+								daysInQ3=92;
+								daysInQ2=daysInYStart-daysInQ4-daysInQ3;
+								
+								
+								//Tage
+								
+								 float internalDaysPerSkillInQ2 = 0;
+								 float internalDaysPerSkillInQ3 = 0;
+								 float internalDaysPerSkillInQ4 = 0;
+							
+								 internalDaysPerSkillInQ2 = daysInQ2*dayfactorintern;
+								 internalDaysPerSkillInQ3 = daysInQ3*dayfactorintern;
+								 internalDaysPerSkillInQ4 = daysInQ4*dayfactorintern;
+								 
+								
+								 float externalDaysPerSkillInQ2 = 0;
+								 float externalDaysPerSkillInQ3 = 0;
+								 float externalDaysPerSkillInQ4 = 0;
+								
+								 externalDaysPerSkillInQ2 = daysInQ2*dayfactorextern;
+								 externalDaysPerSkillInQ3 = daysInQ3*dayfactorextern;
+								 externalDaysPerSkillInQ4 = daysInQ4*dayfactorextern;
+								 
+								 
+								 
+								 //Kosten
+								
+								 float internalCostsPerSkillInQ2 = 0;
+								 float internalCostsPerSkillInQ3 = 0;
+								 float internalCostsPerSkillInQ4 = 0;
+								 
+							
+								 float externalCostsPerSkillInQ2 = 0;
+								 float externalCostsPerSkillInQ3 = 0;
+								 float externalCostsPerSkillInQ4 = 0;
+								 
+								
+								 internalCostsPerSkillInQ2=internalDaysPerSkillInQ2*skill.getDayRateInt();
+								 internalCostsPerSkillInQ3=internalDaysPerSkillInQ3*skill.getDayRateInt();
+								 internalCostsPerSkillInQ4=internalDaysPerSkillInQ4*skill.getDayRateInt();
+								 
+								 
+								 externalCostsPerSkillInQ2 = externalDaysPerSkillInQ2*skill.getDayRateExt();
+								 externalCostsPerSkillInQ3 = externalDaysPerSkillInQ3*skill.getDayRateExt();
+								 externalCostsPerSkillInQ4 = externalDaysPerSkillInQ4*skill.getDayRateExt();
+								
+								
+							}
+							else if (daysInYStart<=366){
+								//Q4, Q3, Q2, Q1
+								daysInQ4=92;
+								daysInQ3=92;
+								daysInQ2=91;
+								daysInQ1=daysInYStart-daysInQ4-daysInQ3-daysInQ2;
+								
+								//Tage
+								 float internalDaysPerSkillInQ1 = 0;
+								 float internalDaysPerSkillInQ2 = 0;
+								 float internalDaysPerSkillInQ3 = 0;
+								 float internalDaysPerSkillInQ4 = 0;
+								 internalDaysPerSkillInQ1 = daysInQ1*dayfactorintern;
+								 internalDaysPerSkillInQ2 = daysInQ2*dayfactorintern;
+								 internalDaysPerSkillInQ3 = daysInQ3*dayfactorintern;
+								 internalDaysPerSkillInQ4 = daysInQ4*dayfactorintern;
+								 
+								 float externalDaysPerSkillInQ1 = 0;
+								 float externalDaysPerSkillInQ2 = 0;
+								 float externalDaysPerSkillInQ3 = 0;
+								 float externalDaysPerSkillInQ4 = 0;
+								 externalDaysPerSkillInQ1 = daysInQ1*dayfactorextern;
+								 externalDaysPerSkillInQ2 = daysInQ2*dayfactorextern;
+								 externalDaysPerSkillInQ3 = daysInQ3*dayfactorextern;
+								 externalDaysPerSkillInQ4 = daysInQ4*dayfactorextern;
+								 
+								 
+								 
+								 //Kosten
+								 float internalCostsPerSkillInQ1 = 0;
+								 float internalCostsPerSkillInQ2 = 0;
+								 float internalCostsPerSkillInQ3 = 0;
+								 float internalCostsPerSkillInQ4 = 0;
+								 
+								 float externalCostsPerSkillInQ1 = 0;
+								 float externalCostsPerSkillInQ2 = 0;
+								 float externalCostsPerSkillInQ3 = 0;
+								 float externalCostsPerSkillInQ4 = 0;
+								 
+								 internalCostsPerSkillInQ1=internalDaysPerSkillInQ1*skill.getDayRateInt();
+								 internalCostsPerSkillInQ2=internalDaysPerSkillInQ2*skill.getDayRateInt();
+								 internalCostsPerSkillInQ3=internalDaysPerSkillInQ3*skill.getDayRateInt();
+								 internalCostsPerSkillInQ4=internalDaysPerSkillInQ4*skill.getDayRateInt();
+								 
+								 externalCostsPerSkillInQ1 = externalDaysPerSkillInQ1*skill.getDayRateExt();
+								 externalCostsPerSkillInQ2 = externalDaysPerSkillInQ2*skill.getDayRateExt();
+								 externalCostsPerSkillInQ3 = externalDaysPerSkillInQ3*skill.getDayRateExt();
+								 externalCostsPerSkillInQ4 = externalDaysPerSkillInQ4*skill.getDayRateExt();
+							}
+							
+							if(daysInYEnd<=90){
+								//Nur Q1
+								daysInQ1 = daysInYEnd;
+								
+								 float internalDaysPerSkillInQ1 = 0;
+								 internalDaysPerSkillInQ1 = daysInQ1*dayfactorintern;
+								 //Extern
+								 
+								
+								 float externalDaysPerSkillInQ1 = 0;
+								 externalDaysPerSkillInQ1 = daysInQ1*dayfactorextern;
+								 
+								 //Kosten berechnen
+								 float CostsPerPhaseAndSkillIntern = 0;
+								 float CostsPerPhaseAndSkillExtern = 0;
+								 
+								 CostsPerPhaseAndSkillIntern=intDaysPerPhaseAndSkill*skill.getDayRateInt();
+								 CostsPerPhaseAndSkillExtern=extDaysPerPhaseAndSkill*skill.getDayRateExt();
+								
+								
+							}
+							else if (daysInYEnd<=181){
+								//Q1, Q2
+								daysInQ1= 90;
+								daysInQ2 =daysInYEnd- daysInQ1;
+								
+								
+								 float internalDaysPerSkillInQ1 = 0;
+								 float internalDaysPerSkillInQ2 = 0;
+								 internalDaysPerSkillInQ1 = daysInQ1*dayfactorintern;
+								 internalDaysPerSkillInQ2 = daysInQ2*dayfactorintern;
+								
+								 float externalDaysPerSkillInQ1 = 0;
+								 float externalDaysPerSkillInQ2 = 0;
+								 externalDaysPerSkillInQ1 = daysInQ1*dayfactorextern;
+								 externalDaysPerSkillInQ2 = daysInQ2*dayfactorextern;
+							
+								 //Kosten
+								
+								 float internalCostsPerSkillInQ1 = 0;
+								 float internalCostsPerSkillInQ2 = 0;
+								 float externalCostsPerSkillInQ1 = 0;
+								 float externalCostsPerSkillInQ2 = 0;
+								
+								 internalCostsPerSkillInQ1 = internalDaysPerSkillInQ1*skill.getDayRateInt();
+								 internalCostsPerSkillInQ2 = internalDaysPerSkillInQ2*skill.getDayRateInt();
+								 externalCostsPerSkillInQ1 = externalDaysPerSkillInQ1*skill.getDayRateExt();
+								 externalCostsPerSkillInQ2 = externalDaysPerSkillInQ2*skill.getDayRateExt();
+							}
+							
+							else if (daysInYEnd<=273){
+								//Q1, Q2, Q3
+								daysInQ1= 90;
+								daysInQ2 = 91;
+								daysInQ3 = daysInYEnd- daysInQ1-daysInQ2;
+								
+								 float internalDaysPerSkillInQ1 = 0;
+								 float internalDaysPerSkillInQ2 = 0;
+								 float internalDaysPerSkillInQ3 = 0;
+								 internalDaysPerSkillInQ1 = daysInQ1*dayfactorintern;
+								 internalDaysPerSkillInQ2 = daysInQ2*dayfactorintern;
+								 internalDaysPerSkillInQ3 = daysInQ3*dayfactorintern;
+								
+								 float externalDaysPerSkillInQ1 = 0;
+								 float externalDaysPerSkillInQ2 = 0;
+								 float externalDaysPerSkillInQ3 = 0;
+								 externalDaysPerSkillInQ1 = daysInQ1*dayfactorextern;
+								 externalDaysPerSkillInQ2 = daysInQ2*dayfactorextern;
+								 externalDaysPerSkillInQ3 = daysInQ3*dayfactorextern;
+							
+								 //Kosten
+								
+								 float internalCostsPerSkillInQ1 = 0;
+								 float internalCostsPerSkillInQ2 = 0;
+								 float externalCostsPerSkillInQ1 = 0;
+								 float externalCostsPerSkillInQ2 = 0;
+								
+								 internalCostsPerSkillInQ1 = internalDaysPerSkillInQ1*skill.getDayRateInt();
+								 internalCostsPerSkillInQ2 = internalDaysPerSkillInQ2*skill.getDayRateInt();
+								 externalCostsPerSkillInQ1 = externalDaysPerSkillInQ1*skill.getDayRateExt();
+								 externalCostsPerSkillInQ2 = externalDaysPerSkillInQ2*skill.getDayRateExt();
+								
+							}
+							
+							else{
+								//Q1, Q2, Q3, Q4
+								daysInQ1= 90;
+								daysInQ2 = 91;
+								daysInQ3 = 92;
+								daysInQ4 = daysInYEnd- daysInQ1-daysInQ2-daysInQ3;
+								
+							}
+						}
+						
+						
+						
+						
+						
+						
+						
 
 				}
 
 			}
+			}
 		}
 
 	}
-
+	
 	public void calculateResultProject(Project project) {
 
 		Result result = new Result();
