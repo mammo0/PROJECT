@@ -26,7 +26,7 @@ public class ReadXML {
 	Document doc = null;
 	File file;
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
-	DateTimeFormatter formattertimestamp = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
+	DateTimeFormatter formattertimestamp = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSS");
 	private ICoreServer core;
 
 	public ReadXML(String name){
