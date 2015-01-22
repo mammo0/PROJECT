@@ -458,11 +458,7 @@ public class PhaseTab extends ScrollPane implements IComponents {
 			panes.put(key, subPanes);
 		}
 		
-		if(panes.isEmpty()){
-			addMainPhase(addMain);
-			return getPhasePanes();
-		}else
-			return panes;
+		return panes;
 	}
 	
 	

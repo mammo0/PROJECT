@@ -196,6 +196,9 @@ public class Core extends ASingelton implements ICoreClient {
 		
 		// fourth screen
 		Hashtable<PhasePaneWrapper, ArrayList<PhasePaneWrapper>> phases = view.getPhasePanes();
+		if(phases.isEmpty() && !ignoreErrors){
+			view.addPhasePaneWrapper("", 0, null);
+		}
 		Enumeration<PhasePaneWrapper> enumKey = phases.keys();
 		while(enumKey.hasMoreElements()){
 			PhasePaneWrapper main = enumKey.nextElement();
@@ -498,12 +501,12 @@ public class Core extends ASingelton implements ICoreClient {
 			pdTableModel pdModel = new pdTableModel();
 			Result result;
 			if(withRisk){
-				if(skill.getResultRisk() != null){
+				if(skill.getResult() != null){
 					// not implemented yet
 				}
 			}else{
-				if(skill.getResultWRisk() != null){
-					result = skill.getResultWRisk();
+				if(skill.getResult() != null){
+					result = skill.getResult();
 					pdModel.skillName.set(skill.getSkillName());
 					pdModel.pdShould.set(result.getPdTotalShould());
 					pdModel.pdIs.set(result.getPdTotalBe());
@@ -515,7 +518,7 @@ public class Core extends ASingelton implements ICoreClient {
 		}
 		
 		// summary line
-		Result result = project.getResultWRisk();
+		Result result = project.getResult();
 		pdTableModel pdModel = new pdTableModel();
 		pdModel.skillName.set("Gesamt");
 //		pdModel.pdShould.set(result.getPdTotalShould());
@@ -534,8 +537,8 @@ public class Core extends ASingelton implements ICoreClient {
 		for(Skill skill : project.getSkills()){
 			costTableModel costModel = new costTableModel();
 			Result result;
-			if(skill.getResultWRisk() != null){
-				result = skill.getResultWRisk();
+			if(skill.getResult() != null){
+				result = skill.getResult();
 				costModel.skillName.set(skill.getSkillName());
 				costModel.costTotal.set(result.getCostTotal());
 				costModel.costInt.set(result.getCostInt());
@@ -545,7 +548,7 @@ public class Core extends ASingelton implements ICoreClient {
 		}
 		
 		// summary line
-		Result result = project.getResultWRisk();
+		Result result = project.getResult();
 		costTableModel costModel = new costTableModel();
 		costModel.skillName.set("Gesamt");
 //		costModel.costTotal.set(result.getCostTotal());
@@ -563,8 +566,8 @@ public class Core extends ASingelton implements ICoreClient {
 		for(Skill skill : project.getSkills()){
 			quarterTableModel quarterModel = new quarterTableModel();
 			Result result;
-			if(skill.getResultWRisk() != null){
-				result = skill.getResultWRisk();
+			if(skill.getResult() != null){
+				result = skill.getResult();
 				quarterModel.skillName.set(skill.getSkillName());
 				quarterModel.pdInt.set(result.getPdInt());
 				quarterModel.pdExt.set(result.getPdExt());

@@ -53,19 +53,13 @@ public class CreateXML {
 
 		try {
 			createNode(eventWriter, "projectName", project.getProjectName());
-			createNode(eventWriter, "projectResponsible",
-					project.getProjectResponsible());
-			createNode(eventWriter, "description", project.getDescription());
-			createNode(eventWriter, "finished", ""+project.isFinished());
-			if(project.isFinished()){
-				createNode(eventWriter, "TimeStamp", project.getTimestamp().toString());
-			}
-			if(project.getStartDate()!=null){
-			createNode(eventWriter, "startDate", project.getStartDate()
-					.toString());
-			createNode(eventWriter, "endDate", project.getEndDate().toString());
-			}else{
-				
+			if(project.getProjectResponsible() != null)
+				createNode(eventWriter, "projectResponsible", project.getProjectResponsible());
+			if(project.getDescription() != null)
+				createNode(eventWriter, "description", project.getDescription());
+			if(project.getStartDate() != null){
+				createNode(eventWriter, "startDate", project.getStartDate().toString());
+				createNode(eventWriter, "endDate", project.getEndDate().toString());
 			}
 		} catch (NullPointerException e) {
 			e.printStackTrace();
@@ -90,7 +84,7 @@ public class CreateXML {
 		eventWriter.add(end);
 	}
 
-	// Phasentag schließen
+	// Phasentag schlieï¿½en
 	public void endTagPhasen() throws XMLStreamException, NullPointerException {
 		eventWriter.add(eventFactory.createEndElement("", "", "phasen"));
 		eventWriter.add(end);
@@ -151,7 +145,7 @@ public class CreateXML {
 		eventWriter.add(end);
 	}
 
-	// Skillstag schließen
+	// Skillstag schlieï¿½en
 	public void endTagSkills() throws XMLStreamException, NullPointerException {
 		eventWriter.add(eventFactory.createEndElement("", "", "skills"));
 		eventWriter.add(end);
@@ -186,7 +180,7 @@ public class CreateXML {
 		eventWriter.add(end);
 	}
 
-	// Resourcetag schließen
+	// Resourcetag schlieï¿½en
 	public void endTagResource() throws XMLStreamException,
 			NullPointerException {
 		eventWriter.add(eventFactory.createEndElement("", "", "resources"));
