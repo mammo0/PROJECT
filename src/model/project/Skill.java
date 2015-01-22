@@ -71,7 +71,7 @@ public class Skill implements Serializable {
 	 * 
 	 * @return the resultRisk
 	 */
-	public Result getResultRisk() {
+	public Result getResult() {
 		return result;
 	}
 
@@ -115,7 +115,7 @@ public class Skill implements Serializable {
 	 * @param resultRisk
 	 *            the resultRisk to set
 	 */
-	public void setResultRisk(Result resultRisk) {
-		this.result = resultRisk;
+	public void setResult(Result result) {
+		this.result = result;
 	}
 }

@@ -45,6 +45,14 @@ public class Project implements Serializable {
 	// the result of the project calculation without the risk factor
 	private Result result;
 
+	public Result getResult() {
+		return result;
+	}
+
+	public void setResult(Result result) {
+		this.result = result;
+	}
+
 	// the time when the project was marked as finished
 	private LocalDateTime timestamp;
 
