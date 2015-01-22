@@ -460,7 +460,7 @@ public class Core extends ASingelton implements ICoreServer {
 			result.setCostTotal(_costTotal);
 			result.setPdTotalShouldRisk(_totalShouldRisk);
 
-			skill.setResultWRisk(result);
+			skill.setResult(result);
 
 		}
 
@@ -518,7 +518,7 @@ public class Core extends ASingelton implements ICoreServer {
 
 			for (Skill skill : project.getSkills()) {
 				
-				Result result = skill.getResultWRisk();
+				Result result = skill.getResult();
 				_skillID = skill.getSkillID();
 				Enumeration<Integer> enumKey = phases.getSkills().keys();
 				while (enumKey.hasMoreElements()) {
