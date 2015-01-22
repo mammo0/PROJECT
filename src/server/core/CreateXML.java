@@ -42,7 +42,7 @@ public class CreateXML {
 	public void saveConfig(Project project) throws Exception,
 			NullPointerException {
 		// create and write Start Tag
-		StartDocument startDocument = eventFactory.createStartDocument();
+		StartDocument startDocument = eventFactory.createStartDocument("UTF-8", "1.0");
 		eventWriter.add(startDocument);
 		// create project open tag
 		StartElement configStartElement = eventFactory.createStartElement("",
