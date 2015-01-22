@@ -200,11 +200,16 @@ public class ProjectEditor extends TabPane implements IComponents {
 	
 	@Override
 	public void setProjectTimeStamp(LocalDateTime timeStamp){
-		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss - dd.MM.yyyy");
-		lblTimeStamp.setText(timeStamp.format(formatter));
-		
-		// set the finish indicator
-		crlFinish.setFill(Color.GREEN);
+		if(timeStamp == null){
+			crlFinish.setFill(Color.RED);
+			lblTimeStamp.setText("");
+		}else{
+			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss - dd.MM.yyyy");
+			lblTimeStamp.setText(timeStamp.format(formatter));
+			
+			// set the finish indicator
+			crlFinish.setFill(Color.GREEN);
+		}
 	}
 
 

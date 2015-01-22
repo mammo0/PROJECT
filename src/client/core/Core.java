@@ -13,6 +13,7 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
@@ -317,7 +318,10 @@ public class Core extends ASingelton implements ICoreClient {
 		view.setProjectResponsible(project.getProjectResponsible());
 		view.setProjectDescription(project.getDescription());
 		
-		// TODO time stamp
+		view.setProjectTimeStamp(project.getTimestamp());
+		if(project.isFinished()){
+			view.disableWrite(true);
+		}
 		
 		// second screen
 		for(Skill skill : project.getSkills()){
@@ -639,14 +643,15 @@ public class Core extends ASingelton implements ICoreClient {
 	@Override
 	public void finishProject(){
 		project.setFinished(true);
-		// TODO time stamp
+		project.setTimestamp(LocalDateTime.now());
 		
-//		try {
-//			server.saveProject(project);
-//		} catch (RemoteException e) {
-//			e.printStackTrace();
-//		}
+		try {
+			server.saveProject(project);
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
 		
+		view.setProjectTimeStamp(project.getTimestamp());
 		view.disableWrite(true);
 	}
 	
