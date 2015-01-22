@@ -3,6 +3,7 @@ package server.core;
 import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
@@ -25,6 +26,7 @@ public class ReadXML {
 	Document doc = null;
 	File file;
 	DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+	DateTimeFormatter formattertimestamp = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
 	private ICoreServer core;
 
 	public ReadXML(String name){
@@ -55,6 +57,16 @@ public class ReadXML {
 			// System.out.println(element.getChildText("description"));
 			project.setDescription(projectelement.getChildText("description"));
 			// System.out.println(element.getChildText("startDate"));
+			if(projectelement.getChildText("finished").equals("true")){
+				project.setFinished(true);
+				LocalDateTime _timestamp = LocalDateTime.parse(
+						projectelement.getChildText("timestamp"), formattertimestamp);
+				project.setTimestamp(null);
+			}
+			else{
+				project.setFinished(false);
+			}
+		
 			if(projectelement.getChildText("startDate")==null || projectelement.getChildText("startDate")==""){
 				
 			}else{

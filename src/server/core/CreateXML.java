@@ -56,6 +56,10 @@ public class CreateXML {
 			createNode(eventWriter, "projectResponsible",
 					project.getProjectResponsible());
 			createNode(eventWriter, "description", project.getDescription());
+			createNode(eventWriter, "finished", ""+project.isFinished());
+			if(project.isFinished()){
+				createNode(eventWriter, "TimeStamp", project.getTimestamp().toString());
+			}
 			if(project.getStartDate()!=null){
 			createNode(eventWriter, "startDate", project.getStartDate()
 					.toString());

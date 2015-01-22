@@ -2,6 +2,7 @@ package model.project;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.Hashtable;
 
 /**
@@ -27,6 +28,8 @@ public class Phase implements Serializable {
 	
 	// the required skills of the phase with the required duration
 	private Hashtable<Integer, Integer> skills;
+	
+	
 	
 	
 	

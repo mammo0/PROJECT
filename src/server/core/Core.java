@@ -147,11 +147,16 @@ public class Core extends ASingelton implements ICoreServer {
 	@Override
 	public Project calculateProject(Project project) {
 		this.project = project;
+		if(project.getStartDate()!=null){
 		calculateLenght(project);
 		calculateResultSkill(project);
 		calculateProjectDays(project);
 	//	calculateYearsQuarters(project, result);
 		calculateQuarterResults(project);
+		}
+		else{
+			
+		}
 		return project;
 	}
 

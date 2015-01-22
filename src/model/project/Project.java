@@ -2,6 +2,7 @@ package model.project;
 
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Date;
 
@@ -38,11 +39,27 @@ public class Project implements Serializable {
 	
 	// the project end Date
 	private LocalDate endDate;
+	
 	// the result of the project calculation without the risk factor
 	private Result resultWRisk;
 	
+	//the time when the project was marked as finished
+	private	LocalDateTime timestamp;
 	
 	
+	
+	public LocalDateTime getTimestamp() {
+		return timestamp;
+	}
+
+
+
+	public void setTimestamp(LocalDateTime timestamp) {
+		this.timestamp = timestamp;
+	}
+
+
+
 	/**
 	 * Constructor
 	 */
