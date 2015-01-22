@@ -46,7 +46,7 @@ public class Core extends ASingelton implements ICoreServer {
 	private int serverPort;
 	private String rmiUrl;
 	private Project project;
-	private Result result;
+//	private Result result;
 	
 
 	private File projectFilesDir;
@@ -150,8 +150,8 @@ public class Core extends ASingelton implements ICoreServer {
 		calculateLenght(project);
 		calculateResultSkill(project);
 		calculateProjectDays(project);
-//		calculateYearsQuarters(project, result);
-//		calculateQuarterResults(project);
+	//	calculateYearsQuarters(project, result);
+		calculateQuarterResults(project);
 		return project;
 	}
 
@@ -190,7 +190,7 @@ public class Core extends ASingelton implements ICoreServer {
 		int numberQuarters = 0;
 
 		int numberofYears = enddateYear - startdateYear + 1;
-
+		
 		for (int i = 0; i < numberofYears; i++) {
 			year = new Year();
 			year.setYearDate(startdateYear + i);
@@ -343,6 +343,8 @@ public class Core extends ASingelton implements ICoreServer {
 		for (Skill skill : project.getSkills()) {
 
 			Result result = new Result();
+			calculateYearsQuarters(project, result);
+			
 
 			// set all temp variables
 			int _skillID = 0;
@@ -510,6 +512,8 @@ public class Core extends ASingelton implements ICoreServer {
 			 
 
 			for (Skill skill : project.getSkills()) {
+				
+				Result result = skill.getResultWRisk();
 				_skillID = skill.getSkillID();
 				Enumeration<Integer> enumKey = phases.getSkills().keys();
 				while (enumKey.hasMoreElements()) {
@@ -551,22 +555,22 @@ public class Core extends ASingelton implements ICoreServer {
 							if (_startquarter == 1 && _endquarter == 1) {
 								daysInQ1=_diffdate;
 								createQ1(daysInQ1, startdate.getYear(), dayfactorintern, 
-										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 								
 							} else if (_startquarter == 2 && _endquarter == 2) {
 								daysInQ2=_diffdate;
 								createQ2(daysInQ2, startdate.getYear(), dayfactorintern, 
-										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 
 							} else if (_startquarter == 3 && _endquarter == 3) {
 								daysInQ3=_diffdate;
 								createQ3(daysInQ3, startdate.getYear(), dayfactorintern, 
-										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 
 							} else if (_startquarter == 4 && _endquarter == 4) {
 								daysInQ4=_diffdate;
 								createQ4(daysInQ4, startdate.getYear(), dayfactorintern, 
-										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 							}
 						} else {
 							//Phasen, die l�nger als ein Quartal dauern, bzw die Quartalsgrenzen �berschreiten
@@ -591,9 +595,9 @@ public class Core extends ASingelton implements ICoreServer {
 								 //Faktor, also wie oben beschrieben zb 0,33 brechenen  --> wird oben berechnet
 								 
 								 createQ1(daysInQ1, startdate.getYear(), dayfactorintern, 
-											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 								 createQ2(daysInQ1, startdate.getYear(), dayfactorintern, 
-											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 								}
 								//Q2
 								else if (startdate.getMonthValue() == 4
@@ -607,9 +611,9 @@ public class Core extends ASingelton implements ICoreServer {
 								daysInQ3 = _diffdate - daysInQ2;
 								
 								createQ2(daysInQ2, startdate.getYear(), dayfactorintern, 
-										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 								createQ3(daysInQ3, startdate.getYear(), dayfactorintern, 
-										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 								
 								}
 								//Q3
@@ -624,9 +628,9 @@ public class Core extends ASingelton implements ICoreServer {
 								 daysInQ4 = _diffdate - daysInQ3;
 								 
 								createQ3(daysInQ3, startdate.getYear(), dayfactorintern, 
-											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 								createQ4(daysInQ4, startdate.getYear(), dayfactorintern, 
-											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 	
 							} 
 //Wenn ein gesamtes Quartal dabei ist					
@@ -645,11 +649,11 @@ public class Core extends ASingelton implements ICoreServer {
 								 daysInQ3=_diffdate - daysInQ1 - daysInQ2;
 						
 								 createQ1(daysInQ1, startdate.getYear(), dayfactorintern, 
-											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 								 createQ2(daysInQ2, startdate.getYear(), dayfactorintern, 
-											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 								 createQ3(daysInQ3, startdate.getYear(), dayfactorintern, 
-											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 							}
 								else if (startdate.getMonthValue() == 4
 										|| startdate.getMonthValue() == 5
@@ -664,11 +668,11 @@ public class Core extends ASingelton implements ICoreServer {
 									// Tage im 3 Quartal
 										 daysInQ4=_diffdate - daysInQ2 - daysInQ3;
 										 createQ2(daysInQ2, startdate.getYear(), dayfactorintern, 
-													dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+													dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 										 createQ3(daysInQ3, startdate.getYear(), dayfactorintern, 
-													dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+													dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 										 createQ4(daysInQ4, startdate.getYear(), dayfactorintern, 
-													dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+													dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 								}
 				
 							} else if (_endquarter - _startquarter == 3) {
@@ -684,13 +688,13 @@ public class Core extends ASingelton implements ICoreServer {
 									 daysInQ4= _diffdate-daysInQ1-daysInQ2-daysInQ3;
 									 
 									 createQ1(daysInQ1, startdate.getYear(), dayfactorintern, 
-												dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+												dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 									 createQ2(daysInQ2, startdate.getYear(), dayfactorintern, 
-												dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+												dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 									 createQ3(daysInQ3, startdate.getYear(), dayfactorintern, 
-												dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+												dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 									 createQ4(daysInQ4, startdate.getYear(), dayfactorintern, 
-												dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+												dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 							}
 
 						}
@@ -704,13 +708,13 @@ public class Core extends ASingelton implements ICoreServer {
 							
 							 //Startjahr
 							//Gibt den Index zur�ck an dem das Startjahr im Array steht
-							int i = calculateIndexOfStartYear(startdate.getYear());
+							int i = calculateIndexOfStartYear(startdate.getYear(), result);
 							if(result.getYears().get(i).getQ1()==null
 								&&result.getYears().get(i).getQ2()==null
 								&&result.getYears().get(i).getQ3()==null){
 								daysInQ4=daysInYStart;
 								createQ4(daysInQ4, startdate.getYear(), dayfactorintern, 
-										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 							
 							}
 							else if(result.getYears().get(i).getQ1()==null
@@ -720,9 +724,9 @@ public class Core extends ASingelton implements ICoreServer {
 									daysInQ4=92;
 									daysInQ3=daysInYStart-daysInQ4;
 									createQ3(daysInQ3, startdate.getYear(), dayfactorintern, 
-											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);	
+											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);	
 									createQ4(daysInQ4, startdate.getYear(), dayfactorintern, 
-												dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+												dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 						}
 							else if(result.getYears().get(i).getQ1()==null){
 									//Q4 und Q3
@@ -730,11 +734,11 @@ public class Core extends ASingelton implements ICoreServer {
 									daysInQ3=92;
 									daysInQ2=daysInYStart-daysInQ4-daysInQ3;
 									createQ2(daysInQ2, startdate.getYear(), dayfactorintern, 
-											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 									createQ3(daysInQ3, startdate.getYear(), dayfactorintern, 
-											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);	
+											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);	
 									createQ4(daysInQ4, startdate.getYear(), dayfactorintern, 
-												dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+												dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 						}
 							else {
 									//Q4 und Q3
@@ -743,19 +747,19 @@ public class Core extends ASingelton implements ICoreServer {
 									daysInQ2=91;
 									daysInQ1=daysInYStart-daysInQ4-daysInQ3-daysInQ2;
 									createQ1(daysInQ1, startdate.getYear(), dayfactorintern, 
-											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 									
 									createQ2(daysInQ2, startdate.getYear(), dayfactorintern, 
-											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 									
 									createQ3(daysInQ3, startdate.getYear(), dayfactorintern, 
-											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 									
 									createQ4(daysInQ4, startdate.getYear(), dayfactorintern, 
-												dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+												dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 										}
 							
-							int j = calculateIndexOfStartYear(enddate.getYear());
+							int j = calculateIndexOfStartYear(enddate.getYear(), result);
 							
 							if(result.getYears().get(j).getQ2()==null
 								&&result.getYears().get(j).getQ3()==null
@@ -764,7 +768,7 @@ public class Core extends ASingelton implements ICoreServer {
 								daysInQ1 = daysInYEnd;
 								
 								createQ1(daysInQ1, enddate.getYear(), dayfactorintern, 
-										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 								 
 							}
 							else if(result.getYears().get(j).getQ3()==null
@@ -774,9 +778,9 @@ public class Core extends ASingelton implements ICoreServer {
 									daysInQ2 =daysInYEnd- daysInQ1;
 										
 									createQ1(daysInQ1, enddate.getYear(), dayfactorintern, 
-												dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+												dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 									createQ2(daysInQ2, enddate.getYear(), dayfactorintern, 
-												dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+												dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 								
 							}
 							
@@ -786,11 +790,11 @@ public class Core extends ASingelton implements ICoreServer {
 									daysInQ3 = daysInYEnd- daysInQ1-daysInQ2;
 								
 							createQ1(daysInQ1, enddate.getYear(), dayfactorintern, 
-										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 							createQ2(daysInQ2, enddate.getYear(), dayfactorintern, 
-										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 							createQ3(daysInQ3, enddate.getYear(), dayfactorintern, 
-									dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+									dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 					
 					}
 							
@@ -801,13 +805,13 @@ public class Core extends ASingelton implements ICoreServer {
 								daysInQ3 = 92;
 								daysInQ4 = daysInYEnd- daysInQ1-daysInQ2-daysInQ3;
 								createQ1(daysInQ1, enddate.getYear(), dayfactorintern, 
-										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 								createQ2(daysInQ2, enddate.getYear(), dayfactorintern, 
-										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 								createQ3(daysInQ3, enddate.getYear(), dayfactorintern, 
-									dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+									dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 								createQ4(daysInQ4, enddate.getYear(), dayfactorintern, 
-									dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
+									dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 							}
 						}
 			
@@ -820,7 +824,7 @@ public class Core extends ASingelton implements ICoreServer {
 	}
 
 	
-	public int calculateIndexOfStartYear(int startyear){
+	public int calculateIndexOfStartYear(int startyear, Result result){
 		
 		int i;
 		for (i=0; i<result.getYears().size(); i++){
@@ -834,9 +838,9 @@ public class Core extends ASingelton implements ICoreServer {
 	}
 	
 	public void createQ1(int daysInQ1, int year,float dayfactorintern, float dayfactorextern, Skill skill, 
-			float intDaysPerPhaseAndSkill, float extDaysPerPhaseAndSkill){
+			float intDaysPerPhaseAndSkill, float extDaysPerPhaseAndSkill, Result result){
 		
-		int yearindex = calculateIndexOfStartYear(year);
+		int yearindex = calculateIndexOfStartYear(year, result);
 		
 		float internalDaysPerSkillInQ1 = daysInQ1*dayfactorintern;
 		float externalDaysPerSkillInQ1 = daysInQ1*dayfactorextern;
@@ -856,9 +860,9 @@ public class Core extends ASingelton implements ICoreServer {
 		result.getYears().get(yearindex).getQ1().setCostInt(tempExtCosts + externalCostsPerSkillInQ1);
 	}
 	public void createQ2(int daysInQ2, int year,float dayfactorintern, float dayfactorextern, Skill skill, 
-			float intDaysPerPhaseAndSkill, float extDaysPerPhaseAndSkill){
+			float intDaysPerPhaseAndSkill, float extDaysPerPhaseAndSkill, Result result){
 		
-		int yearindex = calculateIndexOfStartYear(year);
+		int yearindex = calculateIndexOfStartYear(year, result);
 		
 		float internalDaysPerSkillInQ2 = daysInQ2*dayfactorintern;
 		float externalDaysPerSkillInQ2 = daysInQ2*dayfactorextern;
@@ -879,9 +883,9 @@ public class Core extends ASingelton implements ICoreServer {
 	}
 	
 	public void createQ3(int daysInQ3, int year,float dayfactorintern, float dayfactorextern, Skill skill, 
-			float intDaysPerPhaseAndSkill, float extDaysPerPhaseAndSkill){
+			float intDaysPerPhaseAndSkill, float extDaysPerPhaseAndSkill, Result result){
 		
-		int yearindex = calculateIndexOfStartYear(year);
+		int yearindex = calculateIndexOfStartYear(year, result);
 		
 		float internalDaysPerSkillInQ3 = daysInQ3*dayfactorintern;
 		float externalDaysPerSkillInQ3 = daysInQ3*dayfactorextern;
@@ -903,9 +907,9 @@ public class Core extends ASingelton implements ICoreServer {
 	
 	
 	public void createQ4(int daysInQ4, int year,float dayfactorintern, float dayfactorextern, Skill skill, 
-			float intDaysPerPhaseAndSkill, float extDaysPerPhaseAndSkill){
+			float intDaysPerPhaseAndSkill, float extDaysPerPhaseAndSkill, Result result){
 		
-		int yearindex = calculateIndexOfStartYear(year);
+		int yearindex = calculateIndexOfStartYear(year, result);
 		
 		float internalDaysPerSkillInQ4 = daysInQ4*dayfactorintern;
 		float externalDaysPerSkillInQ4 = daysInQ4*dayfactorextern;
