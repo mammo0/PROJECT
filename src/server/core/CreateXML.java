@@ -61,6 +61,11 @@ public class CreateXML {
 				createNode(eventWriter, "startDate", project.getStartDate().toString());
 				createNode(eventWriter, "endDate", project.getEndDate().toString());
 			}
+			createNode(eventWriter, "finished", ""+project.isFinished());
+			if(project.isFinished()){
+			createNode(eventWriter, "timestamp", project.getTimestamp().toString());
+			}
+			
 		} catch (NullPointerException e) {
 			e.printStackTrace();
 		}

@@ -61,7 +61,7 @@ public class ReadXML {
 				project.setFinished(true);
 				LocalDateTime _timestamp = LocalDateTime.parse(
 						projectelement.getChildText("timestamp"), formattertimestamp);
-				project.setTimestamp(null);
+				project.setTimestamp(_timestamp);
 			}
 			else{
 				project.setFinished(false);
