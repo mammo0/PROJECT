@@ -2,6 +2,7 @@ package server.core;
 
 import global.IServerService;
 
+import java.io.File;
 import java.rmi.RemoteException;
 import java.rmi.server.UnicastRemoteObject;
 import java.util.ArrayList;
@@ -60,5 +61,12 @@ public class ProjectCalculator extends UnicastRemoteObject implements IServerSer
 	@Override
 	public void deleteProject(String projectName) throws RemoteException {
 		core.deleteProject(projectName);
+	}
+
+
+
+	@Override
+	public File getProjectCSV(String projectName) throws RemoteException {
+		return core.getProjectCSV(projectName);
 	}
 }

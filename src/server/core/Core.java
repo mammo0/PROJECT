@@ -1066,4 +1066,10 @@ public class Core extends ASingelton implements ICoreServer {
 		System.gc();
 		file.delete();
 	}
+
+	@Override
+	public File getProjectCSV(String projectName) throws RemoteException {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
