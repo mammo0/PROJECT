@@ -1,16 +1,21 @@
 package client.view.components;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
+import javafx.scene.control.Label;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Color;
+import javafx.scene.shape.Circle;
 import client.view.IComponents;
 
 /**
@@ -38,6 +43,10 @@ public class ProjectEditor extends TabPane implements IComponents {
 	private TextField txtProjectResponsible;
 	@FXML
 	private TextArea txtProjectDescription;
+	@FXML
+	private Circle crlFinish;
+	@FXML
+	private Label lblTimeStamp;
 	
 	private SkillTab skillTab;
 	private ResourceTab resourceTab;
@@ -144,6 +153,17 @@ public class ProjectEditor extends TabPane implements IComponents {
 		phaseTab.clearAll();
 		resultTab.clearAll();
 	}
+	
+	@Override
+	public void disableWrite(boolean disable){
+		txtProjectName.setEditable(!disable);
+		txtProjectResponsible.setEditable(!disable);
+		txtProjectDescription.setEditable(!disable);
+		
+		skillTab.disableWrite(disable);
+		resourceTab.disableWrite(disable);
+		phaseTab.disableWrite(disable);
+	}
 
 
 	@Override
@@ -176,6 +196,15 @@ public class ProjectEditor extends TabPane implements IComponents {
 	@Override
 	public void setProjectDescription(String projectDescription){
 		txtProjectDescription.setText(projectDescription);
+	}
+	
+	@Override
+	public void setProjectTimeStamp(LocalDateTime timeStamp){
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss - dd.MM.yyyy");
+		lblTimeStamp.setText(timeStamp.format(formatter));
+		
+		// set the finish indicator
+		crlFinish.setFill(Color.GREEN);
 	}
 
 

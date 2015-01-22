@@ -197,4 +197,13 @@ public class ResourcePane extends AnchorPane implements IExpandableNode, ITester
 		else
 			return false;
 	}
+
+
+	@Override
+	public void disableWrite(boolean disable) {
+		txtResourceName.setEditable(!disable);
+		cmbIntExt.setMouseTransparent(disable);
+		txtAvailability.setEditable(!disable);
+		txtSkillAmount.setEditable(!disable);
+	}
 }

@@ -3,6 +3,7 @@ package client.view;
 import global.ASingelton;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -124,6 +125,12 @@ public class View extends ASingelton implements IViewClient {
 	@Override
 	public void clearAll(){
 		viewController.clearAll();
+		viewController.disableWrite(false);
+	}
+	
+	@Override
+	public void disableWrite(boolean disable){
+		viewController.disableWrite(disable);
 	}
 	
 	
@@ -157,6 +164,11 @@ public class View extends ASingelton implements IViewClient {
 	@Override
 	public void setProjectDescription(String projectDescription){
 		viewController.setProjectDescription(projectDescription);
+	}
+	
+	@Override
+	public void setProjectTimeStamp(LocalDateTime timeStamp){
+		viewController.setProjectTimeStamp(timeStamp);
 	}
 
 	

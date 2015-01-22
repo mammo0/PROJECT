@@ -67,6 +67,14 @@ public class ResourcePaneWrapper extends TitledPane {
 	
 	
 	/**
+	 * Disable or enable the writing for a project
+	 */
+	public void disableWrite(boolean disable){
+		resourceTable.disableWrite(disable);
+	}
+	
+	
+	/**
 	 * Get the skill corresponding to the wrapper pane
 	 * @return the skill
 	 */

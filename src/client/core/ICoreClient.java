@@ -93,4 +93,15 @@ public interface ICoreClient {
 	 * @param projectName
 	 */
 	public void deleteProject(String projectName);
+	
+	/**
+	 * Finish the current built project
+	 */
+	public void finishProject();
+	
+	/**
+	 * Get if the project is finished
+	 * @return true if the project is finished
+	 */
+	public boolean isProjectFinished();
 }

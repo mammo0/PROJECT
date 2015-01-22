@@ -3,6 +3,7 @@ package client.view.controller;
 import global.ASingelton;
 
 import java.net.URL;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.ResourceBundle;
@@ -131,6 +132,25 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 	
 	
 	
+	private Node getNode(Node parent, String fxmlName){
+		Node node = null;
+		if(parent == null){
+			node = projectEditor.getNode(fxmlName);
+		}else if(parent instanceof SkillPane){
+			node = ((SkillPane)parent).getNode(fxmlName);
+		}else if(parent instanceof ResourcePane){
+			node = ((ResourcePane)parent).getNode(fxmlName);
+		}else if(parent instanceof PhasePaneWrapper){
+			node = ((PhasePaneWrapper)parent).getNode(fxmlName);
+		}else if(parent instanceof PhasePane){
+			node = ((PhasePane)parent).getNode(fxmlName);
+		}
+		
+		return node;
+	}
+	
+	
+	
 	/**
 	 * Display the project in the right list view
 	 * @param projectNames
@@ -145,26 +165,21 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 	 * @param fxmlName the name of the node
 	 */
 	public void markNode(Node parent, String fxmlName){
-		Node node = null;
+		Node node = getNode(parent, fxmlName);
 		if(parent == null){
-			node = projectEditor.getNode(fxmlName);
 			projectEditor.getSelectionModel().select(0);
 		}else if(parent instanceof SkillPane){
-			node = ((SkillPane)parent).getNode(fxmlName);
 			projectEditor.getSelectionModel().select(1);
 		}else if(parent instanceof ResourcePane){
-			node = ((ResourcePane)parent).getNode(fxmlName);
 			projectEditor.getSelectionModel().select(2);
 			Node resParent = parent.getParent();
 			while(!(resParent instanceof ResourcePaneWrapper))
 				resParent = resParent.getParent();
 			((ResourcePaneWrapper) resParent).setExpanded(true);
 		}else if(parent instanceof PhasePaneWrapper){
-			node = ((PhasePaneWrapper)parent).getNode(fxmlName);
 			projectEditor.getSelectionModel().select(3);
 			((PhasePaneWrapper) parent).setExpanded(true);
 		}else if(parent instanceof PhasePane){
-			node = ((PhasePane)parent).getNode(fxmlName);
 			projectEditor.getSelectionModel().select(3);
 			Node phaParent = parent.getParent();
 			while(!(phaParent instanceof PhasePaneWrapper))
@@ -232,6 +247,11 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 	public void clearAll(){
 		projectEditor.clearAll();
 	}
+	
+	@Override
+	public void disableWrite(boolean disable){
+		projectEditor.disableWrite(disable);
+	}
 
 
 	@Override
@@ -264,6 +284,11 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 	@Override
 	public void setProjectDescription(String projectDescription){
 		projectEditor.setProjectDescription(projectDescription);
+	}
+	
+	@Override
+	public void setProjectTimeStamp(LocalDateTime timeStamp){
+		projectEditor.setProjectTimeStamp(timeStamp);
 	}
 
 	

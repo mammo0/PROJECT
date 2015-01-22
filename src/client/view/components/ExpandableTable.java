@@ -23,7 +23,7 @@ import javafx.scene.layout.Priority;
  *
  * @param <Content>
  */
-public class ExpandableTable<Content extends Node> extends ScrollPane {
+public class ExpandableTable<Content extends Node & IExpandableNode> extends ScrollPane {
 	
 	private Class<Content> contentPane;
 	
@@ -86,7 +86,7 @@ public class ExpandableTable<Content extends Node> extends ScrollPane {
 		Content newContent = null;
 		try {
 			newContent = contentPane.newInstance();
-			((IExpandableNode) newContent).setParentNode(parent);
+			newContent.setParentNode(parent);
 		} catch (InstantiationException | IllegalAccessException e) {
 			e.printStackTrace();
 		}
@@ -120,7 +120,7 @@ public class ExpandableTable<Content extends Node> extends ScrollPane {
 			for(Node child : contentList.getChildren()){
 				try{
 					// call the remove method in the child
-					((IExpandableNode) child).removeNode();
+					((Content) child).removeNode();
 				}catch (Exception e){}
 			}
 			contentList.getChildren().clear();
@@ -231,7 +231,7 @@ public class ExpandableTable<Content extends Node> extends ScrollPane {
 	 * This method adds a new content line
 	 */
 	public Content addNewContentLine(){
-		if(((IExpandableNode)contentPanes.get(0)).isEmpty())
+		if(((Content)contentPanes.get(0)).isEmpty())
 			return contentPanes.get(0);
 		else
 			return contentListAddRow();
@@ -250,6 +250,24 @@ public class ExpandableTable<Content extends Node> extends ScrollPane {
 				i--;
 				before = contentListRowCount;
 			}
+		}
+	}
+	
+	
+	/**
+	 * Disable or enable the writing for a project
+	 */
+	public void disableWrite(boolean disable){
+		Enumeration<Button> enumKey = btnContentRemoves.keys();
+		while(enumKey.hasMoreElements()){
+			Button btnRemove = enumKey.nextElement();
+			btnRemove.setVisible(!disable);
+		}
+		
+		btnContentAdd.setVisible(!disable);
+		
+		for(Content content : contentPanes.values()){
+			content.disableWrite(disable);
 		}
 	}
 }

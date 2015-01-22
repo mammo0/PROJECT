@@ -2,6 +2,7 @@ package client.view.components;
 
 import java.io.IOException;
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.time.Period;
 import java.util.ArrayList;
 import java.util.Enumeration;
@@ -404,17 +405,27 @@ public class PhaseTab extends ScrollPane implements IComponents {
 
 	@Override
 	public void clearAll(){
-		for(int i=0;i<mainPhases.size();i++){
-			PhasePaneWrapper mainPhase = mainPhases.get(i);
-			removeMainPhase(mainPhase);
-			ArrayList<PhasePaneWrapper> subPanes;
-			if((subPanes = subPhases.get(mainPhase)) != null){
-				for(int j=0;j< subPanes.size();j++){
-					removeSubPhase(subPanes.get(j));
-					j--;
-				}
-			}
+		for(int i=0;i<accPhaseList.getPanes().size();i++){
+			TitledPane phase = accPhaseList.getPanes().get(i);
+			accPhaseList.getPanes().remove(phase);
 			i--;
+		}
+		accPhaseList.getPanes().add(addMain);
+		
+		mainPhases.clear();
+		subPhases.clear();
+	}
+	
+	@Override
+	public void disableWrite(boolean disable){
+		for(int i=0;i<accPhaseList.getPanes().size();i++){
+			TitledPane phase = accPhaseList.getPanes().get(i);
+			if(phase instanceof PhasePaneWrapper){
+				((PhasePaneWrapper)phase).disableWrite(disable);
+			}else if(phase instanceof AddPhaseWrapper && disable){
+				accPhaseList.getPanes().remove(phase);
+				i--;
+			}
 		}
 	}
 	
@@ -523,4 +534,7 @@ public class PhaseTab extends ScrollPane implements IComponents {
 	
 	@Override
 	public void setProjectDescription(String projectDescription){}
+	
+	@Override
+	public void setProjectTimeStamp(LocalDateTime timeStamp){}
 }

@@ -3,21 +3,22 @@ package client.view.components;
 import java.io.IOException;
 import java.util.ArrayList;
 
-import model.project.Skill;
-import client.core.Core;
-import client.core.ICoreClient;
-import client.view.IExpandableNode;
-import client.view.ITester;
-import client.view.InputTester;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import model.project.Skill;
+import client.core.Core;
+import client.core.ICoreClient;
+import client.view.IExpandableNode;
+import client.view.ITester;
+import client.view.InputTester;
 
 public class PhasePane extends AnchorPane implements IExpandableNode, ITester {
 	
@@ -58,7 +59,13 @@ public class PhasePane extends AnchorPane implements IExpandableNode, ITester {
 		skills = FXCollections.observableArrayList();
 		
 		// add an event handler to listen for changes
-		cmbSkills.setOnAction(this::cmbChanged);
+		cmbSkills.valueProperty().addListener(new ChangeListener<String>() {
+	        @Override
+	        public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+	            if(newValue != null)
+	            	cmbChanged();
+	        }    
+		});
 		
 		// set the skill collection as data source to the combo box
 		cmbSkills.setItems(skills);
@@ -69,7 +76,7 @@ public class PhasePane extends AnchorPane implements IExpandableNode, ITester {
 	
 	
 	// this method is called when the selection of the combo box has changed 
-	private void cmbChanged(ActionEvent event){
+	private void cmbChanged(){
 		// update the in use skills
 		parent.removeSkillInUse(oldSelectedSkill);
 		parent.addSkillInUse(cmbSkills.getSelectionModel().getSelectedItem());
@@ -124,7 +131,6 @@ public class PhasePane extends AnchorPane implements IExpandableNode, ITester {
 	}
 	
 	
-	
 	/**
 	 * This method updates the skills in the drop downs
 	 */
@@ -157,9 +163,9 @@ public class PhasePane extends AnchorPane implements IExpandableNode, ITester {
 			
 			if(deleted && !oldSkill.equals(cmbSkills.getSelectionModel().getSelectedItem())){
 				skills.remove(oldSkill);
-				deleted = true;
 				i--;
 			}
+			deleted = true;
 		}
 	}
 	
@@ -235,5 +241,12 @@ public class PhasePane extends AnchorPane implements IExpandableNode, ITester {
 			return true;
 		else
 			return false;
+	}
+
+
+	@Override
+	public void disableWrite(boolean disable) {
+		cmbSkills.setMouseTransparent(disable);
+		txtDuration.setEditable(!disable);
 	}
 }

@@ -150,8 +150,8 @@ public class Core extends ASingelton implements ICoreServer {
 		calculateLenght(project);
 		calculateResultSkill(project);
 		calculateProjectDays(project);
-		calculateYearsQuarters(project, result);
-		calculateQuarterResults(project);
+//		calculateYearsQuarters(project, result);
+//		calculateQuarterResults(project);
 		return project;
 	}
 
@@ -516,7 +516,7 @@ public class Core extends ASingelton implements ICoreServer {
 					int key = enumKey.nextElement();
 					if (key == _skillID) {
 
-						//Gilt für jede Berechnung
+						//Gilt fï¿½r jede Berechnung
 						for( int i = 0; i<project.getResources().size(); i++){
 							if (project.getResources().get(i).getSkillID()==_skillID){
 								if(project.getResources().get(i).isIntern()==true){
@@ -528,11 +528,11 @@ public class Core extends ASingelton implements ICoreServer {
 								}
 							}
 						}
-						//Summe der Verfügbarkeiten in Faktor umrechnen, mit welchem dann zuerest die externen Tage berechnet werden
+						//Summe der Verfï¿½gbarkeiten in Faktor umrechnen, mit welchem dann zuerest die externen Tage berechnet werden
 						faktor = _availIntern / _availExtern;
 						faktor = faktor +1;
 						
-						//Benötigte Tage pro Skill und Phase auslesen
+						//Benï¿½tigte Tage pro Skill und Phase auslesen
 						 int neededDaysPerSkillAndPhase = phases.getSkills().get(_skillID);
 						 
 						 //Externe Tage berechen
@@ -569,7 +569,7 @@ public class Core extends ASingelton implements ICoreServer {
 										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill);
 							}
 						} else {
-							//Phasen, die länger als ein Quartal dauern, bzw die Quartalsgrenzen überschreiten
+							//Phasen, die lï¿½nger als ein Quartal dauern, bzw die Quartalsgrenzen ï¿½berschreiten
 							//_endquarter - _startquarter = 1 besagt, dass die Phase in Qn beginnt und in Qn+1 endet
 							if (_endquarter - _startquarter == 1) {
 								//Q1
@@ -703,7 +703,7 @@ public class Core extends ASingelton implements ICoreServer {
 							daysInYEnd = enddate.getDayOfYear();
 							
 							 //Startjahr
-							//Gibt den Index zurück an dem das Startjahr im Array steht
+							//Gibt den Index zurï¿½ck an dem das Startjahr im Array steht
 							int i = calculateIndexOfStartYear(startdate.getYear());
 							if(result.getYears().get(i).getQ1()==null
 								&&result.getYears().get(i).getQ2()==null

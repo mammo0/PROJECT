@@ -1,5 +1,6 @@
 package client.view;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -19,6 +20,12 @@ public interface IComponents {
 	 * Clear all inputs
 	 */
 	public void clearAll();
+	
+	/**
+	 * Disable or enabling  the writing for a project
+	 * @param disable
+	 */
+	public void disableWrite(boolean disable);
 	
 	/**
 	 * Get the skill panes from the project editor
@@ -103,4 +110,10 @@ public interface IComponents {
 	 * @param projectDescription
 	 */
 	public void setProjectDescription(String projectDescription);
+	
+	/**
+	 * Set the finished time stamp
+	 * @param timeStamp
+	 */
+	public void setProjectTimeStamp(LocalDateTime timeStamp);
 }

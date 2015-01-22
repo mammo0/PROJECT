@@ -26,4 +26,10 @@ public interface IExpandableNode {
 	 * @return true if the node is empty
 	 */
 	public boolean isEmpty();
+	
+	/**
+	 * Disable or enabling  the writing for a project
+	 * @param disable
+	 */
+	public void disableWrite(boolean disable);
 }

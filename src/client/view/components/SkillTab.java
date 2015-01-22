@@ -1,6 +1,7 @@
 package client.view.components;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -77,6 +78,11 @@ public class SkillTab extends AnchorPane implements IComponents {
 		skillTable.clearAll();
 	}
 	
+	@Override
+	public void disableWrite(boolean disable){
+		skillTable.disableWrite(disable);
+	}
+	
 
 	@Override
 	public String getProjectName() {
@@ -101,6 +107,9 @@ public class SkillTab extends AnchorPane implements IComponents {
 	
 	@Override
 	public void setProjectDescription(String projectDescription){}
+	
+	@Override
+	public void setProjectTimeStamp(LocalDateTime timeStamp){}
 
 	
 	

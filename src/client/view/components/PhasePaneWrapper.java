@@ -173,6 +173,21 @@ public class PhasePaneWrapper extends TitledPane implements ITester {
 	}
 	
 	
+	/**
+	 * Disable or enable the writing for a project
+	 */
+	public void disableWrite(boolean disable){
+		btnRemovePhase.setVisible(!disable);
+		
+		datPhaseBegin.setEditable(!disable);
+		datPhaseEnd.setEditable(!disable);
+		txtPhaseName.setEditable(!disable);
+		txtRiskFactor.setEditable(!disable);
+		
+		phaseTable.disableWrite(disable);
+	}
+	
+	
 	
 	@Override
 	public boolean checkInput(Node node) {

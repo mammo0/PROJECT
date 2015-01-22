@@ -1,12 +1,17 @@
 package client.view.components;
 
 import java.io.IOException;
+import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Comparator;
 
+import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
@@ -69,9 +74,15 @@ public class ResultTab extends AnchorPane {
 	private AnchorPane ancTimeline;
 	
 	@FXML
+	private Button btnFinish;
+	@FXML
 	private ToggleButton tbnRisk;
 	
 	private Timeline timeline;
+	
+	private BooleanProperty finishable;
+	
+	private ArrayList<TableCell<?, ?>> errorCells;
 	
 	
 	private ICoreClient core;
@@ -96,6 +107,10 @@ public class ResultTab extends AnchorPane {
 		
 		this.core = Core.getInstance(Core.class);
 		
+		errorCells = new ArrayList<TableCell<?,?>>();
+		
+		finishable = new SimpleBooleanProperty(this, "finishable", false);
+		btnFinish.disableProperty().bind(finishable.not());
 		
 		// add the time line
 		timeline = new Timeline(2014, 1, 2015, 4);
@@ -128,10 +143,17 @@ public class ResultTab extends AnchorPane {
 		            	int pdIsValue = pdIs.call(new CellDataFeatures<pdTableModel, Integer>(tblPD, colIsPD, pdData.get(getIndex()))).getValue();
 		            	if(pdIsValue<item){
 		            		setStyle("-fx-background-color: red; -fx-text-fill: white;");
-		            	}else if(getIndex() == pdData.size()-1)
+		            		errorCells.add(this);
+		            		finishable.set(false);
+		            	}else if(getIndex() == pdData.size()-1){
 		            		setStyle("-fx-background-color: lightgrey");
-		            	else
+		            	}else{
 		            		setStyle("");
+		            		if(errorCells.contains(this) || errorCells.isEmpty()){
+		            			errorCells.remove(this);
+		            			finishable.set(true);
+		            		}
+		            	}
                         setText(String.valueOf(item));
                     }
 		        }
@@ -151,10 +173,18 @@ public class ResultTab extends AnchorPane {
 		            	int pdShouldValue = pdShould.call(new CellDataFeatures<pdTableModel, Integer>(tblPD, colShouldPD, pdData.get(getIndex()))).getValue();
 		            	if(pdShouldValue>item){
 		            		setStyle("-fx-background-color: red; -fx-text-fill: white;");
-		            	}else if(getIndex() == pdData.size()-1)
+		            		finishable.set(false);
+		            		errorCells.add(this);
+		            	}else if(getIndex() == pdData.size()-1){
 		            		setStyle("-fx-background-color: lightgrey");
-		            	else
+		            	}else{
 		            		setStyle("");
+		            		if(errorCells.contains(this) || errorCells.isEmpty()){
+		            			errorCells.remove(this);
+		            			if(!core.isProjectFinished())
+		            				finishable.set(true);
+		            		}
+		            	}
                         setText(String.valueOf(item));
                     }
 		        }
@@ -212,6 +242,17 @@ public class ResultTab extends AnchorPane {
 	}
 	
 	
+	// this method finishes the project
+	@FXML
+	private void btnFinishClick(){
+		finishable.set(false);
+		
+		// TODO confirm dialog
+		
+		core.finishProject();
+	}
+	
+	
 	// prepare the table
 	private <Model, Type> void prepareTable(TableView<Model> table){
 		// exclude the last line from the sorting
@@ -225,7 +266,7 @@ public class ResultTab extends AnchorPane {
 		    return true;
 		});
 		
-		// mark the last line in the table
+		// iterate over all columns
 		for(TableColumn<Model, ?> columns : table.getColumns()){
 			columns.setCellFactory(column -> {
 			    return new TableCell<Model, Type>() {
@@ -237,10 +278,19 @@ public class ResultTab extends AnchorPane {
 			                setText(null);
 			                setStyle("");
 			            }else{
+			            	// mark the last line in the table
 			            	if(getIndex() == pdData.size()-1)
 			            		setStyle("-fx-background-color: lightgrey");
 			            	else
 			            		setStyle("");
+			            	
+			            	// display the floats with only two decimals
+			            	if(item instanceof Float){
+			            		NumberFormat formatter = NumberFormat.getCurrencyInstance();
+			            		setText(formatter.format(item));
+			            		return;
+			            	}
+			            	
 	                        setText(String.valueOf(item));
 	                    }
 			        }
@@ -261,6 +311,7 @@ public class ResultTab extends AnchorPane {
 		if(quarterData != null)
 			quarterData.clear();
 	}
+	
 	
 	
 	/**

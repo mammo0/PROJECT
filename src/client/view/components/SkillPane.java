@@ -196,4 +196,11 @@ public class SkillPane extends AnchorPane implements IExpandableNode, ITester {
 		}else
 			return false;
 	}
+
+	@Override
+	public void disableWrite(boolean disable) {
+		txtSkillName.setEditable(!disable);
+		txtDayRateInt.setEditable(!disable);
+		txtDayRateExt.setEditable(!disable);
+	}
 }

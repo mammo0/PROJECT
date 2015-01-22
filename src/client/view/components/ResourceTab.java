@@ -1,6 +1,7 @@
 package client.view.components;
 
 import java.io.IOException;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
@@ -127,6 +128,13 @@ public class ResourceTab extends AnchorPane implements IComponents {
 //		accSkillList.getPanes().clear();
 //		updateResources();
 	}
+	
+	@Override
+	public void disableWrite(boolean disable){
+		for(ResourcePaneWrapper resourcePane : wrapperPanes){
+			resourcePane.disableWrite(disable);
+		}
+	}
 
 	
 	@Override
@@ -194,4 +202,7 @@ public class ResourceTab extends AnchorPane implements IComponents {
 	
 	@Override
 	public void setProjectDescription(String projectDescription){}
+	
+	@Override
+	public void setProjectTimeStamp(LocalDateTime timeStamp){}
 }
