@@ -56,10 +56,14 @@ public class CreateXML {
 			createNode(eventWriter, "projectResponsible",
 					project.getProjectResponsible());
 			createNode(eventWriter, "description", project.getDescription());
+			if(project.getStartDate()!=null){
 			createNode(eventWriter, "startDate", project.getStartDate()
 					.toString());
 			createNode(eventWriter, "endDate", project.getEndDate().toString());
-		} catch (Exception e) {
+			}else{
+				
+			}
+		} catch (NullPointerException e) {
 			e.printStackTrace();
 		}
 		// createNode(eventWriter, "marked", project.isFinished());
@@ -223,5 +227,7 @@ public class CreateXML {
 		eventWriter.add(end);
 
 	}
+	
+	
 
 }

@@ -145,10 +145,15 @@ public class Core extends ASingelton implements ICoreServer {
 	@Override
 	public Project calculateProject(Project project) {
 		this.project = project;
+		if(project.getEndDate()!= null){
 		calculateLenght(project);
 		calculateResultSkill(project);
 		calculateProjectDays(project);
 		calculateQuarterResults(project);
+		}
+		else{
+			
+		}
 		return project;
 	}
 
@@ -1865,6 +1870,7 @@ public class Core extends ASingelton implements ICoreServer {
 		int years = 0;
 		int startyear = 0;
 		int endyear = 0;
+		if(project.getEndDate() != null){
 		if (project.getEndDate().getYear() == project.getStartDate().getYear()) {
 			duration = project.getEndDate().getDayOfYear()
 					- project.getStartDate().getDayOfYear() + 1;
@@ -1894,9 +1900,13 @@ public class Core extends ASingelton implements ICoreServer {
 				endyear = endyear - 30;
 			}
 			workingdays = workingdays + (0.55835) * endyear;
+			finaldays = Math.round(workingdays);
+		}
+		}else{
+			
 		}
 
-		finaldays = Math.round(workingdays);
+		
 		return (int) finaldays;
 
 	}
@@ -1930,6 +1940,8 @@ public class Core extends ASingelton implements ICoreServer {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
+		
+	
 	}
 
 	@Override
@@ -1985,7 +1997,9 @@ public class Core extends ASingelton implements ICoreServer {
 
 	@Override
 	public void deleteProject(String projectName) throws RemoteException {
-		// TODO Auto-generated method stub
+		File file = new File(getProjectDirectory()+projectName+".xml");
+		System.gc();
+		file.delete();
 
 	}
 }

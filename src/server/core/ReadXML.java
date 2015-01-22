@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -39,7 +40,7 @@ public class ReadXML {
 
 		try {
 			doc = saxbuilder.build(file);
-			XMLOutputter xmlout = new XMLOutputter();
+			//XMLOutputter xmlout = new XMLOutputter();
 			Element projectelement = doc.getRootElement();
 			List<Element> phasenelement = projectelement.getChildren("phasen");
 			List<Element> skillselement = projectelement.getChildren("skills");
@@ -54,6 +55,9 @@ public class ReadXML {
 			// System.out.println(element.getChildText("description"));
 			project.setDescription(projectelement.getChildText("description"));
 			// System.out.println(element.getChildText("startDate"));
+			if(projectelement.getChildText("startDate")==null || projectelement.getChildText("startDate")==""){
+				
+			}else{
 			LocalDate startDate = LocalDate.parse(
 					projectelement.getChildText("startDate"), formatter);
 			project.setStartDate(startDate);
@@ -61,9 +65,11 @@ public class ReadXML {
 			LocalDate endDate = LocalDate.parse(
 					projectelement.getChildText("endDate"), formatter);
 			project.setEndDate(endDate);
+			}
 
 			// fill the phase object
 
+			
 			for (Element _phaseelement : phasenelement) {
 				List<Element> phaseelement = _phaseelement.getChildren();
 				for (Element _phaseinhalt : phaseelement) {
@@ -71,15 +77,24 @@ public class ReadXML {
 					Phase phase = new Phase();
 					phase.setPhaseName(_phaseinhalt.getChildText("phaseName"));
 
-					LocalDate startDatephase = LocalDate.parse(
-							_phaseinhalt.getChildText("startDate"), formatter);
-					phase.setStartDate(startDatephase);
-					LocalDate endDatephase = LocalDate.parse(
-							_phaseinhalt.getChildText("endDate"), formatter);
-					phase.setEndDate(endDatephase);
-					int riskFactor = Integer.valueOf(_phaseinhalt
-							.getChildText("riskFactor"));
-					phase.setRiskFactor(riskFactor);
+					
+					if(_phaseinhalt.getChildText("phaseName")!= "") {
+						LocalDate startDatephase = LocalDate.parse(
+						_phaseinhalt.getChildText("startDate"), formatter);
+				phase.setStartDate(startDatephase);
+				LocalDate endDatephase = LocalDate.parse(
+						_phaseinhalt.getChildText("endDate"), formatter);
+				phase.setEndDate(endDatephase);
+					}
+					else {
+						
+					}
+				int riskFactor = Integer.valueOf(_phaseinhalt
+						.getChildText("riskFactor"));
+				phase.setRiskFactor(riskFactor);
+				
+					
+					
 					
 					if(_phaseinhalt.getChildText("parent") == null){
 			
@@ -198,8 +213,7 @@ public class ReadXML {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
-		return project;
+			return project;
 
 	}
 }
