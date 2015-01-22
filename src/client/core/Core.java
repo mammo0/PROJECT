@@ -143,6 +143,8 @@ public class Core extends ASingelton implements ICoreClient {
 		
 		// second screen
 		for(SkillPane pane : view.getSkillPanes()){
+			if(pane.isEmpty())
+				continue;
 			Skill skill = new Skill();
 			if(!ignoreErrors && pane.getSkillName().replaceAll(" ", "").isEmpty()){
 				if(!dontMark){
