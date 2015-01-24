@@ -349,12 +349,14 @@ public class Core extends ASingelton implements ICoreServer {
 	public void testPhaseavailable (Phase phase , int SkillID){
 		double availability = 0;
 		int difdays = 0;
+		//Wenn AnzahlTage benötigte SkillTage und phasedays (hashtable) gibt die Anzahl der Arbeistage die eine Phase hat
 		if(phase.getSkills().get(SkillID)>phasesdays.get(phase.getPhaseName())){
 			for(Resource resource : project.getResources()){
 				if(resource.getSkillID() == SkillID){
 					availability = (resource.getAvailability()*0.01)*resource.getSkillAmount()*phasesdays.get(phase.getPhaseName());
+					//Wenn vorhandene Tage geringer als benötigte Tage der Phase
 					if(availability< phase.getSkills().get(SkillID)){
-						difdays = (int) (phasesdays.get(phase.getPhaseName()) - availability);
+						difdays = (int) (phase.getSkills().get(SkillID)-availability);
 						_totalShould = _totalShould + difdays;
 						System.out.println("Zu wenig Ressourcen");
 					}else{
@@ -600,7 +602,7 @@ public class Core extends ASingelton implements ICoreServer {
 								
 								LocalDate enddatequarter = LocalDate.of(_endyear, 3, 31);
 							//Tage die im ersten Quartal liegen
-								 daysInQ1 = enddatequarter.getDayOfYear()-startdate.getDayOfYear();
+								 daysInQ1 = enddatequarter.getDayOfYear()-startdate.getDayOfYear()+1;
 							//Restliche tage folglich im 2 quartal	
 								 daysInQ2 = _diffdate - daysInQ1;
 								 //Tage auf die Quartale verteilen
@@ -613,7 +615,7 @@ public class Core extends ASingelton implements ICoreServer {
 								 
 								 createQ1(daysInQ1, startdate.getYear(), dayfactorintern, 
 											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
-								 createQ2(daysInQ1, startdate.getYear(), dayfactorintern, 
+								 createQ2(daysInQ2, startdate.getYear(), dayfactorintern, 
 											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 								}
 								//Q2
