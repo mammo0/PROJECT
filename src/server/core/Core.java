@@ -15,6 +15,7 @@ import java.rmi.server.UnicastRemoteObject;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Enumeration;
+import java.util.Hashtable;
 
 import javax.xml.stream.XMLStreamException;
 
@@ -47,6 +48,7 @@ public class Core extends ASingelton implements ICoreServer {
 	private String rmiUrl;
 	private Project project;
 //	private Result result;
+	Hashtable<String, Integer> phases = new Hashtable();
 	
 
 	private File projectFilesDir;
@@ -939,43 +941,56 @@ public class Core extends ASingelton implements ICoreServer {
 
 	// calculate the total amount 3f projectdays
 	public int calculateProjectDays(Project project) {
-		int duration = 0;
+		
 		long finaldays = 0;
 		double workingdays = 0;
 		int years = 0;
 		int startyear = 0;
 		int endyear = 0;
-		if (project.getEndDate().getYear() == project.getStartDate().getYear()) {
-			duration = project.getEndDate().getDayOfYear()
-					- project.getStartDate().getDayOfYear() + 1;
-			while (duration >= 30) {
-				workingdays = workingdays + 17;
-				duration = duration - 30;
-			}
-			workingdays = workingdays + (0.55835) * duration;
-		} else {
-			years = project.getEndDate().getYear()
-					- project.getStartDate().getYear();
-			while (years > 1) {
-				workingdays = workingdays + 204;
-				years = years - 1;
-			}
+	
+		
+		for(Phase Phase : project.getPhases()){
+			int duration = 0;
+			if (Phase.getEndDate().getYear() == Phase.getStartDate().getYear()) {
+				duration = Phase.getEndDate().getDayOfYear()
+						- Phase.getStartDate().getDayOfYear() + 1;
+				while (duration >= 30) {
+					workingdays = workingdays + 17;
+					duration = duration - 30;
+				}
+				workingdays = workingdays + (0.55835) * duration;
+			}else {
+				years = Phase.getEndDate().getYear()
+						- Phase.getStartDate().getYear();
+				while (years > 1) {
+					workingdays = workingdays + 204;
+					years = years - 1;
+				}
 
-			startyear = 366 - project.getStartDate().getDayOfYear();
-			while (startyear >= 30) {
-				workingdays = workingdays + 17;
-				startyear = startyear - 30;
-			}
-			workingdays = workingdays + (0.55835) * startyear;
+				startyear = 366 - Phase.getStartDate().getDayOfYear();
+				while (startyear >= 30) {
+					workingdays = workingdays + 17;
+					startyear = startyear - 30;
+				}
+				workingdays = workingdays + (0.55835) * startyear;
 
-			endyear = project.getEndDate().getDayOfYear();
-			while (endyear >= 30) {
-				workingdays = workingdays + 17;
-				endyear = endyear - 30;
+				endyear = Phase.getEndDate().getDayOfYear();
+				while (endyear >= 30) {
+					workingdays = workingdays + 17;
+					endyear = endyear - 30;
+				}
+				workingdays = workingdays + (0.55835) * endyear;
 			}
-			workingdays = workingdays + (0.55835) * endyear;
+			
+			phases.put(Phase.getPhaseName(), (int) workingdays);
 		}
-
+		
+		Enumeration<String> enumKey = phases.keys();
+		while (enumKey.hasMoreElements()) {
+			String key = enumKey.nextElement();
+			finaldays = finaldays + phases.get(key);
+		}
+		
 		finaldays = Math.round(workingdays);
 		return (int) finaldays;
 
