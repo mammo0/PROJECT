@@ -48,7 +48,8 @@ public class Core extends ASingelton implements ICoreServer {
 	private String rmiUrl;
 	private Project project;
 //	private Result result;
-	Hashtable<String, Integer> phases = new Hashtable();
+	Hashtable<String, Integer> phasesdays = new Hashtable();
+	int _totalShould = 0;
 	
 
 	private File projectFilesDir;
@@ -151,8 +152,9 @@ public class Core extends ASingelton implements ICoreServer {
 		this.project = project;
 		if(project.getPhases().size()!= 0){
 		calculateLenght(project);
-		calculateResultSkill(project);
 		calculateProjectDays(project);
+		calculateResultSkill(project);
+		
 	//	calculateYearsQuarters(project, result);
 		calculateQuarterResults(project);
 		}
@@ -343,6 +345,31 @@ public class Core extends ASingelton implements ICoreServer {
 			}
 		}
 	}
+	
+	public void testPhaseavailable (Phase phase , int SkillID){
+		double availability = 0;
+		int difdays = 0;
+		if(phase.getSkills().get(SkillID)>phasesdays.get(phase.getPhaseName())){
+			for(Resource resource : project.getResources()){
+				if(resource.getSkillID() == SkillID){
+					availability = (resource.getAvailability()*0.01)*resource.getSkillAmount()*phasesdays.get(phase.getPhaseName());
+					if(availability<phasesdays.get(phase.getPhaseName())){
+						difdays = (int) (phasesdays.get(phase.getPhaseName()) - availability);
+						_totalShould = _totalShould + difdays;
+						System.out.println("Zu wenig Ressourcen");
+					}else{
+						System.out.println("passt");
+					}
+				}
+				
+			}
+		}
+		else{
+			System.out.println("passt");
+		}
+		
+		
+	}
 
 	// calculate the skill result object
 	public void calculateResultSkill(Project project) {
@@ -355,7 +382,7 @@ public class Core extends ASingelton implements ICoreServer {
 
 			// set all temp variables
 			int _skillID = 0;
-			int _totalShould = 0;
+			
 			int _totalShouldRisk = 0;
 			double _totalBe = 0;
 			double _totalBeExt = 0;
@@ -374,6 +401,8 @@ public class Core extends ASingelton implements ICoreServer {
 			float _dayrateInt = skill.getDayRateInt();
 			float _dayrateExt = skill.getDayRateExt();
 			int _pdTotalBe = 0;
+			int _daysavailable = 0;
+			_totalShould = 0;
 
 			// calculate the total needed mandays per skill
 			_skillID = skill.getSkillID();
@@ -389,6 +418,8 @@ public class Core extends ASingelton implements ICoreServer {
 								* 0.01 * phases.getSkills().get(_skillID));
 						_totalShouldRisk = _totalShouldRisk
 								+ (tempRisk + phases.getSkills().get(_skillID));
+						
+						testPhaseavailable (phases , _skillID);
 
 					}
 				}
@@ -951,6 +982,7 @@ public class Core extends ASingelton implements ICoreServer {
 		
 		for(Phase Phase : project.getPhases()){
 			int duration = 0;
+			workingdays = 0;
 			if (Phase.getEndDate().getYear() == Phase.getStartDate().getYear()) {
 				duration = Phase.getEndDate().getDayOfYear()
 						- Phase.getStartDate().getDayOfYear() + 1;
@@ -982,13 +1014,13 @@ public class Core extends ASingelton implements ICoreServer {
 				workingdays = workingdays + (0.55835) * endyear;
 			}
 			
-			phases.put(Phase.getPhaseName(), (int) workingdays);
+			phasesdays.put(Phase.getPhaseName(), (int) workingdays);
 		}
 		
-		Enumeration<String> enumKey = phases.keys();
+		Enumeration<String> enumKey = phasesdays.keys();
 		while (enumKey.hasMoreElements()) {
 			String key = enumKey.nextElement();
-			finaldays = finaldays + phases.get(key);
+			finaldays = finaldays + phasesdays.get(key);
 		}
 		
 		finaldays = Math.round(workingdays);
