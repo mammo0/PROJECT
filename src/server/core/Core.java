@@ -353,7 +353,7 @@ public class Core extends ASingelton implements ICoreServer {
 			for(Resource resource : project.getResources()){
 				if(resource.getSkillID() == SkillID){
 					availability = (resource.getAvailability()*0.01)*resource.getSkillAmount()*phasesdays.get(phase.getPhaseName());
-					if(availability<phasesdays.get(phase.getPhaseName())){
+					if(availability< phase.getSkills().get(SkillID)){
 						difdays = (int) (phasesdays.get(phase.getPhaseName()) - availability);
 						_totalShould = _totalShould + difdays;
 						System.out.println("Zu wenig Ressourcen");
@@ -363,7 +363,9 @@ public class Core extends ASingelton implements ICoreServer {
 				}
 				
 			}
-		}
+				
+			}
+		
 		else{
 			System.out.println("passt");
 		}
