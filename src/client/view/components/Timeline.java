@@ -111,7 +111,10 @@ public class Timeline extends ScrollPane {
 		VBox pane = new VBox();
 		StackPane yearPane = new StackPane();
 		Button btnYear = new Button(String.valueOf(yearNumber));
-		btnYear.setFont(Font.font("", FontWeight.BOLD, 17.5));
+		if(quarters.length == 1)
+			btnYear.setFont(Font.font("", FontWeight.BOLD, 13));
+		else
+			btnYear.setFont(Font.font("", FontWeight.BOLD, 17.5));
 		btnYear.setOnAction(this::btnYearClick);
 		yearPane.getChildren().add(btnYear);
 		pane.getChildren().add(yearPane);
