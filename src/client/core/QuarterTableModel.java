@@ -9,7 +9,7 @@ import javafx.beans.property.SimpleStringProperty;
  * @author Ammon
  *
  */
-public class quarterTableModel {
+public class QuarterTableModel {
 	public SimpleStringProperty skillName = new SimpleStringProperty();
 	public SimpleFloatProperty costInt = new SimpleFloatProperty();
 	public SimpleFloatProperty costExt = new SimpleFloatProperty();
@@ -26,10 +26,10 @@ public class quarterTableModel {
 	public Float getCostExt() {
 		return costExt.get();
 	}
-	public Integer getPdIsInt() {
+	public Integer getPdInt() {
 		return pdInt.get();
 	}
-	public Integer getPdIsExt() {
+	public Integer getPdExt() {
 		return pdExt.get();
 	}
 }

@@ -65,7 +65,28 @@ public class Year implements Serializable {
 	public Quarter getQ4() {
 		return q4;
 	}
+	
+	/**
+	 * Get the quarter by its number
+	 * @param quarter the quarter number
+	 * @return the quarter
+	 */
+	public Quarter getQuarter(int quarter){
+		switch (quarter) {
+		case 1:
+			return q1;
+		case 2:
+			return q2;
+		case 3:
+			return q3;
+		case 4:
+			return q4;
+		default:
+			return null;
+		}
+	}
 
+	
 	/**
 	 * Set the number of the year
 	 * 

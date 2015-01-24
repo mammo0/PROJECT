@@ -13,8 +13,10 @@ import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
@@ -22,9 +24,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.project.Phase;
 import model.project.Project;
+import model.project.Quarter;
 import model.project.Resource;
 import model.project.Result;
 import model.project.Skill;
+import model.project.Year;
 import client.view.IViewClient;
 import client.view.View;
 import client.view.components.PhasePane;
@@ -419,6 +423,95 @@ public class Core extends ASingelton implements ICoreClient {
 	}
 	
 	
+	// calculate the pds
+	private PDTableModel calculatePDs(String skillName, Result result, boolean withRisk){
+		PDTableModel pdModel = new PDTableModel();
+		pdModel.skillName.set(skillName);
+		if(withRisk)
+			pdModel.pdShould.set(result.getPdTotalShouldRisk());
+		else
+			pdModel.pdShould.set(result.getPdTotalShould());
+		pdModel.pdIs.set(result.getPdTotalBe());
+		pdModel.pdIsInt.set(result.getPdInt());
+		pdModel.pdIsExt.set(result.getPdExt());
+		
+		return pdModel;
+	}
+	
+	// calculate costs
+	private CostTableModel calculateCosts(String skillName, Result result){
+		CostTableModel costModel = new CostTableModel();
+		costModel.skillName.set(skillName);
+		costModel.costTotal.set(result.getCostTotal());
+		costModel.costInt.set(result.getCostInt());
+		costModel.costExt.set(result.getCostExt());
+		
+		return costModel;
+	}
+	
+	// calculate the quarters
+	private QuarterTableModel calculateQuarters(String skillName, Result result, int yearBegin, int quarterBegin, int yearEnd, int quarterEnd){
+		QuarterTableModel quarterModel = new QuarterTableModel();
+		
+		ArrayList<Year> years = result.getYears();
+		years.sort(new Comparator<Year>() {
+			@Override
+			public int compare(Year o1, Year o2) {
+				return o1.getYearDate()<o2.getYearDate() ? -1 :
+					o1.getYearDate()==o2.getYearDate() ? 0 : 1;
+			}
+		});
+		
+		int pdInt = 0;
+		int pdExt = 0;
+		float costInt = 0;
+		float costExt = 0;
+		for(Year year : years){
+			if(year.getYearDate() == yearBegin && year.getYearDate() == yearEnd){
+				for(int i=quarterBegin;i<=quarterEnd;i++){
+					Quarter quarter = year.getQuarter(i);
+					pdInt += quarter.getPdInt();
+					pdExt += quarter.getPdExt();
+					costInt += quarter.getCostInt();
+					costExt += quarter.getCostExt();
+				}
+			}else if(year.getYearDate() == yearBegin){
+				for(int i=quarterBegin;i<=4;i++){
+					Quarter quarter = year.getQuarter(i);
+					pdInt += quarter.getPdInt();
+					pdExt += quarter.getPdExt();
+					costInt += quarter.getCostInt();
+					costExt += quarter.getCostExt();
+				}
+			}else if(year.getYearDate() < yearEnd){
+				for(int i=1;i<=4;i++){
+					Quarter quarter = year.getQuarter(i);
+					pdInt += quarter.getPdInt();
+					pdExt += quarter.getPdExt();
+					costInt += quarter.getCostInt();
+					costExt += quarter.getCostExt();
+				}
+			} else if(year.getYearDate() == yearEnd){
+				for(int i=1;i<=quarterEnd;i++){
+					Quarter quarter = year.getQuarter(i);
+					pdInt += quarter.getPdInt();
+					pdExt += quarter.getPdExt();
+					costInt += quarter.getCostInt();
+					costExt += quarter.getCostExt();
+				}
+			}
+		}
+		
+		quarterModel.skillName.set(skillName);
+		quarterModel.pdInt.set(pdInt);
+		quarterModel.pdExt.set(pdExt);
+		quarterModel.costInt.set(costInt);
+		quarterModel.costExt.set(costExt);
+		
+		return quarterModel;
+	}
+	
+	
 	
 	@Override
 	public void saveSettings(String serverAddress, int serverPort) {
@@ -502,88 +595,79 @@ public class Core extends ASingelton implements ICoreClient {
 	
 	
 	@Override
-	public ObservableList<pdTableModel> getPDTable(boolean withRisk){
-		ObservableList<pdTableModel> pdData = FXCollections.observableArrayList();
+	public ObservableList<PDTableModel> getPDTable(boolean withRisk){
+		ObservableList<PDTableModel> pdData = FXCollections.observableArrayList();
 		
 		for(Skill skill : project.getSkills()){
-			pdTableModel pdModel = new pdTableModel();
+			PDTableModel pdModel = null;
 			Result result;
-			if(withRisk){
-				if(skill.getResult() != null){
-					// not implemented yet
-				}
-			}else{
-				if(skill.getResult() != null){
-					result = skill.getResult();
-					pdModel.skillName.set(skill.getSkillName());
-					pdModel.pdShould.set(result.getPdTotalShould());
-					pdModel.pdIs.set(result.getPdTotalBe());
-					pdModel.pdIsInt.set(result.getPdInt());
-					pdModel.pdIsExt.set(result.getPdExt());
-				}
+			if(skill.getResult() != null){
+				result = skill.getResult();
+				pdModel = calculatePDs(skill.getSkillName(), result, withRisk);
 			}
 			pdData.add(pdModel);
 		}
 		
 		// summary line
+		PDTableModel pdModel = null;
 		Result result = project.getResult();
-		pdTableModel pdModel = new pdTableModel();
-		pdModel.skillName.set("Gesamt");
-//		pdModel.pdShould.set(result.getPdTotalShould());
-//		pdModel.pdIs.set(result.getPdTotalBe());
-//		pdModel.pdIsInt.set(result.getPdInt());
-//		pdModel.pdIsExt.set(result.getPdExt());
+		if(result != null){
+			pdModel = calculatePDs("Gesamt", result, withRisk);
+		}
 		pdData.add(pdModel);
 		
 		return pdData;
 	}
 	
 	@Override
-	public ObservableList<costTableModel> getCostTable(){
-		ObservableList<costTableModel> costData = FXCollections.observableArrayList();
+	public ObservableList<CostTableModel> getCostTable(){
+		ObservableList<CostTableModel> costData = FXCollections.observableArrayList();
 		
 		for(Skill skill : project.getSkills()){
-			costTableModel costModel = new costTableModel();
+			CostTableModel costModel = null;
 			Result result;
 			if(skill.getResult() != null){
 				result = skill.getResult();
-				costModel.skillName.set(skill.getSkillName());
-				costModel.costTotal.set(result.getCostTotal());
-				costModel.costInt.set(result.getCostInt());
-				costModel.costExt.set(result.getCostExt());
+				costModel = calculateCosts(skill.getSkillName(), result);
 			}
 			costData.add(costModel);
 		}
 		
 		// summary line
+		CostTableModel costModel = null;
 		Result result = project.getResult();
-		costTableModel costModel = new costTableModel();
-		costModel.skillName.set("Gesamt");
-//		costModel.costTotal.set(result.getCostTotal());
-//		costModel.costInt.set(result.getCostInt());
-//		costModel.costExt.set(result.getCostExt());
+		if(result != null){
+			costModel = calculateCosts("Gesamt", result);
+		}
 		costData.add(costModel);
 		
 		return costData;
 	}
 	
 	@Override
-	public ObservableList<quarterTableModel> getQuarterTable(){
-		ObservableList<quarterTableModel> quarterData = FXCollections.observableArrayList();
+	public ObservableList<QuarterTableModel> getQuarterTable(int yearBegin, int quarterBegin, int yearEnd, int quarterEnd){
+		ObservableList<QuarterTableModel> quarterData = FXCollections.observableArrayList();
+		
+		if(yearBegin < 0 || quarterBegin < 0 || yearEnd < 0 || quarterEnd < 0)
+			return quarterData;
 		
 		for(Skill skill : project.getSkills()){
-			quarterTableModel quarterModel = new quarterTableModel();
+			QuarterTableModel quarterModel = null;
 			Result result;
 			if(skill.getResult() != null){
 				result = skill.getResult();
-				quarterModel.skillName.set(skill.getSkillName());
-				quarterModel.pdInt.set(result.getPdInt());
-				quarterModel.pdExt.set(result.getPdExt());
-				quarterModel.costInt.set(result.getCostInt());
-				quarterModel.costExt.set(result.getCostExt());
+				quarterModel = calculateQuarters(skill.getSkillName(), result, yearBegin, quarterBegin, yearEnd, quarterEnd);
 			}
 			quarterData.add(quarterModel);
 		}
+		
+		// summary line
+		QuarterTableModel quarterModel = null;
+		Result result = project.getResult();
+		if(result != null){
+			quarterModel = calculateQuarters("Gesamt", result, yearBegin, quarterBegin, yearEnd, quarterEnd);
+		}
+		quarterData.add(quarterModel);
 		
 		return quarterData;
 	}
@@ -662,5 +746,17 @@ public class Core extends ASingelton implements ICoreClient {
 	@Override
 	public boolean isProjectFinished(){
 		return project.isFinished();
+	}
+
+
+	@Override
+	public LocalDate getProjectStartDate() {
+		return project.getStartDate();
+	}
+
+
+	@Override
+	public LocalDate getProjectEndDate() {
+		return project.getEndDate();
 	}
 }

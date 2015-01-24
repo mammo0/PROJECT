@@ -1,8 +1,8 @@
 package client.view.components;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
-import java.util.Hashtable;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -28,14 +28,16 @@ public class Timeline extends ScrollPane {
 	@FXML
 	private StackPane stkTimeline;
 	
-	private Hashtable<Integer, ArrayList<ToggleButton>> quarterPanes;
+	private ArrayList<ButtonQuarter> quarterButtons;
+	
+	private ResultTab parent;
 	
 	
 	
 	/**
 	 * The Constructor
 	 */
-	public Timeline(int yearBeginn, int beginnQuarter, int yearEnd, int endQuarter) {
+	public Timeline(ResultTab parent) {
 		// load the skill tab fxml
 		FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/client/view/fxml/Timeline.fxml"));
 		
@@ -50,33 +52,30 @@ public class Timeline extends ScrollPane {
 		    e.printStackTrace();
 		}
 		
-		quarterPanes = new Hashtable<Integer, ArrayList<ToggleButton>>();
+		this.parent = parent;
 		
-		AnchorPane time = buildTimeline(yearBeginn, beginnQuarter, yearEnd, endQuarter);
-		this.setMinHeight(110d);
-		this.setMaxHeight(time.maxHeight(0d));
-		stkTimeline.getChildren().add(time);
+		quarterButtons = new ArrayList<ButtonQuarter>();
 	}
 	
 	
 	// this method generates the complete time line
-	private AnchorPane buildTimeline(int yearBeginn, int beginnQuarter, int yearEnd, int endQuarter){
+	private AnchorPane buildTimeline(int yearBegin, int beginQuarter, int yearEnd, int endQuarter){
 		AnchorPane timeline = new AnchorPane();
 		
 		HBox pane = new HBox();
 		
-		for(int i=yearBeginn;i<=yearEnd;i++){
+		for(int i=yearBegin;i<=yearEnd;i++){
 			ArrayList<AnchorPane> quarters = new ArrayList<AnchorPane>();
-			if(i==yearBeginn && i== yearEnd){
-				for(int j=beginnQuarter;j<=endQuarter;j++){
+			if(i==yearBegin && i== yearEnd){
+				for(int j=beginQuarter;j<=endQuarter;j++){
 					quarters.add(buildQuarter(j,i));
 				}
 			}else if(i==yearEnd){
 				for(int j=1;j<=endQuarter;j++){
 					quarters.add(buildQuarter(j,i));
 				}
-			}else if(i==yearBeginn){
-				for(int j=beginnQuarter;j<=4;j++){
+			}else if(i==yearBegin){
+				for(int j=beginQuarter;j<=4;j++){
 					quarters.add(buildQuarter(j,i));
 				}
 			}else{
@@ -156,15 +155,9 @@ public class Timeline extends ScrollPane {
 		pane.getChildren().add(linePane);
 		
 		StackPane buttonPane = new StackPane();
-		ToggleButton btnQuarter = new ToggleButton("Q"+quarterNumber);
+		ButtonQuarter btnQuarter = new ButtonQuarter(quarterNumber, yearNumber);
 		btnQuarter.setOnAction(this::btnQuarterClick);
-		if(quarterPanes.get(yearNumber) == null){
-			ArrayList<ToggleButton> buttons = new ArrayList<ToggleButton>();
-			quarterPanes.put(yearNumber, buttons);
-		}
-		ArrayList<ToggleButton> buttons = quarterPanes.get(yearNumber);
-		buttons.add(btnQuarter);
-		quarterPanes.put(yearNumber, buttons);
+		quarterButtons.add(btnQuarter);
 		buttonPane.getChildren().add(btnQuarter);
 		pane.getChildren().add(buttonPane);
 		
@@ -181,25 +174,237 @@ public class Timeline extends ScrollPane {
 	
 	// this method is called when a year toggle button is clicked
 	private void btnYearClick(ActionEvent event){
-		ArrayList<ToggleButton> buttons = quarterPanes.get(Integer.valueOf(((Button)event.getSource()).getText()));
-		
 		boolean allSelected = true;
-		for(ToggleButton button : buttons){
-			if(!button.isSelected())
-				allSelected = false;
+		for(ButtonQuarter button : quarterButtons){
+			if(button.getYear() == Integer.valueOf(((Button)event.getSource()).getText()))
+				if(!button.isSelected())
+					allSelected = false;
 		}
 		
-		for(ToggleButton button : buttons){
-			if(allSelected)
-				button.setSelected(false);
-			else
-				button.setSelected(true);
+		boolean firstRun = true;
+		for(ButtonQuarter button : quarterButtons){
+			if(button.getYear() == Integer.valueOf(((Button)event.getSource()).getText())){
+				if(allSelected){
+					button.setSelected(false);
+					if(firstRun == true){
+						firstRun = false;
+						btnQuarterClick(new ActionEvent(button, null));
+					}
+				}else{
+					if(firstRun == true){
+						firstRun = false;
+						btnQuarterClick(new ActionEvent(button, null));
+					}
+					button.setSelected(true);
+				}
+				
+			}
 		}
+		
+		parent.refreshQuarterResults();
+	}
+	
+	
+	// get the quarter buttons between two other quarter buttons
+	private ArrayList<ButtonQuarter> getButtonsBetween(ButtonQuarter start, ButtonQuarter end){
+		ArrayList<ButtonQuarter> buttons = new ArrayList<ButtonQuarter>();
+		
+		for(ButtonQuarter button : quarterButtons){
+			if((start.getQuarterYear().isBefore(button.getQuarterYear()) && button.getQuarterYear().isBefore(end.getQuarterYear()) ||
+					(start.getQuarterYear().isAfter(button.getQuarterYear()) && button.getQuarterYear().isAfter(end.getQuarterYear())))){
+				buttons.add(button);
+			}
+		}
+		
+		return buttons;
+	}
+	
+	// get a quarter button by its quarter and year number
+	private ButtonQuarter getQuarterButton(int quarter, int year){
+		for(ButtonQuarter button : quarterButtons){
+			if(button.getYear() == year && button.getQuarter() == quarter)
+				return button;
+		}
+		return null;
+	}
+	
+	// get the group size after a selected button
+	private int getGroupSize(ButtonQuarter startButton){
+		ButtonQuarter after = null;
+		if(startButton.getQuarter() == 4)
+			after = getQuarterButton(1, startButton.getYear()+1);
+		else
+			after = getQuarterButton(startButton.getQuarter()+1, startButton.getYear());
+		
+		if(after != null && after.isSelected())
+			return 1+ getGroupSize(after);
+		else
+			return 1;
 	}
 	
 	
 	// this method is called when a quarter toggle button is clicked
 	private void btnQuarterClick(ActionEvent event){
+		ButtonQuarter btnQuarter = (ButtonQuarter) event.getSource();
 		
+		// select buttons between
+		ArrayList<ButtonQuarter> buttons = null;
+		for(ButtonQuarter button : quarterButtons){
+			if((button.isSelected() && buttons == null) || (button.isSelected() && !button.equals(btnQuarter) && buttons != null && !buttons.contains(button))){
+				buttons = getButtonsBetween(button, btnQuarter);
+			}
+		}
+		if(buttons != null)
+			for(ButtonQuarter button : buttons){
+				button.setSelected(true);
+			}
+		
+		// keep the greatest group of at least a pair
+		int maxGroupSize = 0;
+		ButtonQuarter startButton = null;
+		ButtonQuarter endButton = null;
+		for(int i=0;i<quarterButtons.size();i++){
+			ButtonQuarter earliest = quarterButtons.get(i);
+			if(earliest.isSelected()){
+				int groupSize = getGroupSize(earliest);
+				
+				if(groupSize > maxGroupSize){
+					startButton = earliest;
+					endButton = quarterButtons.get(i+groupSize-1);
+					maxGroupSize = groupSize;
+					
+					i = i+groupSize-1;
+				}
+			}
+		}
+		
+		if(startButton != null && endButton != null){
+			ArrayList<ButtonQuarter> group = getButtonsBetween(startButton, endButton);
+			group.add(startButton);
+			group.add(endButton);
+			for(ButtonQuarter button : quarterButtons){
+				if(!group.contains(button))
+					button.setSelected(false);
+			}
+		}
+		
+		if(event.getTarget() != null)
+			parent.refreshQuarterResults();
+	}
+	
+	
+	
+	/**
+	 * Create a new time line
+	 * @param startDate
+	 * @param endDate
+	 */
+	public void createTimeline(LocalDate startDate, LocalDate endDate){
+		int beginnQuarter = ((startDate.getMonthValue() -1) /3) +1;
+		int endQuarter = ((endDate.getMonthValue() -1) /3) +1;
+		
+		createTimeline(startDate.getYear(), beginnQuarter, endDate.getYear(), endQuarter);
+	}
+	
+	/**
+	 * Create a new time line
+	 * @param yearBeginn
+	 * @param beginnQuarter
+	 * @param yearEnd
+	 * @param endQuarter
+	 */
+	public void createTimeline(int yearBeginn, int beginnQuarter, int yearEnd, int endQuarter){
+		quarterButtons.clear();
+		
+		AnchorPane time = buildTimeline(yearBeginn, beginnQuarter, yearEnd, endQuarter);
+		this.setMinHeight(110d);
+		this.setMaxHeight(time.maxHeight(0d));
+		stkTimeline.getChildren().add(time);	
+	}
+	
+	
+	
+	/**
+	 * Get the selected start year
+	 * @return the selected year
+	 */
+	public int getSelectedYearBegin(){
+		for(ButtonQuarter button : quarterButtons){
+			if(button.isSelected())
+				return button.getYear();
+		}
+		return -1;
+	}
+	
+	/**
+	 * Get the selected start quarter
+	 * @return the selected quarter
+	 */
+	public int getSelectedQuarterBegin(){
+		for(ButtonQuarter button : quarterButtons){
+			if(button.isSelected())
+				return button.getQuarter();
+		}
+		return -1;
+	}
+	
+	/**
+	 * Get the selected end year
+	 * @return the selected year
+	 */
+	public int getSelectedYearEnd(){
+		for(int i=quarterButtons.size()-1;i>=0;i--){
+			if(quarterButtons.get(i).isSelected())
+				return quarterButtons.get(i).getYear();
+		}
+		return -1;
+	}
+	
+	/**
+	 * Get the selected end quarter
+	 * @return the selected quarter
+	 */
+	public int getSelectedQuarterEnd(){
+		for(int i=quarterButtons.size()-1;i>=0;i--){
+			if(quarterButtons.get(i).isSelected())
+				return quarterButtons.get(i).getQuarter();
+		}
+		return -1;
+	}
+	
+	
+	
+	// own class for the quarter toggle buttons
+	private class ButtonQuarter extends ToggleButton{
+		
+		private int year;
+		private int quarter;
+		
+		public ButtonQuarter(int quarter, int year){
+			super("Q"+quarter);
+			this.year = year;
+			this.quarter = quarter;
+		}
+		
+		
+		/**
+		 * Get the year number
+		 * @return the year
+		 */
+		public int getYear(){
+			return year;
+		}
+		
+		/**
+		 * Get the quarter number
+		 * @return the quarter
+		 */
+		public int getQuarter(){
+			return quarter;
+		}
+		
+		public LocalDate getQuarterYear(){
+			return LocalDate.of(year, quarter*3, 1);
+		}
 	}
 }

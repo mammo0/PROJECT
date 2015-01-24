@@ -21,53 +21,53 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import client.core.Core;
 import client.core.ICoreClient;
-import client.core.costTableModel;
-import client.core.pdTableModel;
-import client.core.quarterTableModel;
+import client.core.CostTableModel;
+import client.core.PDTableModel;
+import client.core.QuarterTableModel;
 
 public class ResultTab extends AnchorPane {
 	
 	@FXML
-	private TableView<pdTableModel> tblPD;
+	private TableView<PDTableModel> tblPD;
 	@FXML
-	private TableColumn<pdTableModel, String> colSkillPD;
+	private TableColumn<PDTableModel, String> colSkillPD;
 	@FXML
-	private TableColumn<pdTableModel, Integer> colShouldPD;
+	private TableColumn<PDTableModel, Integer> colShouldPD;
 	@FXML
-	private TableColumn<pdTableModel, Integer> colIsPD;
+	private TableColumn<PDTableModel, Integer> colIsPD;
 	@FXML
-	private TableColumn<pdTableModel, Integer> colIsPDInt;
+	private TableColumn<PDTableModel, Integer> colIsPDInt;
 	@FXML
-	private TableColumn<pdTableModel, Integer> colIsPDExt;
-	private ObservableList<pdTableModel> pdData;
+	private TableColumn<PDTableModel, Integer> colIsPDExt;
+	private ObservableList<PDTableModel> pdData;
 	
 	
 	@FXML
-	private TableView<costTableModel> tblCost;
+	private TableView<CostTableModel> tblCost;
 	@FXML
-	private TableColumn<costTableModel, String> colSkillCost;
+	private TableColumn<CostTableModel, String> colSkillCost;
 	@FXML
-	private TableColumn<costTableModel, Float> colTotalCost;
+	private TableColumn<CostTableModel, Float> colTotalCost;
 	@FXML
-	private TableColumn<costTableModel, Float> colIntCost;
+	private TableColumn<CostTableModel, Float> colIntCost;
 	@FXML
-	private TableColumn<costTableModel, Float> colExtCost;
-	private ObservableList<costTableModel> costData;
+	private TableColumn<CostTableModel, Float> colExtCost;
+	private ObservableList<CostTableModel> costData;
 	
 	
 	@FXML
-	private TableView<quarterTableModel> tblQuarter;
+	private TableView<QuarterTableModel> tblQuarter;
 	@FXML
-	private TableColumn<quarterTableModel, String> colSkillQuarter;
+	private TableColumn<QuarterTableModel, String> colSkillQuarter;
 	@FXML
-	private TableColumn<quarterTableModel, Float> colIntCostQuarter;
+	private TableColumn<QuarterTableModel, Float> colIntCostQuarter;
 	@FXML
-	private TableColumn<quarterTableModel, Float> colExtCostQuarter;
+	private TableColumn<QuarterTableModel, Float> colExtCostQuarter;
 	@FXML
-	private TableColumn<quarterTableModel, Integer> colIntPDQuarter;
+	private TableColumn<QuarterTableModel, Integer> colIntPDQuarter;
 	@FXML
-	private TableColumn<quarterTableModel, Integer> colExtPDQuarter;
-	private ObservableList<quarterTableModel> quarterData;
+	private TableColumn<QuarterTableModel, Integer> colExtPDQuarter;
+	private ObservableList<QuarterTableModel> quarterData;
 	
 	
 	@FXML
@@ -113,7 +113,7 @@ public class ResultTab extends AnchorPane {
 		btnFinish.disableProperty().bind(finishable.not());
 		
 		// add the time line
-		timeline = new Timeline(2014, 1, 2015, 4);
+		timeline = new Timeline(this);
 		ancTimeline.getChildren().add(timeline);
 		AnchorPane.setTopAnchor(timeline, 0d);
 		AnchorPane.setBottomAnchor(timeline, 0d);
@@ -123,15 +123,15 @@ public class ResultTab extends AnchorPane {
 		
 		// Set up the pd table
 		prepareTable(tblPD);
-		PropertyValueFactory<pdTableModel, Integer> pdShould = new PropertyValueFactory<pdTableModel, Integer>("pdShould");
-		PropertyValueFactory<pdTableModel, Integer> pdIs = new PropertyValueFactory<pdTableModel, Integer>("pdIs");
+		PropertyValueFactory<PDTableModel, Integer> pdShould = new PropertyValueFactory<PDTableModel, Integer>("pdShould");
+		PropertyValueFactory<PDTableModel, Integer> pdIs = new PropertyValueFactory<PDTableModel, Integer>("pdIs");
 		
 		colSkillPD.setCellValueFactory(
-				new PropertyValueFactory<pdTableModel, String>("skillName")
+				new PropertyValueFactory<PDTableModel, String>("skillName")
 			);
 		colShouldPD.setCellValueFactory(pdShould);
 		colShouldPD.setCellFactory(column -> {
-		    return new TableCell<pdTableModel, Integer>() {
+		    return new TableCell<PDTableModel, Integer>() {
 		        @Override
 		        protected void updateItem(Integer item, boolean empty) {
 		            super.updateItem(item, empty);
@@ -140,7 +140,7 @@ public class ResultTab extends AnchorPane {
 		                setText(null);
 		                setStyle("");
 		            }else{
-		            	int pdIsValue = pdIs.call(new CellDataFeatures<pdTableModel, Integer>(tblPD, colIsPD, pdData.get(getIndex()))).getValue();
+		            	int pdIsValue = pdIs.call(new CellDataFeatures<PDTableModel, Integer>(tblPD, colIsPD, pdData.get(getIndex()))).getValue();
 		            	if(pdIsValue<item){
 		            		setStyle("-fx-background-color: red; -fx-text-fill: white;");
 		            		errorCells.add(this);
@@ -161,7 +161,7 @@ public class ResultTab extends AnchorPane {
 		});
 		colIsPD.setCellValueFactory(pdIs);
 		colIsPD.setCellFactory(column -> {
-		    return new TableCell<pdTableModel, Integer>() {
+		    return new TableCell<PDTableModel, Integer>() {
 		        @Override
 		        protected void updateItem(Integer item, boolean empty) {
 		            super.updateItem(item, empty);
@@ -170,7 +170,7 @@ public class ResultTab extends AnchorPane {
 		                setText(null);
 		                setStyle("");
 		            }else{
-		            	int pdShouldValue = pdShould.call(new CellDataFeatures<pdTableModel, Integer>(tblPD, colShouldPD, pdData.get(getIndex()))).getValue();
+		            	int pdShouldValue = pdShould.call(new CellDataFeatures<PDTableModel, Integer>(tblPD, colShouldPD, pdData.get(getIndex()))).getValue();
 		            	if(pdShouldValue>item){
 		            		setStyle("-fx-background-color: red; -fx-text-fill: white;");
 		            		finishable.set(false);
@@ -191,43 +191,51 @@ public class ResultTab extends AnchorPane {
 		    };
 		});
 		colIsPDInt.setCellValueFactory(
-			    new PropertyValueFactory<pdTableModel, Integer>("pdIsInt")
+			    new PropertyValueFactory<PDTableModel, Integer>("pdIsInt")
 			);
 		colIsPDExt.setCellValueFactory(
-			    new PropertyValueFactory<pdTableModel, Integer>("pdIsExt")
+			    new PropertyValueFactory<PDTableModel, Integer>("pdIsExt")
 			);
 		
 		// Set up the cost table
 		prepareTable(tblCost);
 		colSkillCost.setCellValueFactory(
-				new PropertyValueFactory<costTableModel, String>("skillName")
+				new PropertyValueFactory<CostTableModel, String>("skillName")
 			);
 		colTotalCost.setCellValueFactory(
-			    new PropertyValueFactory<costTableModel, Float>("costTotal")
+			    new PropertyValueFactory<CostTableModel, Float>("costTotal")
 			);
 		colIntCost.setCellValueFactory(
-			    new PropertyValueFactory<costTableModel, Float>("costInt")
+			    new PropertyValueFactory<CostTableModel, Float>("costInt")
 			);
 		colExtCost.setCellValueFactory(
-			    new PropertyValueFactory<costTableModel, Float>("costExt")
+			    new PropertyValueFactory<CostTableModel, Float>("costExt")
 			);
 		
 		// Set up the quarter table
+		prepareTable(tblQuarter);
 		colSkillQuarter.setCellValueFactory(
-				new PropertyValueFactory<quarterTableModel, String>("skillName")
+				new PropertyValueFactory<QuarterTableModel, String>("skillName")
 			);
 		colIntCostQuarter.setCellValueFactory(
-				new PropertyValueFactory<quarterTableModel, Float>("costInt")
+				new PropertyValueFactory<QuarterTableModel, Float>("costInt")
 			);
 		colExtCostQuarter.setCellValueFactory(
-				new PropertyValueFactory<quarterTableModel, Float>("costExt")
+				new PropertyValueFactory<QuarterTableModel, Float>("costExt")
 			);
 		colIntPDQuarter.setCellValueFactory(
-				new PropertyValueFactory<quarterTableModel, Integer>("pdInt")
+				new PropertyValueFactory<QuarterTableModel, Integer>("pdInt")
 			);
 		colExtPDQuarter.setCellValueFactory(
-				new PropertyValueFactory<quarterTableModel, Integer>("pdExt")
+				new PropertyValueFactory<QuarterTableModel, Integer>("pdExt")
 			);
+	}
+	
+	
+	// this mehtod refreshes the pd result tab
+	private void refreshPDResults(){
+		pdData = core.getPDTable(tbnRisk.isSelected());
+		tblPD.setItems(pdData);
 	}
 	
 	
@@ -238,7 +246,7 @@ public class ResultTab extends AnchorPane {
 		else
 			tbnRisk.setText("Risikozuschlag EIN");
 		
-//		displayResults();
+		refreshPDResults();
 	}
 	
 	
@@ -267,37 +275,52 @@ public class ResultTab extends AnchorPane {
 		});
 		
 		// iterate over all columns
-		for(TableColumn<Model, ?> columns : table.getColumns()){
-			columns.setCellFactory(column -> {
-			    return new TableCell<Model, Type>() {
-			        @Override
-			        protected void updateItem(Type item, boolean empty) {
-			            super.updateItem(item, empty);
-	
-			            if (item == null || empty) {
-			                setText(null);
-			                setStyle("");
-			            }else{
-			            	// mark the last line in the table
-			            	if(getIndex() == pdData.size()-1)
-			            		setStyle("-fx-background-color: lightgrey");
-			            	else
-			            		setStyle("");
-			            	
-			            	// display the floats with only two decimals
-			            	if(item instanceof Float){
-			            		NumberFormat formatter = NumberFormat.getCurrencyInstance();
-			            		setText(formatter.format(item));
-			            		return;
-			            	}
-			            	
-	                        setText(String.valueOf(item));
-	                    }
-			        }
-			    };
-			});
+		for(TableColumn<Model, ?> column : table.getColumns()){
+			if(!column.getColumns().isEmpty()){
+				for(TableColumn<Model, ?> innerColumn : column.getColumns()){
+					innerColumn.setCellFactory(columnFactory -> {
+					    return newTableCellFactory();
+					});
+				}
+			}else{
+				column.setCellFactory(columnFactory -> {
+				    return newTableCellFactory();
+				});
+			}
 		}
 	}
+	
+	// this method creates a specific table cell factory
+	private <Model, Type> TableCell<Model, Type> newTableCellFactory(){
+		return new TableCell<Model, Type>() {
+	        @Override
+	        protected void updateItem(Type item, boolean empty) {
+	            super.updateItem(item, empty);
+
+	            if (item == null || empty) {
+	                setText(null);
+	                setStyle("");
+	            }else{
+	            	// mark the last line in the table
+	            	if(getIndex() == pdData.size()-1)
+	            		setStyle("-fx-background-color: lightgrey");
+	            	else
+	            		setStyle("");
+	            	
+	            	// display the floats with only two decimals
+	            	if(item instanceof Float){
+	            		NumberFormat formatter = NumberFormat.getCurrencyInstance();
+	            		setText(formatter.format(item));
+	            		return;
+	            	}
+	            	
+                    setText(String.valueOf(item));
+                }
+	        }
+	    };
+	}
+	
+	
 	
 	
 	/**
@@ -318,13 +341,22 @@ public class ResultTab extends AnchorPane {
 	 * This method displays the results in the tables
 	 */
 	public void displayResults(){
-		pdData = core.getPDTable(tbnRisk.isSelected());
-		tblPD.setItems(pdData);
+		refreshPDResults();
 		
 		costData = core.getCostTable();
 		tblCost.setItems(costData);
 		
-//		quarterData = core.getQuarterTable();
-//		tblQuarter.setItems(quarterData);
+		timeline.createTimeline(core.getProjectStartDate(), core.getProjectEndDate());
+		refreshQuarterResults();
+	}
+	
+	
+	/**
+	 * This method refreshes the quarter results tab
+	 */
+	public void refreshQuarterResults(){
+		quarterData = core.getQuarterTable(timeline.getSelectedYearBegin(), timeline.getSelectedQuarterBegin(),
+										   timeline.getSelectedYearEnd(), timeline.getSelectedQuarterEnd());
+		tblQuarter.setItems(quarterData);
 	}
 }

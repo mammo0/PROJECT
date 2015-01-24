@@ -1,5 +1,6 @@
 package client.core;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 import javafx.collections.ObservableList;
@@ -34,19 +35,23 @@ public interface ICoreClient {
 	 * @param withRisk if the risk factor should be considered
 	 * @return the pd results
 	 */
-	public ObservableList<pdTableModel> getPDTable(boolean withRisk);
+	public ObservableList<PDTableModel> getPDTable(boolean withRisk);
 	
 	/**
 	 * Get an array list with the cost results
 	 * @return the cost results
 	 */
-	public ObservableList<costTableModel> getCostTable();
+	public ObservableList<CostTableModel> getCostTable();
 	
 	/**
 	 * Get an array list with the quarter results
+	 * @param yearBegin the start year
+	 * @param quarterBegin the start quarter
+	 * @param yearEnd the end year
+	 * @param quarterEnd the end quarter
 	 * @return the quarter results
 	 */
-	public ObservableList<quarterTableModel> getQuarterTable();
+	public ObservableList<QuarterTableModel> getQuarterTable(int yearBegin, int quarterBegin, int yearEnd, int quarterEnd);
 	
 	/**
 	 * Get the skills from the skill view
@@ -104,4 +109,16 @@ public interface ICoreClient {
 	 * @return true if the project is finished
 	 */
 	public boolean isProjectFinished();
+	
+	/**
+	 * Get the project start date
+	 * @return the start date
+	 */
+	public LocalDate getProjectStartDate();
+	
+	/**
+	 * Get the project end date
+	 * @return the end date
+	 */
+	public LocalDate getProjectEndDate();
 }

@@ -8,7 +8,7 @@ import javafx.beans.property.SimpleStringProperty;
  * @author Ammon
  *
  */
-public class costTableModel {
+public class CostTableModel {
 	public SimpleStringProperty skillName = new SimpleStringProperty();
 	public SimpleFloatProperty costTotal = new SimpleFloatProperty();
 	public SimpleFloatProperty costInt = new SimpleFloatProperty();

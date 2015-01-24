@@ -8,7 +8,7 @@ import javafx.beans.property.SimpleStringProperty;
  * @author Ammon
  *
  */
-public class pdTableModel {
+public class PDTableModel {
 	public SimpleStringProperty skillName = new SimpleStringProperty();
 	public SimpleIntegerProperty pdShould = new SimpleIntegerProperty();
 	public SimpleIntegerProperty pdIs = new SimpleIntegerProperty();
