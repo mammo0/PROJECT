@@ -315,6 +315,7 @@ public class Timeline extends ScrollPane {
 	 */
 	public void createTimeline(int yearBeginn, int beginnQuarter, int yearEnd, int endQuarter){
 		quarterButtons.clear();
+		stkTimeline.getChildren().clear();
 		
 		AnchorPane time = buildTimeline(yearBeginn, beginnQuarter, yearEnd, endQuarter);
 		this.setMinHeight(110d);

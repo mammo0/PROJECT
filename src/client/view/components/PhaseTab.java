@@ -194,7 +194,7 @@ public class PhaseTab extends ScrollPane implements IComponents {
 		
 		if(!phase.isSubPhase() && below.isSubPhase()){
 			date = getBelowStartDate(below);
-		}else if(phase.isSubPhase() && !below.isSubPhase() && !subPhases.get(below).isEmpty()){
+		}else if(phase.isSubPhase() && !below.isSubPhase() && subPhases.get(below) != null && !subPhases.get(below).isEmpty()){
 			date = getBelowStartDate(below);
 		}else{
 			date = below.getPhaseBegin();
