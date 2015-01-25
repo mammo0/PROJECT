@@ -7,7 +7,7 @@
 
 <fx:root fx:id="titlePane" type="TitledPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <content>
-      <GridPane>
+      <GridPane vgap="7.0">
          <columnConstraints>
             <ColumnConstraints hgrow="ALWAYS" />
          </columnConstraints>

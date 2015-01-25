@@ -54,18 +54,18 @@ public class ExpandableTable<Content extends Node & IExpandableNode> extends Scr
 		// set the column constraints
 		columnConstraints = new ArrayList<ColumnConstraints>();
 		ColumnConstraints col1 = new ColumnConstraints();
-	    col1.setPrefWidth(25d);
+	    col1.setMinWidth(28d);
 	    col1.setHgrow(Priority.NEVER);
-	    col1.setHalignment(HPos.CENTER);
+	    col1.setHalignment(HPos.LEFT);
 	    columnConstraints.add(col1);
 	    ColumnConstraints col2 = new ColumnConstraints();
 	    col2.setHgrow(Priority.ALWAYS);
 	    col2.setHalignment(HPos.CENTER);
 	    columnConstraints.add(col2);
 	    ColumnConstraints col3 = new ColumnConstraints();
-	    col3.setPrefWidth(25d);
+	    col3.setMinWidth(27d);
 	    col3.setHgrow(Priority.NEVER);
-	    col3.setHalignment(HPos.CENTER);
+	    col3.setHalignment(HPos.RIGHT);
 	    columnConstraints.add(col3);
 	    contentList.getColumnConstraints().addAll(columnConstraints);
 		
@@ -74,6 +74,7 @@ public class ExpandableTable<Content extends Node & IExpandableNode> extends Scr
 		contentPanes = new Hashtable<Integer, Content>();
 		btnContentRemoves = new Hashtable<Button, Integer>();
 		btnContentAdd = new Button("+");
+		btnContentAdd.setMinWidth(25d);
 		btnContentAdd.setOnAction(this::btnContentAddClick);
 		contentListAddRow();
 		
@@ -93,6 +94,7 @@ public class ExpandableTable<Content extends Node & IExpandableNode> extends Scr
 		contentPanes.put(contentListRowCount, newContent);
 		
 		Button btnContentRemove = new Button("-");
+		btnContentRemove.setMinWidth(25d);
 		btnContentRemove.setOnAction(this::btnContentRemoveClick);
 		btnContentRemoves.put(btnContentRemove, contentListRowCount);
 		
@@ -141,7 +143,6 @@ public class ExpandableTable<Content extends Node & IExpandableNode> extends Scr
 				btnContentRemoves.remove(btn);
 			}
 		}
-//		btnContentRemoves.remove(event.getSource());
 		contentPanes.clear();
 		
 		// special case on deleting the first line
