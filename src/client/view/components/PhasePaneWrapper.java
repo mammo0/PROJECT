@@ -3,12 +3,9 @@ package client.view.components;
 import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Stack;
 
-import client.core.Core;
-import client.core.ICoreClient;
-import client.view.ITester;
-import client.view.InputTester;
-import model.project.Skill;
+import javafx.application.Platform;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -25,6 +22,11 @@ import javafx.scene.control.TitledPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import model.project.Skill;
+import client.core.Core;
+import client.core.ICoreClient;
+import client.view.ITester;
+import client.view.InputTester;
 
 public class PhasePaneWrapper extends TitledPane implements ITester {
 	
@@ -49,6 +51,16 @@ public class PhasePaneWrapper extends TitledPane implements ITester {
 	private ArrayList<String> skillsInUse;
 	
 	private ICoreClient core;
+	
+	private boolean noDateCheck;
+	
+	private static Stack<Runnable> runnableStack;
+	
+	
+	static{
+		runnableStack = new Stack<Runnable>();
+	}
+	
 	
 	
 	/**
@@ -119,21 +131,45 @@ public class PhasePaneWrapper extends TitledPane implements ITester {
 		datPhaseBegin.valueProperty().addListener(new ChangeListener<LocalDate>(){
 			@Override
 			public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
-				if(newValue != null)
-					parent.checkPhaseDates(This, newValue, null);
-				if(newValue != null && (getPhaseEnd() == null || getPhaseEnd().isBefore(newValue)))
-					datPhaseEnd.setValue(newValue);
+				if(newValue != null){
+					Runnable run = new Runnable() {
+						@Override
+						public void run() {
+							boolean temp = noDateCheck;
+							if(!noDateCheck && !parent.checkPhaseDates(This, newValue, null)){
+								noDateCheck = true;
+								datPhaseBegin.setValue(oldValue);
+							}else if(temp)
+								noDateCheck = false;
+							
+							runnableStack.pop();
+						}
+					};
+					runnableStack.push(run);
+					Platform.runLater(run);
+				}
 			}
 		});
 		datPhaseEnd.valueProperty().addListener(new ChangeListener<LocalDate>(){
 			@Override
 			public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
-				if(newValue != null)
-					parent.checkPhaseDates(This, null, newValue);
-				if(getPhaseBegin() == null)
-					datPhaseBegin.setValue(newValue);
-				else if(newValue != null && newValue.isBefore(getPhaseBegin()))
-					datPhaseEnd.setValue(getPhaseBegin());
+				if(newValue != null){
+					Runnable run = new Runnable() {
+						@Override
+						public void run() {
+							boolean temp = noDateCheck;
+							if(!noDateCheck && !parent.checkPhaseDates(This, null, newValue)){
+								noDateCheck = true;
+								datPhaseEnd.setValue(oldValue);
+							}else if(temp)
+								noDateCheck = false;
+							
+							runnableStack.pop();
+						}
+					};
+					runnableStack.push(run);
+					Platform.runLater(run);
+				}
 			}
 		});
 		
@@ -148,6 +184,17 @@ public class PhasePaneWrapper extends TitledPane implements ITester {
 		else
 			parent.removeMainPhase(this);
 	}
+	
+	
+	
+	/**
+	 * Get the current size of the runnable stack
+	 * @return the size
+	 */
+	public static int getRunnableStackSize(){
+		return runnableStack.size();
+	}
+	
 	
 	
 	
@@ -286,6 +333,15 @@ public class PhasePaneWrapper extends TitledPane implements ITester {
 	 * @param phaseBeginn the begin date
 	 */
 	public void setPhaseBegin(LocalDate phaseBeginn){
+		setPhaseBegin(phaseBeginn, false);
+	}
+	/**
+	 *  Set the phase begin date
+	 * @param phaseBeginn the begin date
+	 * @param noDateCheck if the value should be checked
+	 */
+	public void setPhaseBegin(LocalDate phaseBeginn, boolean noDateCheck){
+		this.noDateCheck = noDateCheck;
 		datPhaseBegin.setValue(phaseBeginn);
 	}
 	
@@ -303,6 +359,15 @@ public class PhasePaneWrapper extends TitledPane implements ITester {
 	 * @param phaseEnd the end date
 	 */
 	public void setPhaseEnd(LocalDate phaseEnd){
+		setPhaseEnd(phaseEnd, false);
+	}
+	/**
+	 * Set the phase end date
+	 * @param phaseEnd the end date
+	 * @param noDateCheck if the value should be checked
+	 */
+	public void setPhaseEnd(LocalDate phaseEnd, boolean noDateCheck){
+		this.noDateCheck = noDateCheck;
 		datPhaseEnd.setValue(phaseEnd);
 	}
 	

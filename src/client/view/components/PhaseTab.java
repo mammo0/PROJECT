@@ -8,6 +8,9 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
+import com.sun.org.apache.bcel.internal.generic.IFNE;
+
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,6 +20,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TitledPane;
 import client.view.IComponents;
+import client.view.dialogs.Dialog;
+import client.view.dialogs.DialogConfirmation;
 
 public class PhaseTab extends ScrollPane implements IComponents {
 	
@@ -28,6 +33,10 @@ public class PhaseTab extends ScrollPane implements IComponents {
 	
 	private AddPhaseWrapper addMain;
 	
+	private static boolean changeAbove;
+	private static boolean changeBelow;
+	
+	private boolean ignoreDateDialog;
 	
 	
 	/**
@@ -72,12 +81,35 @@ public class PhaseTab extends ScrollPane implements IComponents {
 	}
 	
 	
+	// this method waits until all date checks are performed
+	// then it sets the ignoreDateDialog boolean to false
+	private void endIgnoreDateDialog(){
+		Platform.runLater(new Runnable() {
+			@Override
+			public void run() {
+				new Thread(){
+					public void run(){
+						while(PhasePaneWrapper.getRunnableStackSize() != 0)
+							try {
+								Thread.sleep(1);
+							} catch (InterruptedException e) {
+								e.printStackTrace();
+							}
+						ignoreDateDialog = false;
+					}
+				}.start();
+			}
+		});
+	}
+	
+	
 	/**
 	 * Check if the phases are overlapping. If so change the other phase dates.
 	 * @param phase the phase to be checked
+	 * @return true if values have changed
 	 */
-	public void checkPhaseDates(PhasePaneWrapper phase){
-		checkPhaseDates(phase, phase.getPhaseBegin(), phase.getPhaseEnd());
+	public boolean checkPhaseDates(PhasePaneWrapper phase){
+		return checkPhaseDates(phase, phase.getPhaseBegin(), phase.getPhaseEnd());
 	}
 	
 	
@@ -86,61 +118,124 @@ public class PhaseTab extends ScrollPane implements IComponents {
 	 * @param phase the phase to be checked
 	 * @param phaseStart start date of the phase
 	 * @param phaseEnd end date of the phase
+	 * @return true if values have changed
 	 */
-	public void checkPhaseDates(PhasePaneWrapper phase, LocalDate phaseStart, LocalDate phaseEnd){
+	public boolean checkPhaseDates(PhasePaneWrapper phase, LocalDate phaseStart, LocalDate phaseEnd){
+		boolean changed = false;
+		
+		// check phase itself
+		if((phase.getPhaseEnd() == null && phaseStart != null) ||
+				(phase.getPhaseBegin() != null && phase.getPhaseEnd() != null && phase.getPhaseBegin().isAfter(phase.getPhaseEnd()))){
+			phase.setPhaseEnd(phase.getPhaseBegin(), true);
+			changed = true;
+		}
+		if(phase.getPhaseBegin() == null && phaseEnd != null){
+			phase.setPhaseBegin(phaseEnd, true);
+			changed = true;
+		}
+		
 		// check above
 		LocalDate aboveEnd = getAboveEndDate(phase);
-		if(phaseStart == null && aboveEnd != null){
+		if(phase.getPhaseBegin() == null && aboveEnd != null){
 			phase.setPhaseBegin(aboveEnd.plusDays(1));
 		}
 		else if(aboveEnd != null && phaseStart != null){
 			if(aboveEnd.isAfter(phaseStart) || aboveEnd.isEqual(phaseStart)){
 				PhasePaneWrapper above = getPhaseAbove(phase);
 				if(above.getPhaseBegin() != null && above.getPhaseEnd() != null){
-					// TODO dialog confirmation
+					String message = "Das eigegebene Datum liegt vor oder auf dem Ende der vorherigen Phase: "
+							+ above.getPhaseName() +"\n"
+							+ "Möchten Sie diese nach vorne verlegen?";
+					DialogConfirmation confirmation = new DialogConfirmation("Phasenverschiebung", message);
+					if(!ignoreDateDialog && PhasePaneWrapper.getRunnableStackSize() == 1 &&
+							!Dialog.showDialog(confirmation))
+						return false;
 					
-					int aboveDuration = Period.between(above.getPhaseBegin(), above.getPhaseEnd()).getDays();
-					above.setPhaseBegin(phaseStart.minusDays(aboveDuration+1));
-					above.setPhaseEnd(phaseStart.minusDays(1));
+					changeAbove = true;
+					if(!changeBelow){
+						int aboveDuration = Period.between(above.getPhaseBegin(), above.getPhaseEnd()).getDays();
+						above.setPhaseBegin(phaseStart.minusDays(aboveDuration+1));
+						above.setPhaseEnd(phaseStart.minusDays(1));
+						changed = true;
+					}
+					changeAbove = false;
 				}
 			}else if(!phaseStart.minusDays(1).isEqual(aboveEnd)){
 				PhasePaneWrapper above = getPhaseAbove(phase);
 				if(above.getPhaseBegin() != null && above.getPhaseEnd() != null){
-					// TODO dialog confirmation
+					String message = "Das eigegebene Startdatum liegt nach dem Ende der vorherigen Phase: "
+							+ above.getPhaseName() +"\n"
+							+ "Möchten Sie diese nach hinten verlegen?";
+					DialogConfirmation confirmation = new DialogConfirmation("Phasenverschiebung", message);
+					if(!ignoreDateDialog && PhasePaneWrapper.getRunnableStackSize() == 1 &&
+							!Dialog.showDialog(confirmation))
+						return false;
 					
-					int aboveDuration = Period.between(above.getPhaseBegin(), above.getPhaseEnd()).getDays();
-					above.setPhaseEnd(phaseStart.minusDays(1));
-					above.setPhaseBegin(above.getPhaseEnd().minusDays(aboveDuration));
+					changeAbove = true;
+					if(!changeBelow){
+						int aboveDuration = Period.between(above.getPhaseBegin(), above.getPhaseEnd()).getDays();
+						above.setPhaseEnd(phaseStart.minusDays(1));
+						above.setPhaseBegin(phaseStart.minusDays(aboveDuration+1));
+						changed = true;
+					}
+					changeAbove = false;
 				}
 			}
 		}
 		
 		// check below
 		LocalDate belowStart = getBelowStartDate(phase);
-		if(phaseEnd == null && belowStart != null)
+		if(phase.getPhaseEnd() == null && belowStart != null)
 			phase.setPhaseEnd(belowStart.minusDays(1));
 		else if(belowStart != null && phaseEnd != null){
 			if(belowStart.isBefore(phaseEnd) || belowStart.isEqual(phaseEnd)){
 				PhasePaneWrapper below = getPhaseBelow(phase);
 				if(below.getPhaseBegin() != null && below.getPhaseEnd() != null){
-					// TODO dialog confirmation
+					String message = "Das eigegebene Datum liegt nach oder auf dem Anfang der nächsten Phase: "
+							+ below.getPhaseName() +"\n"
+							+ "Möchten Sie diese nach hinten verlegen?";
+					DialogConfirmation confirmation = new DialogConfirmation("Phasenverschiebung", message);
+					if(!ignoreDateDialog && PhasePaneWrapper.getRunnableStackSize() == 1 &&
+							!Dialog.showDialog(confirmation))
+						return false;
 					
-					int belowDuration = Period.between(below.getPhaseBegin(), below.getPhaseEnd()).getDays();
-					below.setPhaseEnd(phaseEnd.plusDays(belowDuration+1));
-					below.setPhaseBegin(phaseEnd.plusDays(1));
+					changeBelow = true;
+					if(!changeAbove){
+						int belowDuration = Period.between(below.getPhaseBegin(), below.getPhaseEnd()).getDays();
+						below.setPhaseEnd(phaseEnd.plusDays(belowDuration+1));
+						below.setPhaseBegin(phaseEnd.plusDays(1));
+						changed = true;
+					}
+					changeBelow = false;
 				}
 			}else if(!phaseEnd.plusDays(1).isEqual(belowStart)){
 				PhasePaneWrapper below = getPhaseBelow(phase);
 				if(below.getPhaseBegin() != null && below.getPhaseEnd() != null){
-					// TODO dialog confirmation
+					String message = "Das eigegebene Enddatum liegt vor dem Anfang der nächsten Phase: "
+							+ below.getPhaseName() +"\n"
+							+ "Möchten Sie diese nach vorne verlegen?";
+					DialogConfirmation confirmation = new DialogConfirmation("Phasenverschiebung", message);
+					if(!ignoreDateDialog && PhasePaneWrapper.getRunnableStackSize() == 1 &&
+							!Dialog.showDialog(confirmation))
+						return false;
 					
-					int belowDuration = Period.between(below.getPhaseBegin(), below.getPhaseEnd()).getDays();
-					below.setPhaseBegin(phaseEnd.plusDays(1));
-					below.setPhaseEnd(phaseEnd.plusDays(belowDuration+1));
+					changeBelow = true;
+					if(!changeAbove){
+						int belowDuration = Period.between(below.getPhaseBegin(), below.getPhaseEnd()).getDays();
+						below.setPhaseBegin(phaseEnd.plusDays(1));
+						below.setPhaseEnd(phaseEnd.plusDays(belowDuration+1));
+						changed = true;
+					}
+					changeBelow = false;
 				}
 			}
-				
 		}
+		
+		if(!changed && ((phaseStart == null && phaseEnd != null) || (phaseStart != null && phaseEnd == null))){
+			changed = true;
+		}
+		
+		return changed;
 	}
 	
 	
@@ -278,7 +373,17 @@ public class PhaseTab extends ScrollPane implements IComponents {
 	 * @param phase the main phase to remove
 	 */
 	public void removeMainPhase(PhasePaneWrapper phase){
+		String message = "Möchten Sie die Phase: " + phase.getPhaseName() +"\n"
+				+"wirklich löschen? Alle nachfolgenden Phasen werden nach vorne verschoben.";
+		DialogConfirmation conformation = new DialogConfirmation("Phase löschen?", message);
+		if(!Dialog.showDialog(conformation))
+			return;
+		
 		int indexBeginn = accPhaseList.getPanes().indexOf(phase);
+		
+		PhasePaneWrapper surroundPhase = getPhaseAbove(phase);
+		if(surroundPhase == null)
+			surroundPhase = getPhaseBelow(phase);
 		
 		int indexEnd;
 		try{
@@ -291,6 +396,12 @@ public class PhaseTab extends ScrollPane implements IComponents {
 		
 		subPhases.remove(phase);
 		mainPhases.remove(phase);
+		
+		if(surroundPhase != null){
+			ignoreDateDialog = true;
+			checkPhaseDates(surroundPhase);
+			endIgnoreDateDialog();
+		}	
 	}
 	
 	
@@ -299,6 +410,16 @@ public class PhaseTab extends ScrollPane implements IComponents {
 	 * @param phase the sub phase to remove
 	 */
 	public void removeSubPhase(PhasePaneWrapper phase){
+		String message = "Möchten Sie die Phase: " + phase.getPhaseName() +"\n"
+				+"wirklich löschen? Alle nachfolgenden Phasen werden nach vorne verschoben.";
+		DialogConfirmation conformation = new DialogConfirmation("Phase löschen?", message);
+		if(!Dialog.showDialog(conformation))
+			return;
+		
+		PhasePaneWrapper surroundPhase = getPhaseAbove(phase);
+		if(surroundPhase == null)
+			surroundPhase = getPhaseBelow(phase);
+		
 		int index = accPhaseList.getPanes().indexOf(phase);
 		accPhaseList.getPanes().remove(index);
 		
@@ -321,6 +442,12 @@ public class PhaseTab extends ScrollPane implements IComponents {
 		}
 		
 		this.checkMainPhases();
+		
+		if(surroundPhase != null){
+			ignoreDateDialog = true;
+			checkPhaseDates(surroundPhase);
+			endIgnoreDateDialog();
+		}
 	}
 	
 	

@@ -33,6 +33,8 @@ import client.view.components.ResourcePane;
 import client.view.components.ResourcePaneWrapper;
 import client.view.components.SettingsMenu;
 import client.view.components.SkillPane;
+import client.view.dialogs.Dialog;
+import client.view.dialogs.DialogConfirmation;
 
 /**
  * This class handles the user interactions from the view
@@ -111,8 +113,12 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 	
 	@FXML
 	private void deleteProject(){
-		//TODO confirmation dialog
-		core.deleteProject(lstProjects.getSelectionModel().getSelectedItem());
+		String message = "Möchten Sie das Projekt: "
+				+ lstProjects.getSelectionModel().getSelectedItem() + "\n"
+				+ "wirklich löschen?";
+		DialogConfirmation confirmation = new DialogConfirmation("Wirklich löschen?", message);
+		if(Dialog.showDialog(confirmation))
+			core.deleteProject(lstProjects.getSelectionModel().getSelectedItem());
 	}
 	
 	

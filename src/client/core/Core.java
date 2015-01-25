@@ -36,6 +36,9 @@ import client.view.components.PhasePaneWrapper;
 import client.view.components.ResourcePane;
 import client.view.components.ResourcePaneWrapper;
 import client.view.components.SkillPane;
+import client.view.dialogs.Dialog;
+import client.view.dialogs.DialogConfirmation;
+import client.view.dialogs.DialogError;
 
 /**
  * This class is the core for the client application
@@ -72,6 +75,16 @@ public class Core extends ASingelton implements ICoreClient {
 		return "rmi://"+serverAddress+":"+serverPort+"/PROJECT";
 	}
 	
+	// this method asks the user if he wants to establish a new connection to the server
+	private void askForNewConnection(){
+		if(view != null){
+			String message = "Möchten Sie versuchen eine neue Verbindung zum Server herzustellen?";
+			DialogConfirmation confirmation = new DialogConfirmation("Neue Verbindung?", message);
+			if(Dialog.showDialog(confirmation))
+				openNewConnection();
+		}
+	}
+	
 	// this method opens a new connection to the server
 	private void openNewConnection(){
 		// close the old connection
@@ -80,11 +93,20 @@ public class Core extends ASingelton implements ICoreClient {
 		// open a new one
 		try {
 			server = (IServerService) Naming.lookup(buildRmiurl(serverAddress));
-			if(view != null)
+			if(view != null){
+				view.setStatus("Verbindung zum Server hergestellt.", 10);
 				view.displayProjects(server.getAllProjectNames());
+			}
 		} catch (MalformedURLException | RemoteException | NotBoundException e) {
-			if(view != null)
-				view.setStatus("Keine Verbindung zum Server möglich.", 0);
+			if(view != null){
+				String messge = "Keine Verbindung zum Server möglich.";
+				DialogError error = new DialogError("Verbindungsproblem", messge, e);
+				Dialog.showDialog(error);
+				
+				view.setStatus(messge, 0);
+				
+				askForNewConnection();
+			}
 		}
 	}
 	
@@ -108,8 +130,13 @@ public class Core extends ASingelton implements ICoreClient {
 			
 			openNewConnection();
 		} catch (IOException e) {
-			if(view != null)
-				view.setStatus("Bitte die Servereinstellungen überprüfen.", 0);
+			if(view != null){
+				String message = "Bitte überprüfen Sie die Einstellungen.";
+				DialogError error = new DialogError("Falsche Einstellungen", message, e);
+				Dialog.showDialog(error);
+				
+				view.setStatus(message, 0);
+			}
 		}
 	}
 	
@@ -531,7 +558,13 @@ public class Core extends ASingelton implements ICoreClient {
 				writer.write(lastLine);
 				writer.close();
 			} catch (IOException e) {
-				e.printStackTrace();
+				if(view != null){
+					String message = "Die Einstellungen konnten nicht gespeichert werden.";
+					DialogError error = new DialogError("Speichern der Einstellungen", message, e);
+					Dialog.showDialog(error);
+					
+					view.setStatus(message, 10);
+				}
 			}
 			
 			openNewConnection();
@@ -682,12 +715,20 @@ public class Core extends ASingelton implements ICoreClient {
 			return false;
 		try {
 			result = server.calculateProject(project);
-		} catch (RemoteException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			if(view != null){
+				String message = "Fehler beim Berechnen des Projekts.";
+				DialogError error = new DialogError("Projekt berechnen", message+"\nBitte überprüfen Sie die Serververbindung.", e);
+				Dialog.showDialog(error);
+				
+				view.setStatus(message, 10);
+				
+				askForNewConnection();
+			}
 		}
 		
 		project = result;
-		
+		view.setStatus("Berechnung erfolgreich.", 5);
 		return true;
 	}
 	
@@ -698,8 +739,17 @@ public class Core extends ASingelton implements ICoreClient {
 			try {
 				server.saveProject(project);
 				view.displayProjects(server.getAllProjectNames());
-			} catch (RemoteException e) {
-				e.printStackTrace();
+				view.setStatus(project.getProjectName()+" wurde gespeichert.", 5);
+			} catch (Exception e) {
+				if(view != null){
+					String message = "Fehler beim Speichern des Projekts";
+					DialogError error = new DialogError("Speichern des Projekts", message+"\nBitte überprüfen Sie die Serververbindung.", e);
+					Dialog.showDialog(error);
+					
+					view.setStatus(message, 10);
+					
+					askForNewConnection();
+				}
 			}
 		}
 	}
@@ -710,12 +760,21 @@ public class Core extends ASingelton implements ICoreClient {
 		
 		try {
 			project = server.loadProject(projectName);
-		} catch (RemoteException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			if(view != null){
+				String message = "Fehler beim Laden des Projekts";
+				DialogError error = new DialogError("Laden des Projekts", message+"\nBitte überprüfen Sie die Serververbindung.", e);
+				Dialog.showDialog(error);
+				
+				view.setStatus(message, 10);
+				
+				askForNewConnection();
+			}
 			return;
 		}
 		
 		showProject();
+		view.setStatus(projectName+" wurde geladen.", 5);
 	}
 	
 	@Override
@@ -723,8 +782,17 @@ public class Core extends ASingelton implements ICoreClient {
 		try {
 			server.deleteProject(projectName);
 			view.displayProjects(server.getAllProjectNames());
-		} catch (RemoteException e) {
-			e.printStackTrace();
+			view.setStatus(projectName+" wurde gelöscht.", 5);
+		} catch (Exception e) {
+			if(view != null){
+				String message = "Fehler beim Löschen des Projekts";
+				DialogError error = new DialogError("Löschen des Projekts", message+"\nBitte überprüfen Sie die Serververbindung.", e);
+				Dialog.showDialog(error);
+				
+				view.setStatus(message, 10);
+				
+				askForNewConnection();
+			}
 		}
 	}
 	
@@ -735,12 +803,22 @@ public class Core extends ASingelton implements ICoreClient {
 		
 		try {
 			server.saveProject(project);
-		} catch (RemoteException e) {
-			e.printStackTrace();
+		} catch (Exception e) {
+			if(view != null){
+				String message = "Fehler beim Speichern des Projekts";
+				DialogError error = new DialogError("Speichern des Projekts", message+"\nBitte überprüfen Sie die Serververbindung.", e);
+				Dialog.showDialog(error);
+				
+				view.setStatus(message, 10);
+				
+				askForNewConnection();
+			}
+			return;
 		}
 		
 		view.setProjectTimeStamp(project.getTimestamp());
 		view.disableWrite(true);
+		view.setStatus(project.getProjectName()+" wurde gemeldet.", 5);
 	}
 	
 	@Override
