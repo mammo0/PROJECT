@@ -16,12 +16,14 @@ import javafx.geometry.Insets;
 import javafx.geometry.VPos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
+import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.Priority;
+import javafx.util.Callback;
 import model.project.Skill;
 import client.core.Core;
 import client.core.ICoreClient;
@@ -53,6 +55,8 @@ public class PhasePaneWrapper extends TitledPane implements ITester {
 	private ICoreClient core;
 	
 	private boolean noDateCheck;
+	
+	private boolean writeProtected;
 	
 	private static Stack<Runnable> runnableStack;
 	
@@ -150,6 +154,23 @@ public class PhasePaneWrapper extends TitledPane implements ITester {
 				}
 			}
 		});
+		datPhaseBegin.setDayCellFactory(new Callback<DatePicker, DateCell>() {
+            @Override
+            public DateCell call(final DatePicker datePicker) {
+                return new DateCell() {
+                    @Override
+                    public void updateItem(LocalDate item, boolean empty) {
+                        super.updateItem(item, empty);
+                       
+                        if (!empty && writeProtected) {
+                            setDisable(true);
+                        }else if(!empty && !writeProtected){
+                        	setDisable(false);
+                        }
+                    }
+                };
+            }
+        });
 		datPhaseEnd.valueProperty().addListener(new ChangeListener<LocalDate>(){
 			@Override
 			public void changed(ObservableValue<? extends LocalDate> observable, LocalDate oldValue, LocalDate newValue) {
@@ -172,6 +193,23 @@ public class PhasePaneWrapper extends TitledPane implements ITester {
 				}
 			}
 		});
+		datPhaseEnd.setDayCellFactory(new Callback<DatePicker, DateCell>() {
+            @Override
+            public DateCell call(final DatePicker datePicker) {
+                return new DateCell() {
+                    @Override
+                    public void updateItem(LocalDate item, boolean empty) {
+                        super.updateItem(item, empty);
+                       
+                        if (!empty && writeProtected) {
+                            setDisable(true);
+                        }else if(!empty && !writeProtected){
+                        	setDisable(false);
+                        }
+                    }
+                };
+            }
+        });
 		
 		// add an input tester to the text field
 		txtRiskFactor.textProperty().addListener(new InputTester(this, txtRiskFactor));
@@ -226,6 +264,7 @@ public class PhasePaneWrapper extends TitledPane implements ITester {
 	public void disableWrite(boolean disable){
 		btnRemovePhase.setVisible(!disable);
 		
+		writeProtected = disable;
 		datPhaseBegin.setEditable(!disable);
 		datPhaseEnd.setEditable(!disable);
 		txtPhaseName.setEditable(!disable);
