@@ -49,12 +49,13 @@ public class Core extends ASingelton implements ICoreServer {
 	private Project project;
 //	private Result result;
 	Hashtable<String, Integer> phasesdays = new Hashtable();
-	int _totalShould = 0;
-	int _totalShouldRisk = 0;
+//	int _totalShould = 0;
+//	int _totalShouldRisk = 0;
 	float _totalCostProject = 0;
 	int _totalmandaysProject = 0;
 	int _totalmandaysIntProject = 0;
 	int _totalmandaysShouldProject = 0;
+	int _totalmandaysShouldProjectRisk = 0;
 	int _totalmandaysExtProject = 0;
 	float _totalCostIntProject = 0;
 	float _totalCostExtProject = 0;
@@ -417,8 +418,8 @@ public class Core extends ASingelton implements ICoreServer {
 			float _dayrateExt = skill.getDayRateExt();
 			int _pdTotalBe = 0;
 			int _daysavailable = 0;
-			_totalShould = 0;
-			_totalShouldRisk = 0;
+			int _totalShould = 0;
+			int _totalShouldRisk = 0;
 
 			// calculate the total needed mandays per skill
 			_skillID = skill.getSkillID();
@@ -441,6 +442,7 @@ public class Core extends ASingelton implements ICoreServer {
 				}
 
 			}
+			_totalmandaysShouldProject = _totalmandaysShouldProject + _totalShould;
 			result.setPdTotalShould(_totalShould);
 
 			// calculate the total available mandays per skill intern/extern
@@ -502,9 +504,10 @@ public class Core extends ASingelton implements ICoreServer {
 			_totalCostIntProject = _totalCostIntProject +_costInt;
 			_totalCostExtProject = _totalCostExtProject +_costExt;
 			_totalmandaysProject = _totalmandaysProject + _pdTotalBe;
-			_totalmandaysShouldProject = _totalmandaysShouldProject + _totalShould;
+			
 			_totalmandaysIntProject = _totalmandaysIntProject +_pdInt;
 			_totalmandaysExtProject = _totalmandaysExtProject + _pdExt;
+			_totalmandaysShouldProjectRisk = _totalmandaysShouldProjectRisk + _totalShouldRisk;
 			
 			
 			// set the result variables
@@ -526,6 +529,7 @@ public class Core extends ASingelton implements ICoreServer {
 			project.getResult().setPdExtBe(_totalmandaysExtProject);
 			project.getResult().setCostInt(_totalCostIntProject);
 			project.getResult().setCostExt(_totalCostExtProject);
+			project.getResult().setPdTotalShouldRisk(_totalmandaysShouldProjectRisk);
 			
 						
 
