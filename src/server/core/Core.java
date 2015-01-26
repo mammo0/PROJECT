@@ -50,6 +50,16 @@ public class Core extends ASingelton implements ICoreServer {
 //	private Result result;
 	Hashtable<String, Integer> phasesdays = new Hashtable();
 	int _totalShould = 0;
+	int _totalShouldRisk = 0;
+	float _totalCostProject = 0;
+	int _totalmandaysProject = 0;
+	int _totalmandaysIntProject = 0;
+	int _totalmandaysShouldProject = 0;
+	int _totalmandaysExtProject = 0;
+	float _totalCostIntProject = 0;
+	float _totalCostExtProject = 0;
+	private Result resultProject;
+	
 	
 
 	private File projectFilesDir;
@@ -150,6 +160,8 @@ public class Core extends ASingelton implements ICoreServer {
 	@Override
 	public Project calculateProject(Project project) {
 		this.project = project;
+		resultProject = new Result();
+		project.setResult(resultProject);
 		if(project.getPhases().size()!= 0){
 		calculateLenght(project);
 		calculateProjectDays(project);
@@ -356,11 +368,12 @@ public class Core extends ASingelton implements ICoreServer {
 					availability = (resource.getAvailability()*0.01)*resource.getSkillAmount()*phasesdays.get(phase.getPhaseName());
 					//Wenn vorhandene Tage geringer als benötigte Tage der Phase
 					if(availability< phase.getSkills().get(SkillID)){
-						difdays = (int) (phase.getSkills().get(SkillID)-availability);
-						_totalShould = _totalShould + difdays;
-						System.out.println("Zu wenig Ressourcen");
+						//difdays = (int) (phase.getSkills().get(SkillID)-availability);
+						//System.out.println("Zu wenig Ressourcen");
+						phase.setEnoughDays(false);
 					}else{
-						System.out.println("passt");
+						//System.out.println("passt");
+						phase.setEnoughDays(true);
 					}
 				}
 				
@@ -386,8 +399,6 @@ public class Core extends ASingelton implements ICoreServer {
 
 			// set all temp variables
 			int _skillID = 0;
-			
-			int _totalShouldRisk = 0;
 			double _totalBe = 0;
 			double _totalBeExt = 0;
 			int _availability = 0;
@@ -407,6 +418,7 @@ public class Core extends ASingelton implements ICoreServer {
 			int _pdTotalBe = 0;
 			int _daysavailable = 0;
 			_totalShould = 0;
+			_totalShouldRisk = 0;
 
 			// calculate the total needed mandays per skill
 			_skillID = skill.getSkillID();
@@ -486,6 +498,15 @@ public class Core extends ASingelton implements ICoreServer {
 			_costTotal = _costInt + _costExt;
 			_pdTotalBe = _pdInt + _pdExt;
 
+			_totalCostProject = _totalCostProject + _costTotal;
+			_totalCostIntProject = _totalCostIntProject +_costInt;
+			_totalCostExtProject = _totalCostExtProject +_costExt;
+			_totalmandaysProject = _totalmandaysProject + _pdTotalBe;
+			_totalmandaysShouldProject = _totalmandaysShouldProject + _totalShould;
+			_totalmandaysIntProject = _totalmandaysIntProject +_pdInt;
+			_totalmandaysExtProject = _totalmandaysExtProject + _pdExt;
+			
+			
 			// set the result variables
 			result.setPdIntBe(_pdInt);
 			result.setPdExtBe(_pdExt);
@@ -496,8 +517,17 @@ public class Core extends ASingelton implements ICoreServer {
 			result.setCostInt(_costInt);
 			result.setCostTotal(_costTotal);
 			result.setPdTotalShouldRisk(_totalShouldRisk);
-
 			skill.setResult(result);
+			
+			project.getResult().setCostTotal(_totalCostProject);
+			project.getResult().setPdTotalBe(_totalmandaysProject);
+			project.getResult().setPdTotalShould(_totalmandaysShouldProject);
+			project.getResult().setPdIntBe(_totalmandaysIntProject);
+			project.getResult().setPdExtBe(_totalmandaysExtProject);
+			project.getResult().setCostInt(_totalCostIntProject);
+			project.getResult().setCostExt(_totalCostExtProject);
+			
+						
 
 		}
 

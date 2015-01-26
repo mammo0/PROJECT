@@ -11,6 +11,7 @@ import java.util.ArrayList;
  */
 public class Result implements Serializable {
 
+	
 	// the total people days
 	private int pdIntBe;
 	// the total people Ext days
@@ -127,7 +128,7 @@ public class Result implements Serializable {
 	public float getCostTotal() {
 		return costTotal;
 	}
-
+	
 	/**
 	 * Get the years of the project with their quarter results
 	 * 
