@@ -2,6 +2,15 @@ package server.view;
 
 import global.ASingelton;
 
+import java.awt.AWTException;
+import java.awt.Image;
+import java.awt.MenuItem;
+import java.awt.PopupMenu;
+import java.awt.SystemTray;
+import java.awt.Toolkit;
+import java.awt.TrayIcon;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.io.IOException;
 
 import javafx.application.Application;
@@ -22,17 +31,8 @@ import server.core.ICoreServer;
  */
 public class View extends ASingelton implements IViewServer {
 	
-	private ICoreServer core;
-	
 	private Stage primaryStage;
 	
-	
-	/**
-	 * Constructor
-	 */
-	public View(ICoreServer core) {
-		this.core = core;
-	}
 	
 	
 	
@@ -73,6 +73,65 @@ public class View extends ASingelton implements IViewServer {
 		}
 		
 		
+		public void setTray(Stage stage){
+			SystemTray sTray = null;
+			sTray = SystemTray.getSystemTray();
+			// TODO set icon
+			Image image = Toolkit.getDefaultToolkit().getImage("Mario-icon.png");
+			
+			ActionListener listenerShow = new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					Platform.runLater(new Runnable() {
+						@Override
+						public void run() {
+							stage.show();
+							stage.toFront();
+						}
+					});
+				}
+			};
+
+			ActionListener listenerClose = new ActionListener() {
+				@Override
+				public void actionPerformed(ActionEvent e) {
+					// stop the server
+					core.stopServer();
+					
+					System.exit(0);
+				}
+			};
+
+			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+				@Override
+				public void handle(WindowEvent arg0) {
+					stage.toBack();
+					stage.hide();
+				}
+			});
+			
+			
+			PopupMenu popup = new PopupMenu();
+			MenuItem showItem = new MenuItem("Öffnen");
+			MenuItem exitItem = new MenuItem("Beenden");
+
+			showItem.addActionListener(listenerShow);
+			exitItem.addActionListener(listenerClose);
+
+			popup.add(showItem);
+			popup.add(exitItem);
+
+			TrayIcon icon = new TrayIcon(image, "PROJECT", popup);
+
+			try {
+				sTray.add(icon);
+			}
+			catch (AWTException e) {
+				System.err.println(e);
+			}
+		}
+		
+		
 		@Override
 		public void start(Stage primaryStage) {
 			Parent root;
@@ -85,18 +144,23 @@ public class View extends ASingelton implements IViewServer {
 	            // set the primary stage
 	            view.setPrimaryStage(primaryStage);
 	            
-	            // handle the window close event
-	            primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-	                @Override
-	                public void handle(WindowEvent t) {
-	                	// stop the server
-	                	core.stopServer();
-	                	
-	                	// exit the application
-	                    Platform.exit();
-	                    System.exit(0);
-	                }
-	            });
+	            if (SystemTray.isSupported()) {
+	    			Platform.setImplicitExit(false);
+	    			setTray(primaryStage);
+	    		}else{
+		            // handle the window close event
+		            primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+		                @Override
+		                public void handle(WindowEvent t) {
+		                	// stop the server
+		                	core.stopServer();
+		                	
+		                	// exit the application
+		                    Platform.exit();
+		                    System.exit(0);
+		                }
+		            });
+	    		}
 	            
 	            // show the frame
 	            primaryStage.show();

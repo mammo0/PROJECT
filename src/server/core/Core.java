@@ -3,8 +3,13 @@ package server.core;
 import global.ASingelton;
 import global.IServerService;
 
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
@@ -19,6 +24,8 @@ import java.util.Hashtable;
 
 import javax.xml.stream.XMLStreamException;
 
+import client.view.dialogs.Dialog;
+import client.view.dialogs.DialogError;
 import model.project.Phase;
 import model.project.Project;
 import model.project.Quarter;
@@ -53,17 +60,27 @@ public class Core extends ASingelton implements ICoreServer {
 	
 
 	private File projectFilesDir;
+	
+	private File configFile;
+	
+	
+	
 
 	public Core() {
-		this.projectPath = System.getProperty("user.dir");
+		configFile = new File("server.conf");
+		
+		loadSettings();
 	}
 
 	@Override
 	public String getProjectDirectory() {
-		if (projectFilesDir == null)
-			return projectPath + "/";
-		else
-			return projectFilesDir.getAbsolutePath() + "/";
+		if (projectFilesDir == null){
+			if(projectPath.endsWith(File.separator))
+				return projectPath;
+			else
+				return projectPath + File.separator;
+		}else
+			return projectFilesDir.getAbsolutePath() + File.separator;
 	}
 
 	@Override
@@ -95,10 +112,54 @@ public class Core extends ASingelton implements ICoreServer {
 			return false;
 		}
 	}
+	
+	
+	// this method loads the connection settings from a configuration file
+	private void loadSettings(){
+		BufferedReader reader;
+		try {
+			reader = new BufferedReader(new FileReader(configFile));
+			String line = null;
+			while ((line = reader.readLine()) != null) {
+				if(line.startsWith("PORT="))
+					setServerPort(Integer.valueOf(line.split("=")[1]));
+				else if(line.startsWith("DIR="))
+					setProjectDirectory(line.split("=")[1]);
+				else{
+					reader.close();
+					throw new IOException();
+				}
+			}
+			reader.close();
+		} catch (IOException e) {
+			setProjectDirectory(System.getProperty("user.dir"));
+			setServerPort(4711);
+		}
+	}
+	
+	
+	@Override
+	public void saveSettings(String projectDir, int serverPort) {
+		setServerPort(serverPort);
+		setProjectDirectory(projectDir);
+		
+		String firstLine = "DIR="+projectDir;
+		String lastLine = "PORT="+serverPort;
+		
+		BufferedWriter writer;
+		try {
+			writer = new BufferedWriter(new FileWriter(configFile));
+			writer.write(firstLine);
+			writer.newLine();
+			writer.write(lastLine);
+			writer.close();
+		} catch (IOException e) {}
+	}
+	
 
 	@Override
 	public void startGui() {
-		view = new View(this);
+		view = new View();
 		view.showFrame();
 
 	}
@@ -349,12 +410,12 @@ public class Core extends ASingelton implements ICoreServer {
 	public void testPhaseavailable (Phase phase , int SkillID){
 		double availability = 0;
 		int difdays = 0;
-		//Wenn AnzahlTage benötigte SkillTage und phasedays (hashtable) gibt die Anzahl der Arbeistage die eine Phase hat
+		//Wenn AnzahlTage benï¿½tigte SkillTage und phasedays (hashtable) gibt die Anzahl der Arbeistage die eine Phase hat
 		if(phase.getSkills().get(SkillID)>phasesdays.get(phase.getPhaseName())){
 			for(Resource resource : project.getResources()){
 				if(resource.getSkillID() == SkillID){
 					availability = (resource.getAvailability()*0.01)*resource.getSkillAmount()*phasesdays.get(phase.getPhaseName());
-					//Wenn vorhandene Tage geringer als benötigte Tage der Phase
+					//Wenn vorhandene Tage geringer als benï¿½tigte Tage der Phase
 					if(availability< phase.getSkills().get(SkillID)){
 						difdays = (int) (phase.getSkills().get(SkillID)-availability);
 						_totalShould = _totalShould + difdays;

@@ -51,4 +51,11 @@ public interface ICoreServer extends IServerService {
 	 * @param path
 	 */
 	public void setProjectDirectory(String path);
+	
+	/**
+	 * Save the server settings to an external config file
+	 * @param projectDir the project directory
+	 * @param serverPort the server port
+	 */
+	public void saveSettings(String projectDir, int serverPort);
 }

@@ -38,7 +38,7 @@
                 <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="ALWAYS" />
               </rowConstraints>
                <children>
-                  <TextField fx:id="txtPort" prefWidth="60.0" promptText="Port" text="4711" GridPane.columnIndex="1" />
+                  <TextField fx:id="txtPort" prefWidth="60.0" promptText="Port" GridPane.columnIndex="1" />
                   <Label text="Portnumber:" />
                </children>
             </GridPane>
@@ -51,6 +51,12 @@
             <TextField fx:id="txtPath" editable="false" layoutX="14.0" layoutY="30.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="123.0" AnchorPane.topAnchor="44.0" />
             <Button layoutX="278.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnPathChooserClick" text="Change Path" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="44.0" />
             <Label layoutX="14.0" layoutY="14.0" text="Path for the project files:" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
+         </children>
+      </AnchorPane>
+      <Separator prefWidth="200.0" />
+      <AnchorPane>
+         <children>
+            <Button layoutX="236.0" layoutY="160.0" mnemonicParsing="false" onAction="#btnSaveSettingsClick" text="Save Settings" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
          </children>
       </AnchorPane>
    </children>

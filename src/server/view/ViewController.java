@@ -82,9 +82,19 @@ public class ViewController implements Initializable{
         File selectedDirectory = directoryChooser.showDialog(view.getPrimaryStage());
         
         if(selectedDirectory != null){
-        	txtPath.setText(selectedDirectory.getAbsolutePath());
+        	txtPath.setText(selectedDirectory.getAbsolutePath() + File.separator);
         	core.setProjectDirectory(selectedDirectory.getAbsolutePath());
         }
+	}
+	
+	
+	/**
+	 * This method is called, when the save settings button is clicked.
+	 * It saves the port and path settings to an external file.
+	 */
+	@FXML
+	private void btnSaveSettingsClick(ActionEvent event){
+		core.saveSettings(txtPath.getText(), parseServerPort(txtPort.getText()));
 	}
 	
 	
@@ -93,7 +103,7 @@ public class ViewController implements Initializable{
 	 * It will start the server thread.
 	 */
 	@FXML
-	public void btnStartClick(ActionEvent event){
+	private void btnStartClick(ActionEvent event){
 		// start the server
 		core.startServer();
 		
@@ -115,7 +125,7 @@ public class ViewController implements Initializable{
 	 * It will stop the server thread.
 	 */
 	@FXML
-	public void btnStopClick(ActionEvent event){
+	private void btnStopClick(ActionEvent event){
 		// stop the server
 		core.stopServer();
 		
@@ -137,7 +147,7 @@ public class ViewController implements Initializable{
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
 		// set the server port to default
-		core.setServerPort(parseServerPort(txtPort.getText()));
+		this.txtPort.setText(String.valueOf(core.getServerPort()));
 		
 		// add a change listener to the text field
 		txtPort.focusedProperty().addListener(new ChangeListener<Boolean>() {
