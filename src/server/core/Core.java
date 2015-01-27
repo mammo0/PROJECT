@@ -59,6 +59,16 @@ public class Core extends ASingelton implements ICoreServer {
 //	int _totalShould = 0;
 //	int _totalShouldRisk = 0;
 	private Result resultProject;
+	float _totalCostProject = 0;
+	int _totalmandaysProject = 0;
+	int _totalmandaysIntProject = 0;
+	int _totalmandaysShouldProject = 0;
+	int _totalmandaysShouldProjectRisk = 0;
+	int _totalmandaysExtProject = 0;
+	float _totalCostIntProject = 0;
+	float _totalCostExtProject = 0;
+	
+	
 	
 	
 
@@ -215,6 +225,7 @@ public class Core extends ASingelton implements ICoreServer {
 	public Project calculateProject(Project project) {
 		this.project = project;
 		resultProject = new Result();
+		clearVariables();
 		project.setResult(resultProject);
 		if(project.getPhases().size()!= 0){
 		calculateLenght(project);
@@ -228,6 +239,20 @@ public class Core extends ASingelton implements ICoreServer {
 			
 		}
 		return project;
+	}
+	
+	public void clearVariables(){
+		
+		
+		 _totalCostProject = 0;
+		_totalmandaysProject = 0;
+		_totalmandaysIntProject = 0;
+		_totalmandaysShouldProject = 0;
+		_totalmandaysShouldProjectRisk = 0;
+		_totalmandaysExtProject = 0;
+		_totalCostIntProject = 0;
+		_totalCostExtProject = 0;
+		
 	}
 
 	// calculate the length of the complete Project
@@ -439,7 +464,7 @@ public class Core extends ASingelton implements ICoreServer {
 			}
 		
 		else{
-			System.out.println("passt");
+			//System.out.println("passt");
 		}
 		
 		
@@ -476,14 +501,7 @@ public class Core extends ASingelton implements ICoreServer {
 			int _daysavailable = 0;
 			int _totalShould = 0;
 			int _totalShouldRisk = 0;
-			float _totalCostProject = 0;
-			int _totalmandaysProject = 0;
-			int _totalmandaysIntProject = 0;
-			int _totalmandaysShouldProject = 0;
-			int _totalmandaysShouldProjectRisk = 0;
-			int _totalmandaysExtProject = 0;
-			float _totalCostIntProject = 0;
-			float _totalCostExtProject = 0;
+			
 
 			// calculate the total needed mandays per skill
 			_skillID = skill.getSkillID();
