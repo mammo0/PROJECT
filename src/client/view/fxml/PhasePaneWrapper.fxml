@@ -11,10 +11,10 @@
    <content>
       <VBox spacing="14.0">
          <children>
-            <GridPane hgap="14.0">
+            <GridPane hgap="14.0" vgap="7.0">
                <columnConstraints>
                   <ColumnConstraints hgrow="NEVER" />
-                  <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="100.0" />
+                  <ColumnConstraints hgrow="ALWAYS" />
                </columnConstraints>
                <rowConstraints>
                   <RowConstraints vgrow="NEVER" />
@@ -24,13 +24,13 @@
                <children>
                   <Label layoutX="11.0" layoutY="14.0" text="Phasenbeginn:" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
                   <Label text="Phasenende:" GridPane.rowIndex="1" />
-                  <Label text="Risikofaktor:" GridPane.rowIndex="2" />
-                  <TextField fx:id="txtRiskFactor" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                  <Label text="Risikofaktor (in %):" GridPane.rowIndex="2" />
+                  <TextField fx:id="txtRiskFactor" maxWidth="190.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
                   <DatePicker fx:id="datPhaseBegin" GridPane.columnIndex="1" />
                   <DatePicker fx:id="datPhaseEnd" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                </children>
             </GridPane>
-            <VBox VBox.vgrow="ALWAYS">
+            <VBox spacing="14.0" VBox.vgrow="ALWAYS">
                <children>
                   <GridPane AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="114.0">
                     <columnConstraints>

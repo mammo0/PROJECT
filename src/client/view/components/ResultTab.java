@@ -24,6 +24,8 @@ import client.core.ICoreClient;
 import client.core.CostTableModel;
 import client.core.PDTableModel;
 import client.core.QuarterTableModel;
+import client.view.dialogs.Dialog;
+import client.view.dialogs.DialogConfirmation;
 
 public class ResultTab extends AnchorPane {
 	
@@ -253,10 +255,13 @@ public class ResultTab extends AnchorPane {
 	// this method finishes the project
 	@FXML
 	private void btnFinishClick(){
+		String message = "Möchten Sie das Projekt wirklich abschließen?\n"
+				+ "Es kann danach nicht mehr bearbeitet werden.";
+		DialogConfirmation confirmation = new DialogConfirmation("Projekt abschließen", message);
+		if(!Dialog.showDialog(confirmation))
+			return;
+		
 		finishable.set(false);
-		
-		// TODO confirm dialog
-		
 		core.finishProject();
 	}
 	

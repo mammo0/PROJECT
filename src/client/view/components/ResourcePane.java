@@ -5,6 +5,8 @@ import java.io.IOException;
 import client.view.IExpandableNode;
 import client.view.ITester;
 import client.view.InputTester;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -52,6 +54,18 @@ public class ResourcePane extends AnchorPane implements IExpandableNode, ITester
 		// finalize the choice box
 		cmbIntExt.getItems().addAll("Intern","Extern");
 		cmbIntExt.getSelectionModel().selectFirst();
+		cmbIntExt.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
+			@Override
+			public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+				if(newValue.equals("Extern")){
+					txtAvailability.setText(String.valueOf(100));
+					txtAvailability.setEditable(false);
+				}else if(newValue.equals("Intern") && oldValue.equals("Extern")){
+					txtAvailability.setEditable(true);
+					txtAvailability.setText("");
+				}
+			}
+		});
 		
 		// add an input tester to the text fields
 		txtAvailability.textProperty().addListener(new InputTester(this, txtAvailability));

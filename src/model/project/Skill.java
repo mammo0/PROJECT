@@ -9,6 +9,12 @@ import java.io.Serializable;
  *
  */
 public class Skill implements Serializable {
+	
+	
+	// the real total people days
+	private int pdTotalReal;
+	
+
 	// the name of the skill
 	private String skillName;
 
@@ -89,6 +95,15 @@ public class Skill implements Serializable {
 		this.skillName = skillName;
 	}
 
+	
+	public int getPdTotalReal() {
+		return pdTotalReal;
+	}
+
+	public void setPdTotalReal(int pdTotalReal) {
+		this.pdTotalReal = pdTotalReal;
+	}
+	
 	/**
 	 * Set the internal daily rate of the skill
 	 * 

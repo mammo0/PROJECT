@@ -19,8 +19,8 @@
 	        <ColumnConstraints halignment="CENTER" hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0" />
 	      </columnConstraints>
 	      <rowConstraints>
-	        <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
-	        <RowConstraints minHeight="10.0" prefHeight="30.0" valignment="CENTER" vgrow="SOMETIMES" />
+	        <RowConstraints valignment="CENTER" vgrow="SOMETIMES" />
+	        <RowConstraints valignment="CENTER" vgrow="SOMETIMES" />
 	      </rowConstraints>
 	       <children>
 	          <Label text="Kompetenzbezeichnung" GridPane.rowSpan="2147483647" />
@@ -29,6 +29,6 @@
 	          <Label text="Extern" GridPane.columnIndex="2" GridPane.rowIndex="1" />
 	       </children>
 	    </GridPane>
-      <AnchorPane fx:id="ancSkillList" layoutX="14.0" layoutY="79.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="79.0" />
+      <AnchorPane fx:id="ancSkillList" layoutX="14.0" layoutY="79.0" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="81.0" />
 	 </children>
 </fx:root>
