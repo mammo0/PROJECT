@@ -58,14 +58,6 @@ public class Core extends ASingelton implements ICoreServer {
 	Hashtable<String, Integer> phasesdays = new Hashtable();
 //	int _totalShould = 0;
 //	int _totalShouldRisk = 0;
-	float _totalCostProject = 0;
-	int _totalmandaysProject = 0;
-	int _totalmandaysIntProject = 0;
-	int _totalmandaysShouldProject = 0;
-	int _totalmandaysShouldProjectRisk = 0;
-	int _totalmandaysExtProject = 0;
-	float _totalCostIntProject = 0;
-	float _totalCostExtProject = 0;
 	private Result resultProject;
 	
 	
@@ -273,6 +265,7 @@ public class Core extends ASingelton implements ICoreServer {
 		int endquarter = 0;
 		int deltaYears = 0;
 		int numberQuarters = 0;
+		
 
 		int numberofYears = enddateYear - startdateYear + 1;
 		
@@ -483,6 +476,14 @@ public class Core extends ASingelton implements ICoreServer {
 			int _daysavailable = 0;
 			int _totalShould = 0;
 			int _totalShouldRisk = 0;
+			float _totalCostProject = 0;
+			int _totalmandaysProject = 0;
+			int _totalmandaysIntProject = 0;
+			int _totalmandaysShouldProject = 0;
+			int _totalmandaysShouldProjectRisk = 0;
+			int _totalmandaysExtProject = 0;
+			float _totalCostIntProject = 0;
+			float _totalCostExtProject = 0;
 
 			// calculate the total needed mandays per skill
 			_skillID = skill.getSkillID();
