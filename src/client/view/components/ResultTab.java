@@ -8,13 +8,10 @@ import java.util.Hashtable;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -29,8 +26,6 @@ import client.core.CostTableModel;
 import client.core.ICoreClient;
 import client.core.PDTableModel;
 import client.core.QuarterTableModel;
-import client.view.ITester;
-import client.view.InputTester;
 import client.view.dialogs.Dialog;
 import client.view.dialogs.DialogConfirmation;
 
@@ -274,20 +269,6 @@ public class ResultTab extends AnchorPane {
 		}else if(!core.isProjectFinished())
 			tblPD.getColumns().remove(colRealPD);
 		
-		if(!pdData.isEmpty() && RealTextField.textFields.size() != pdData.size()){
-			for(int i=0;i<pdData.size();i++){
-				if(pdData.get(i).getPdReal() == null){
-					RealTextField field = null;
-					if(i == pdData.size()-1){
-						field = new RealTextField(true);
-					}else{
-						field = new RealTextField();
-					}
-					pdData.get(i).pdReal.set(field);
-				}
-			}
-		}
-		
 		tblPD.setItems(pdData);
 	}
 	
@@ -390,7 +371,7 @@ public class ResultTab extends AnchorPane {
 	public void clearAll(){
 		if(pdData != null){
 			pdData.clear();
-			RealTextField.textFields.clear();
+			RealTextField.clearTextFields();
 		}
 		if(costData != null)
 			costData.clear();

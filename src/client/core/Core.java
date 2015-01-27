@@ -33,6 +33,7 @@ import client.view.IViewClient;
 import client.view.View;
 import client.view.components.PhasePane;
 import client.view.components.PhasePaneWrapper;
+import client.view.components.RealTextField;
 import client.view.components.ResourcePane;
 import client.view.components.ResourcePaneWrapper;
 import client.view.components.SkillPane;
@@ -338,6 +339,13 @@ public class Core extends ASingelton implements ICoreClient {
 				}
 			}
 		}
+		project.getPhases().sort(new Comparator<Phase>() {
+			@Override
+			public int compare(Phase o1, Phase o2) {
+				return o1.getStartDate().isBefore(o2.getStartDate()) ? 1 :
+					o1.getStartDate().isEqual(o2.getStartDate()) ? 0 : -1;
+			}
+		});
 		
 		// fifth screen (real times)
 		if(project.isFinished() && view.getRealTimes() != null){
@@ -388,7 +396,14 @@ public class Core extends ASingelton implements ICoreClient {
 		
 		// forth screen
 		// sort the phases
-		ArrayList<Phase> phases = sortPhases(project.getPhases());
+		ArrayList<Phase> phases = project.getPhases();
+		phases.sort(new Comparator<Phase>() {
+			@Override
+			public int compare(Phase o1, Phase o2) {
+				return o1.getStartDate().isBefore(o2.getStartDate()) ? -1 :
+					o1.getStartDate().isEqual(o2.getStartDate()) ? 0 : 1;
+			}
+		});;
 		boolean firstSub = true;
 		for(int i=0;i<phases.size();i++){
 			Phase phase = phases.get(i);
@@ -432,36 +447,6 @@ public class Core extends ASingelton implements ICoreClient {
 		}
 	}
 	
-	// sort the phases ascending (by their start date)
-	private ArrayList<Phase> sortPhases(ArrayList<Phase> phases){
-		ArrayList<Phase> input = new ArrayList<Phase>(phases);
-		ArrayList<Phase> sorted = new ArrayList<Phase>();
-		
-		int size = input.size();
-		for(int i=0;i<size;i++){
-			Phase earliest = getEarliestPhase(input);
-			sorted.add(i, earliest);
-			input.remove(earliest);
-		}
-		
-		return sorted;
-	}
-	
-	// helper method for the phase sort method
-	private Phase getEarliestPhase(ArrayList<Phase> phases){
-		ArrayList<Phase> _phases = new ArrayList<>(phases);
-		
-		Phase earliest = _phases.get(0);
-		_phases.remove(0);
-		for(Phase phase : _phases){
-			if(phase.getStartDate().isBefore(earliest.getStartDate())){
-				earliest = phase;
-			}
-		}
-		
-		return earliest;
-	}
-	
 	
 	// calculate the pds
 	private PDTableModel calculatePDs(String skillName, Result result, boolean withRisk){
@@ -474,6 +459,20 @@ public class Core extends ASingelton implements ICoreClient {
 		pdModel.pdIs.set(result.getPdTotalBe());
 		pdModel.pdIsInt.set(result.getPdInt());
 		pdModel.pdIsExt.set(result.getPdExt());
+		
+		// add the text field for the real times
+		RealTextField realField = new RealTextField();
+		boolean found = false;
+		for(Skill skill : project.getSkills()){
+			if(skill.getSkillName().equals(skillName)){
+				found = true;
+				if(skill.getPdTotalReal() != 0)
+					realField.setText(String.valueOf(skill.getPdTotalReal()));
+			}
+		}
+		if(!found)
+			realField = new RealTextField(true);
+		pdModel.pdReal.set(realField);
 		
 		return pdModel;
 	}
