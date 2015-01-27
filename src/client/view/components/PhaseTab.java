@@ -8,8 +8,6 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.Hashtable;
 
-import com.sun.org.apache.bcel.internal.generic.IFNE;
-
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -661,4 +659,9 @@ public class PhaseTab extends ScrollPane implements IComponents {
 	
 	@Override
 	public void setProjectTimeStamp(LocalDateTime timeStamp){}
+	
+	@Override
+	public Hashtable<String, Integer> getRealTimes(){
+		return null;
+	}
 }

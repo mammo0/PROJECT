@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.*?>
 <?import javafx.geometry.*?>
 <?import javafx.scene.web.*?>
 <?import javafx.scene.paint.*?>
@@ -10,9 +11,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<fx:root prefHeight="570.0" prefWidth="608.0" style="-fx-border-color: black;" tabClosingPolicy="UNAVAILABLE" type="TabPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+<fx:root styleClass="tabEditor" tabClosingPolicy="UNAVAILABLE" type="TabPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
 	   <tabs>
-	      <Tab fx:id="tabProject" text="Projekt anlegen">
+	      <Tab fx:id="tabProject">
 	         <content>
 	            <AnchorPane prefHeight="200.0" prefWidth="200.0">
 	               <children>
@@ -42,9 +43,13 @@
 	            </AnchorPane>
 	         </content>
 	      </Tab>
-	      <Tab fx:id="tabSkills" text="Kompetenzen anlegen" />
-	      <Tab fx:id="tabResources" onSelectionChanged="#updateResources" text="Ressourcenplanung" />
-	      <Tab fx:id="tabPhases" onSelectionChanged="#updatePhases" text="Phasenplanung" />
-      <Tab fx:id="tabResults" text="Ergebnisse" />
+	      <Tab fx:id="tabSkills" />
+	      <Tab fx:id="tabResources" onSelectionChanged="#updateResources" />
+	      <Tab fx:id="tabPhases" onSelectionChanged="#updatePhases" />
+      <Tab fx:id="tabResults" />
 	   </tabs>
+   <stylesheets>
+      <URL value="@../css/View.css" />
+      <URL value="@../css/ProjectEditor.css" />
+   </stylesheets>
 	</fx:root>

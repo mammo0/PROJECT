@@ -4,26 +4,33 @@ import java.io.IOException;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.Hashtable;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import client.core.Core;
-import client.core.ICoreClient;
 import client.core.CostTableModel;
+import client.core.ICoreClient;
 import client.core.PDTableModel;
 import client.core.QuarterTableModel;
+import client.view.ITester;
+import client.view.InputTester;
 import client.view.dialogs.Dialog;
 import client.view.dialogs.DialogConfirmation;
 
@@ -41,6 +48,7 @@ public class ResultTab extends AnchorPane {
 	private TableColumn<PDTableModel, Integer> colIsPDInt;
 	@FXML
 	private TableColumn<PDTableModel, Integer> colIsPDExt;
+	private TableColumn<PDTableModel, TextField> colRealPD;
 	private ObservableList<PDTableModel> pdData;
 	
 	
@@ -198,6 +206,29 @@ public class ResultTab extends AnchorPane {
 		colIsPDExt.setCellValueFactory(
 			    new PropertyValueFactory<PDTableModel, Integer>("pdIsExt")
 			);
+		colRealPD = new TableColumn<PDTableModel, TextField>("Ist-Zeiten");
+		colRealPD.setMaxWidth(100000d);
+		colRealPD.setCellFactory(column -> {return new TableCell<PDTableModel, TextField>(){
+			@Override
+	        protected void updateItem(TextField item, boolean empty) {
+				super.updateItem(item, empty);
+				
+				if (item == null || empty) {
+					setStyle("");
+				}else{
+	            	// mark the last line in the table
+					if(getIndex() == pdData.size()-1)
+	            		setStyle("-fx-background-color: lightgrey");
+				}
+				
+	            if (item != null || empty) {
+                    setGraphic(item);
+	            }
+			}
+		};});
+		colRealPD.setCellValueFactory(
+			    new PropertyValueFactory<PDTableModel, TextField>("pdReal")
+			);
 		
 		// Set up the cost table
 		prepareTable(tblCost);
@@ -237,6 +268,26 @@ public class ResultTab extends AnchorPane {
 	// this mehtod refreshes the pd result tab
 	private void refreshPDResults(){
 		pdData = core.getPDTable(tbnRisk.isSelected());
+		
+		if(core.isProjectFinished() && !tblPD.getColumns().contains(colRealPD)){
+			tblPD.getColumns().add(colRealPD);
+		}else if(!core.isProjectFinished())
+			tblPD.getColumns().remove(colRealPD);
+		
+		if(!pdData.isEmpty() && RealTextField.textFields.size() != pdData.size()){
+			for(int i=0;i<pdData.size();i++){
+				if(pdData.get(i).getPdReal() == null){
+					RealTextField field = null;
+					if(i == pdData.size()-1){
+						field = new RealTextField(true);
+					}else{
+						field = new RealTextField();
+					}
+					pdData.get(i).pdReal.set(field);
+				}
+			}
+		}
+		
 		tblPD.setItems(pdData);
 	}
 	
@@ -248,21 +299,26 @@ public class ResultTab extends AnchorPane {
 		else
 			tbnRisk.setText("Risikozuschlag EIN");
 		
-		refreshPDResults();
+		if(pdData != null && !pdData.isEmpty())
+			refreshPDResults();
 	}
 	
 	
 	// this method finishes the project
 	@FXML
 	private void btnFinishClick(){
+		if(core.isProjectFinished())
+			return;
+		
 		String message = "Möchten Sie das Projekt wirklich abschließen?\n"
 				+ "Es kann danach nicht mehr bearbeitet werden.";
 		DialogConfirmation confirmation = new DialogConfirmation("Projekt abschließen", message);
 		if(!Dialog.showDialog(confirmation))
 			return;
 		
-		finishable.set(false);
 		core.finishProject();
+		
+		tblPD.getColumns().add(colRealPD);
 	}
 	
 	
@@ -332,8 +388,10 @@ public class ResultTab extends AnchorPane {
 	 * Clear all inputs
 	 */
 	public void clearAll(){
-		if(pdData != null)
+		if(pdData != null){
 			pdData.clear();
+			RealTextField.textFields.clear();
+		}
 		if(costData != null)
 			costData.clear();
 		if(quarterData != null)
@@ -363,5 +421,27 @@ public class ResultTab extends AnchorPane {
 		quarterData = core.getQuarterTable(timeline.getSelectedYearBegin(), timeline.getSelectedQuarterBegin(),
 										   timeline.getSelectedYearEnd(), timeline.getSelectedQuarterEnd());
 		tblQuarter.setItems(quarterData);
+	}
+	
+	
+	/**
+	 * Get the real times from the result screen after the project is finished
+	 * @return the real times per skill
+	 */
+	public Hashtable<String, Integer> getRealTimes(){
+		if(pdData != null){
+			Hashtable<String, Integer> realTimes = new Hashtable<String, Integer>();
+			
+			for(PDTableModel model : pdData){
+				int realPD;
+				if(!((TextField)model.getPdReal()).getText().isEmpty()){
+					realPD = Integer.parseInt(((TextField)model.getPdReal()).getText());
+					realTimes.put(model.getSkillName(), realPD);
+				}		
+			}
+			
+			return realTimes;
+		}
+		return null;
 	}
 }

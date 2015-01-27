@@ -1,7 +1,9 @@
 package client.core;
 
 import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.scene.control.TextField;
 
 /**
  * This class is the model class for the pd result table
@@ -14,6 +16,7 @@ public class PDTableModel {
 	public SimpleIntegerProperty pdIs = new SimpleIntegerProperty();
 	public SimpleIntegerProperty pdIsInt = new SimpleIntegerProperty();
 	public SimpleIntegerProperty pdIsExt = new SimpleIntegerProperty();
+	public SimpleObjectProperty<TextField> pdReal = new SimpleObjectProperty<TextField>();
 	
 	
 	public String getSkillName() {
@@ -30,5 +33,8 @@ public class PDTableModel {
 	}
 	public Integer getPdIsExt() {
 		return pdIsExt.get();
+	}
+	public Object getPdReal() {
+		return pdReal.get();
 	}
 }

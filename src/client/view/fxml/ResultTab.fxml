@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
 <?import javafx.scene.layout.*?>
@@ -82,4 +83,8 @@
          </children>
       </VBox>
    </children>
+   <stylesheets>
+      <URL value="@../css/ResultTab.css" />
+      <URL value="@../css/View.css" />
+   </stylesheets>
 </fx:root>

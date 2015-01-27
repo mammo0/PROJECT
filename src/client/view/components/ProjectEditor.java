@@ -1,5 +1,6 @@
 package client.view.components;
 
+import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -14,6 +15,9 @@ import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import client.view.IComponents;
@@ -72,21 +76,53 @@ public class ProjectEditor extends TabPane implements IComponents {
 		    e.printStackTrace();
 		}
 		
+		
+		// set up first screen
+		tabProject.setGraphic(getTabHeader("res/tabs/Home.png", "Projekt anlegen"));
+		
 		// add the second screen (skills)
 		skillTab = new SkillTab();
 		tabSkills.setContent(skillTab);
+		tabSkills.setGraphic(getTabHeader("res/tabs/KompetenzenAnlegen.png", "Kompetenz anlegen"));
 		
 		// add the third screen (resources)
 		resourceTab = new ResourceTab();
 		tabResources.setContent(resourceTab);
+		tabResources.setGraphic(getTabHeader("res/tabs/KompetenzenDefinieren.png", "Ressourenplanung"));
 		
 		// add the fourth screen (phases)
 		phaseTab = new PhaseTab();
 		tabPhases.setContent(phaseTab);
+		tabPhases.setGraphic(getTabHeader("res/tabs/Phasenplanung.png", "Phasenplanung"));
 		
 		// add the fifth screen (results)
 		resultTab = new ResultTab();
 		tabResults.setContent(resultTab);
+		tabResults.setGraphic(getTabHeader("res/tabs/Kalkulation.png", "Ergebnisse"));
+		
+		
+//		tabMinWidthProperty().bind(this.widthProperty().subtract(75).divide(5));
+	}
+	
+	
+	// generate the tab header with a picture and title
+	private BorderPane getTabHeader(String imagePath, String tabTitle){
+		BorderPane pane = new BorderPane();
+		
+		
+		File file = new File(imagePath);
+	    Image img = new Image(file.toURI().toString());
+		ImageView image = new ImageView();
+		image.setPreserveRatio(true);
+		image.setFitWidth(40);
+		image.setImage(img);
+		
+		Label label = new Label(tabTitle);
+		
+		pane.setCenter(image);
+		pane.setBottom(label);
+		
+		return pane;
 	}
 	
 	
@@ -210,6 +246,11 @@ public class ProjectEditor extends TabPane implements IComponents {
 			// set the finish indicator
 			crlFinish.setFill(Color.GREEN);
 		}
+	}
+	
+	@Override
+	public Hashtable<String, Integer> getRealTimes(){
+		return resultTab.getRealTimes();
 	}
 
 

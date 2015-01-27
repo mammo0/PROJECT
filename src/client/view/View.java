@@ -170,6 +170,11 @@ public class View extends ASingelton implements IViewClient {
 	public void setProjectTimeStamp(LocalDateTime timeStamp){
 		viewController.setProjectTimeStamp(timeStamp);
 	}
+	
+	@Override
+	public Hashtable<String, Integer> getRealTimes(){
+		return viewController.getRealTimes();
+	}
 
 	
 	

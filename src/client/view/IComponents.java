@@ -115,4 +115,10 @@ public interface IComponents {
 	 * @param timeStamp
 	 */
 	public void setProjectTimeStamp(LocalDateTime timeStamp);
+	
+	/**
+	 * Get the real times from the result screen after the project is finished
+	 * @return the real times per skill
+	 */
+	public Hashtable<String, Integer> getRealTimes();
 }

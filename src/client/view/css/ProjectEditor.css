@@ -1,0 +1,11 @@
+@CHARSET "UTF-8";
+.tabEditor{
+	-fx-tab-min-height: 60px;
+	-fx-tab-max-height: 60px;
+}
+.tabEditor:top .tab-header-area .tab-header-background{
+	-fx-background-color: #b2b2b2;
+}
+.tabEditor:top .tab-header-area .headers-region .tab:top{
+	-fx-min-height: 100px;
+}

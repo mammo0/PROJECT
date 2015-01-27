@@ -296,6 +296,11 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 	public void setProjectTimeStamp(LocalDateTime timeStamp){
 		projectEditor.setProjectTimeStamp(timeStamp);
 	}
+	
+	@Override
+	public Hashtable<String, Integer> getRealTimes(){
+		return projectEditor.getRealTimes();
+	}
 
 	
 

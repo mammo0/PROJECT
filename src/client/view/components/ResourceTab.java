@@ -205,4 +205,9 @@ public class ResourceTab extends AnchorPane implements IComponents {
 	
 	@Override
 	public void setProjectTimeStamp(LocalDateTime timeStamp){}
+	
+	@Override
+	public Hashtable<String, Integer> getRealTimes(){
+		return null;
+	}
 }

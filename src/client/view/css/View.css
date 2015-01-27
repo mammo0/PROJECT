@@ -1,0 +1,9 @@
+@CHARSET "UTF-8";
+.root{
+	-fx-background-color: #eaeaea;
+	-fx-focus-color: #b7e1f7;
+	
+	
+	-fx-font-family: "Times New Roman";
+	-fx-font-size: 14px;
+}

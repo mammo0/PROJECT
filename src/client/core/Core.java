@@ -146,28 +146,28 @@ public class Core extends ASingelton implements ICoreClient {
 	private boolean buildProject(){
 		return buildProject(false, false);
 	}
-	private boolean buildProject(boolean ignoreErrors, boolean dontMark){
-		if(!dontMark)
+	private boolean buildProject(boolean ignoreErrors, boolean dontChangeProject){
+		if(!dontChangeProject)
 			project = new Project();
 		
 		// first screen
 		if(view.getProjectName().replaceAll(" ", "").isEmpty()){
-			if(!dontMark){
+			if(!dontChangeProject){
 				view.markNode(null, "txtProjectName");
 				view.setStatus("Bitte einen Projektnamen angeben.", 10);
 			}
 			return false;
 		}
-		if(!dontMark)
+		if(!dontChangeProject)
 			project.setProjectName(view.getProjectName());
 		if(!ignoreErrors && view.getProjectResponsible().replaceAll(" ", "").isEmpty()){
-			if(!dontMark){
+			if(!dontChangeProject){
 				view.markNode(null, "txtProjectResponsible");
 				view.setStatus("Bitte einen Projektverantwortlichen angeben.", 10);
 			}
 			return false;
 		}
-		if(!dontMark){
+		if(!dontChangeProject){
 			project.setProjectResponsible(view.getProjectResponsible());
 			project.setDescription(view.getProjectDescription());
 		}
@@ -178,7 +178,7 @@ public class Core extends ASingelton implements ICoreClient {
 				continue;
 			Skill skill = new Skill();
 			if(!ignoreErrors && pane.getSkillName().replaceAll(" ", "").isEmpty()){
-				if(!dontMark){
+				if(!dontChangeProject){
 					view.markNode(pane, "txtSkillName");
 					view.setStatus("Bitte einen Kompetenznamen angeben.", 10);
 				}
@@ -188,7 +188,7 @@ public class Core extends ASingelton implements ICoreClient {
 			skill.setDayRateInt(pane.getDayRateInt());
 			skill.setDayRateExt(pane.getDayRateExt());
 			
-			if(!dontMark)
+			if(!dontChangeProject)
 				project.addSkill(skill);
 		}
 		
@@ -197,7 +197,7 @@ public class Core extends ASingelton implements ICoreClient {
 			for(ResourcePane pane : paneWrapper.getResourcePanes()){
 				Resource resource = new Resource();
 				if(!ignoreErrors && pane.getResourceName().replaceAll(" ", "").isEmpty()){
-					if(!dontMark){
+					if(!dontChangeProject){
 						view.markNode(pane, "txtResourceName");
 						view.setStatus("Bitte einen Resourcennamen angeben.", 10);
 					}
@@ -206,7 +206,7 @@ public class Core extends ASingelton implements ICoreClient {
 				resource.setResourceName(pane.getResourceName());
 				resource.setSkill(paneWrapper.getSkill().getSkillID());
 				if(!ignoreErrors && pane.getAvailability() == -1){
-					if(!dontMark){
+					if(!dontChangeProject){
 						view.markNode(pane, "txtAvailability");
 						view.setStatus("Bitte eine Verfügbarkeit angeben.", 10);
 					}
@@ -214,7 +214,7 @@ public class Core extends ASingelton implements ICoreClient {
 				}
 				resource.setAvailability(pane.getAvailability());
 				if(!ignoreErrors && pane.getSkillAmount() == -1){
-					if(!dontMark){
+					if(!dontChangeProject){
 						view.markNode(pane, "txtSkillAmount");
 						view.setStatus("Bitte eine Anzahl angeben.", 10);
 					}
@@ -223,7 +223,7 @@ public class Core extends ASingelton implements ICoreClient {
 				resource.setSkillAmount(pane.getSkillAmount());
 				resource.setIntern(pane.isIntern());
 				
-				if(!dontMark)
+				if(!dontChangeProject)
 					project.addResource(resource);
 			}
 		}
@@ -239,7 +239,7 @@ public class Core extends ASingelton implements ICoreClient {
 			
 			Phase mainPhase = new Phase();
 			if(!ignoreErrors && main.getPhaseName().replaceAll(" ", "").isEmpty()){
-				if(!dontMark){
+				if(!dontChangeProject){
 					view.markNode(main, "txtPhaseName");
 					view.setStatus("Bitte einen Phasennamen angeben.", 10);
 				}
@@ -248,7 +248,7 @@ public class Core extends ASingelton implements ICoreClient {
 			mainPhase.setPhaseName(main.getPhaseName());
 			if(phases.get(main).isEmpty()){
 				if(!ignoreErrors && main.getPhaseBegin() == null){
-					if(!dontMark){
+					if(!dontChangeProject){
 						view.markNode(main, "datPhaseBegin");
 						view.setStatus("Bitte einen Phasenbeginn angeben.", 10);
 					}
@@ -256,7 +256,7 @@ public class Core extends ASingelton implements ICoreClient {
 				}
 				mainPhase.setStartDate(main.getPhaseBegin());
 				if(!ignoreErrors && main.getPhaseEnd() == null){
-					if(!dontMark){
+					if(!dontChangeProject){
 						view.markNode(main, "datPhaseEnd");
 						view.setStatus("Bitte ein Phasenende angeben.", 10);
 					}
@@ -267,14 +267,14 @@ public class Core extends ASingelton implements ICoreClient {
 				
 				for(PhasePane phasePane : main.getPhasePanes()){
 					if(!ignoreErrors && phasePane.getPhaseSkillId() == -1){
-						if(!dontMark){
+						if(!dontChangeProject){
 							view.markNode(phasePane, "cmbSkills");
 							view.setStatus("Bitte einen Skill auswählen.", 10);
 						}
 						return false;
 					}
 					if(!ignoreErrors && phasePane.getPhaseDuration() == -1){
-						if(!dontMark){
+						if(!dontChangeProject){
 							view.markNode(phasePane, "txtDuration");
 							view.setStatus("Bitte eine Dauer angeben.", 10);
 						}
@@ -283,13 +283,13 @@ public class Core extends ASingelton implements ICoreClient {
 					mainPhase.addSkill(phasePane.getPhaseSkillId(), phasePane.getPhaseDuration());
 				}
 				
-				if(!dontMark)
+				if(!dontChangeProject)
 					project.addPhase(mainPhase);
 			}else{
 				for(PhasePaneWrapper sub : phases.get(main)){
 					Phase subPhase = new Phase();
 					if(!ignoreErrors && sub.getPhaseName().replaceAll(" ", "").isEmpty()){
-						if(!dontMark){
+						if(!dontChangeProject){
 							view.markNode(sub, "txtPhaseName");
 							view.setStatus("Bitte einen Phasennamen angeben.", 10);
 						}
@@ -298,7 +298,7 @@ public class Core extends ASingelton implements ICoreClient {
 					subPhase.setPhaseName(sub.getPhaseName());
 					subPhase.setParent(mainPhase);
 					if(!ignoreErrors && sub.getPhaseBegin() == null){
-						if(!dontMark){
+						if(!dontChangeProject){
 							view.markNode(sub, "datPhaseBegin");
 							view.setStatus("Bitte einen Phasenbeginn angeben.", 10);
 						}
@@ -306,7 +306,7 @@ public class Core extends ASingelton implements ICoreClient {
 					}
 					subPhase.setStartDate(sub.getPhaseBegin());
 					if(!ignoreErrors && sub.getPhaseEnd() == null){
-						if(!dontMark){
+						if(!dontChangeProject){
 							view.markNode(sub, "datPhaseEnd");
 							view.setStatus("Bitte ein Phasenende angeben.", 10);
 						}
@@ -317,14 +317,14 @@ public class Core extends ASingelton implements ICoreClient {
 					
 					for(PhasePane phasePane : sub.getPhasePanes()){
 						if(!ignoreErrors && phasePane.getPhaseSkillId() == -1){
-							if(!dontMark){
+							if(!dontChangeProject){
 								view.markNode(phasePane, "cmbSkills");
 								view.setStatus("Bitte einen Skill auswählen.", 10);
 							}
 							return false;
 						}
 						if(!ignoreErrors && phasePane.getPhaseDuration() == -1){
-							if(!dontMark){
+							if(!dontChangeProject){
 								view.markNode(phasePane, "txtDuration");
 								view.setStatus("Bitte eine Dauer angeben.", 10);
 							}
@@ -333,8 +333,20 @@ public class Core extends ASingelton implements ICoreClient {
 						subPhase.addSkill(phasePane.getPhaseSkillId(), phasePane.getPhaseDuration());
 					}
 					
-					if(!dontMark)
+					if(!dontChangeProject)
 						project.addPhase(subPhase);
+				}
+			}
+		}
+		
+		// fifth screen (real times)
+		if(project.isFinished() && view.getRealTimes() != null){
+			Enumeration<String> enumKey2 = view.getRealTimes().keys();
+			while(enumKey2.hasMoreElements()){
+				String key = enumKey2.nextElement();
+				for(int i=0;i<project.getSkills().size();i++){
+					if(project.getSkills().get(i).getSkillName().equals(key))
+						project.getSkills().get(i).setPdTotalReal(view.getRealTimes().get(key));
 				}
 			}
 		}
@@ -422,13 +434,14 @@ public class Core extends ASingelton implements ICoreClient {
 	
 	// sort the phases ascending (by their start date)
 	private ArrayList<Phase> sortPhases(ArrayList<Phase> phases){
+		ArrayList<Phase> input = new ArrayList<Phase>(phases);
 		ArrayList<Phase> sorted = new ArrayList<Phase>();
 		
-		int size = phases.size();
+		int size = input.size();
 		for(int i=0;i<size;i++){
-			Phase earliest = getEarliestPhase(phases);
+			Phase earliest = getEarliestPhase(input);
 			sorted.add(i, earliest);
-			phases.remove(earliest);
+			input.remove(earliest);
 		}
 		
 		return sorted;
@@ -709,6 +722,9 @@ public class Core extends ASingelton implements ICoreClient {
 	
 	@Override
 	public boolean calculateProject(){
+		if(isProjectFinished())
+			return false;
+		
 		Project result = null;
 		
 		if(!buildProject())
@@ -735,7 +751,13 @@ public class Core extends ASingelton implements ICoreClient {
 	
 	@Override
 	public void saveProject(){
-		if(buildProject(true, false)){
+		boolean buildSuccess;
+		if(!isProjectFinished()){
+			buildSuccess = buildProject(true, false);
+		}else
+			buildSuccess = buildProject(true, true);
+		
+		if(buildSuccess){
 			try {
 				server.saveProject(project);
 				view.displayProjects(server.getAllProjectNames());
@@ -823,7 +845,10 @@ public class Core extends ASingelton implements ICoreClient {
 	
 	@Override
 	public boolean isProjectFinished(){
-		return project.isFinished();
+		if(project == null)
+			return false;
+		else
+			return project.isFinished();
 	}
 
 
