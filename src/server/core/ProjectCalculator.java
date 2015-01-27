@@ -66,7 +66,7 @@ public class ProjectCalculator extends UnicastRemoteObject implements IServerSer
 
 
 	@Override
-	public File getProjectCSV(String projectName) throws RemoteException {
-		return core.getProjectCSV(projectName);
+	public File getProjectCSV(Project project) throws RemoteException {
+		return core.getProjectCSV(project);
 	}
 }

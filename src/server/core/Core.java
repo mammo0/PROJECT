@@ -1223,8 +1223,8 @@ public class Core extends ASingelton implements ICoreServer {
 	}
 
 	@Override
-	public File getProjectCSV(String projectName) throws RemoteException {
-		// TODO Auto-generated method stub
+	public File getProjectCSV(Project project) throws RemoteException {
+		
 		return null;
 	}
 }
