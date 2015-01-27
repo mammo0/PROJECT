@@ -627,10 +627,7 @@ public class Core extends ASingelton implements ICoreServer {
 			int _endyear = phases.getEndDate().getYear();
 			int _startquarter = (phases.getStartDate().getMonthValue() - 1) / 3 + 1;
 			int _endquarter = (phases.getEndDate().getMonthValue() - 1) / 3 + 1;
-			int daysInQ1=0;
-			int daysInQ2=0;
-			int daysInQ3=0;
-			int daysInQ4=0;
+			
 			int daysInYStart=0;
 			int daysInYEnd=0;
 			float dayfactorintern = 0;
@@ -658,14 +655,15 @@ public class Core extends ASingelton implements ICoreServer {
 				}
 			}
 			
-			//Dauer in Kalendertagen
-		
-			
 			//Dauer in Arbeitstagen
 			durationinworkingdays = (int) Math.round(_diffdate * (0.55835));
 			
 			for (Skill skill : project.getSkills()) {
 				Result result = skill.getResult();
+				int daysInQ1=0;
+				int daysInQ2=0;
+				int daysInQ3=0;
+				int daysInQ4=0;
 				int availableInternalDays=0;
 				int availableExternalDays=0;
 				
@@ -884,9 +882,7 @@ public class Core extends ASingelton implements ICoreServer {
 									createQ4(daysInQ4, startdate.getYear(), dayfactorintern, 
 												dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 										}
-							
-							int j = calculateIndexOfStartYear(enddate.getYear(), result);
-							
+						
 							if(enddate.getMonthValue()==1||enddate.getMonthValue()==2||enddate.getMonthValue()==3){
 								//Nur Q1
 								daysInQ1 = daysInYEnd;
@@ -941,9 +937,6 @@ public class Core extends ASingelton implements ICoreServer {
 				}
 			}
 		
-	
-	
-
 	
 	public int calculateIndexOfStartYear(int year, Result result){
 		
