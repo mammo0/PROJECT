@@ -633,11 +633,7 @@ public class Core extends ASingelton implements ICoreServer {
 			int daysInYEnd=0;
 			float dayfactorintern = 0;
 			float dayfactorextern = 0;
-			int availableInternalDays=0;
-			int availableExternalDays=0;
-			
-			int neededInternalDays=0;
-			int neededExternalDays=0;
+		
 			
 			int durationinworkingdays = 0;
 			int neededdays =0;
@@ -668,6 +664,11 @@ public class Core extends ASingelton implements ICoreServer {
 			
 			for (Skill skill : project.getSkills()) {
 				Result result = skill.getResult();
+				int availableInternalDays=0;
+				int availableExternalDays=0;
+				
+				int neededInternalDays=0;
+				int neededExternalDays=0;
 				
 				//Benötigte Arbeitstage Tage des Skills in der Phase
 				if(phases.getSkills().get(skill.getSkillID())!=null){
@@ -681,11 +682,11 @@ public class Core extends ASingelton implements ICoreServer {
 					if(project.getResources().get(i).getSkillID()==skill.getSkillID()){
 						if (project.getResources().get(i).isIntern()==true){
 							double faktor = project.getResources().get(i).getAvailability()*project.getResources().get(i).getSkillAmount()*0.01;
-							availableInternalDays = availableInternalDays+(int)Math.round(availableInternalDays + durationinworkingdays*faktor);
+							availableInternalDays = (int)Math.round(availableInternalDays + durationinworkingdays*faktor);
 						}
 						else {
 							double faktor = project.getResources().get(i).getAvailability()*project.getResources().get(i).getSkillAmount()*0.01;
-							availableExternalDays = availableExternalDays+(int)Math.round(availableExternalDays + durationinworkingdays*faktor);
+							availableExternalDays = (int)Math.round(availableExternalDays + durationinworkingdays*faktor);
 						}
 					}
 				}
