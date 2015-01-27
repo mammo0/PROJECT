@@ -33,7 +33,7 @@ public class CreateXML {
 		this.ProjectFile = ProjectFile;
 		outputFactory = XMLOutputFactory.newInstance();
 		eventWriter = outputFactory.createXMLEventWriter(new FileOutputStream(
-				ProjectFile));
+				ProjectFile), "UTF-8");
 		eventFactory = XMLEventFactory.newInstance();
 		end = eventFactory.createDTD("\n");
 	}
@@ -42,7 +42,7 @@ public class CreateXML {
 	public void saveConfig(Project project) throws Exception,
 			NullPointerException {
 		// create and write Start Tag
-		StartDocument startDocument = eventFactory.createStartDocument("UTF-8", "1.0");
+		StartDocument startDocument = eventFactory.createStartDocument();
 		eventWriter.add(startDocument);
 		// create project open tag
 		StartElement configStartElement = eventFactory.createStartElement("",
