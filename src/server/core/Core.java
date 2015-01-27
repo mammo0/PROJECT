@@ -184,6 +184,8 @@ public class Core extends ASingelton implements ICoreServer {
 		project.setStartDate(startdate);
 		project.setEndDate(enddate);
 	}
+	
+	
 
 	public void calculateYearsQuarters(Project project, Result result) {
 
@@ -509,10 +511,24 @@ public class Core extends ASingelton implements ICoreServer {
 
 			LocalDate startdate = phases.getStartDate();
 			LocalDate enddate = phases.getEndDate();
-			
-			//Gesamte Tage der Phase gilt nur wenn alles in eniem jahr ist!!
-			int _diffdate =enddate.getDayOfYear()-startdate.getDayOfYear()+1;
-			
+			int _diffdate=0;
+			//Gesamte Tage der Phase gilt nur wenn alles in eniem jahr ist!!^
+			if(enddate.getYear()-startdate.getYear()==0){
+			_diffdate =enddate.getDayOfYear()-startdate.getDayOfYear()+1;
+			}
+			else {
+				int yeardiff = enddate.getYear()-startdate.getYear();
+				if(yeardiff == 1){
+					_diffdate=365-startdate.getDayOfYear()+enddate.getDayOfYear();
+				}
+				if(yeardiff>1){
+					yeardiff = yeardiff-1;
+					for (int i = 0; i<yeardiff; i++){
+						_diffdate= _diffdate+365;
+					}
+					_diffdate=_diffdate + 365-startdate.getDayOfYear()+enddate.getDayOfYear();
+				}
+			}
 			int _skillID = 0;
 			int _endyear = phases.getEndDate().getYear();
 			int _startquarter = (phases.getStartDate().getMonthValue() - 1) / 3 + 1;
@@ -726,17 +742,13 @@ public class Core extends ASingelton implements ICoreServer {
 							 //Startjahr
 							//Gibt den Index zur�ck an dem das Startjahr im Array steht
 							int i = calculateIndexOfStartYear(startdate.getYear(), result);
-							if(result.getYears().get(i).getQ1()==null
-								&&result.getYears().get(i).getQ2()==null
-								&&result.getYears().get(i).getQ3()==null){
+							if(startdate.getMonthValue()==10||startdate.getMonthValue()==11||startdate.getMonthValue()==12){
 								daysInQ4=daysInYStart;
 								createQ4(daysInQ4, startdate.getYear(), dayfactorintern, 
 										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 							
 							}
-							else if(result.getYears().get(i).getQ1()==null
-										&&result.getYears().get(i).getQ2()==null
-										&&result.getYears().get(i).getQ3()==null){
+							else if(startdate.getMonthValue()==7||startdate.getMonthValue()==8||startdate.getMonthValue()==9){
 									//Q4 und Q3
 									daysInQ4=92;
 									daysInQ3=daysInYStart-daysInQ4;
@@ -745,8 +757,8 @@ public class Core extends ASingelton implements ICoreServer {
 									createQ4(daysInQ4, startdate.getYear(), dayfactorintern, 
 												dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 						}
-							else if(result.getYears().get(i).getQ1()==null){
-									//Q4 und Q3
+							else if(startdate.getMonthValue()==4||startdate.getMonthValue()==5||startdate.getMonthValue()==6){
+									//Q4 und Q3 und Q2
 									daysInQ4=92;
 									daysInQ3=92;
 									daysInQ2=daysInYStart-daysInQ4-daysInQ3;
