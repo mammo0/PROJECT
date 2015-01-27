@@ -40,6 +40,7 @@ import client.view.components.SkillPane;
 import client.view.dialogs.Dialog;
 import client.view.dialogs.DialogConfirmation;
 import client.view.dialogs.DialogError;
+import client.view.dialogs.DialogWarning;
 
 /**
  * This class is the core for the client application
@@ -342,6 +343,9 @@ public class Core extends ASingelton implements ICoreClient {
 		project.getPhases().sort(new Comparator<Phase>() {
 			@Override
 			public int compare(Phase o1, Phase o2) {
+				if(o1.getStartDate() == null || o2.getStartDate() == null)
+					return -1;
+				
 				return o1.getStartDate().isBefore(o2.getStartDate()) ? 1 :
 					o1.getStartDate().isEqual(o2.getStartDate()) ? 0 : -1;
 			}
@@ -445,6 +449,55 @@ public class Core extends ASingelton implements ICoreClient {
 		if(project.isFinished()){
 			view.disableWrite(true);
 		}
+	}
+	
+	
+	private boolean testPhases(Project result){
+		for(Phase phase : result.getPhases()){
+			if(!phase.isEnoughDays()){
+				PhasePane mark = null;
+				PhasePaneWrapper wrapper = null;
+				Enumeration<PhasePaneWrapper> enumKey = view.getPhasePanes().keys();
+				while(enumKey.hasMoreElements()){
+					PhasePaneWrapper main = enumKey.nextElement();
+					if(main.getPhaseName().equals(phase.getPhaseName())){
+						wrapper = main;
+						break;
+					}
+					if(!view.getPhasePanes().get(main).isEmpty()){
+						for(PhasePaneWrapper sub : view.getPhasePanes().get(main)){
+							if(sub.getPhaseName().equals(phase.getPhaseName())){
+								wrapper = sub;
+								break;
+							}
+						}
+					}
+				}
+				if(wrapper != null){
+					for(PhasePane pane : wrapper.getPhasePanes()){
+						Enumeration<Integer> enumKey2 = phase.getSkills().keys();
+						while(enumKey2.hasMoreElements()){
+							if(pane.getPhaseSkillId() == enumKey2.nextElement()){
+								mark = pane;
+								break;
+							}
+						}
+						
+					}
+					if(mark != null){
+						view.markNode(mark, "txtDuration");
+						String message = "Bitte den Zeitraum verlängern oder mehr Ressourcen eintragen.\n"
+								+ "Achtung, diese Ressourcen stehen dann für das Gesamtprojekt zur Verfügung.";
+						DialogWarning warning = new DialogWarning("Benötigte Personentage nicht durch vorhande Ressourcen abdeckbar", message);
+						Dialog.showDialog(warning);
+						
+						return false;
+					}
+				}
+			}
+		}
+		
+		return true;
 	}
 	
 	
@@ -730,6 +783,8 @@ public class Core extends ASingelton implements ICoreClient {
 			return false;
 		try {
 			result = server.calculateProject(project);
+//			if(!testPhases(result))
+//				return false;
 		} catch (Exception e) {
 			if(view != null){
 				String message = "Fehler beim Berechnen des Projekts.";
@@ -739,6 +794,8 @@ public class Core extends ASingelton implements ICoreClient {
 				view.setStatus(message, 10);
 				
 				askForNewConnection();
+				
+				return false;
 			}
 		}
 		
