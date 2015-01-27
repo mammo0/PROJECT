@@ -56,7 +56,18 @@ public class Core extends ASingelton implements ICoreServer {
 	private Project project;
 //	private Result result;
 	Hashtable<String, Integer> phasesdays = new Hashtable();
-	int _totalShould = 0;
+//	int _totalShould = 0;
+//	int _totalShouldRisk = 0;
+	float _totalCostProject = 0;
+	int _totalmandaysProject = 0;
+	int _totalmandaysIntProject = 0;
+	int _totalmandaysShouldProject = 0;
+	int _totalmandaysShouldProjectRisk = 0;
+	int _totalmandaysExtProject = 0;
+	float _totalCostIntProject = 0;
+	float _totalCostExtProject = 0;
+	private Result resultProject;
+	
 	
 
 	private File projectFilesDir;
@@ -211,6 +222,8 @@ public class Core extends ASingelton implements ICoreServer {
 	@Override
 	public Project calculateProject(Project project) {
 		this.project = project;
+		resultProject = new Result();
+		project.setResult(resultProject);
 		if(project.getPhases().size()!= 0){
 		calculateLenght(project);
 		calculateProjectDays(project);
@@ -245,6 +258,8 @@ public class Core extends ASingelton implements ICoreServer {
 		project.setStartDate(startdate);
 		project.setEndDate(enddate);
 	}
+	
+	
 
 	public void calculateYearsQuarters(Project project, Result result) {
 
@@ -417,11 +432,12 @@ public class Core extends ASingelton implements ICoreServer {
 					availability = (resource.getAvailability()*0.01)*resource.getSkillAmount()*phasesdays.get(phase.getPhaseName());
 					//Wenn vorhandene Tage geringer als ben�tigte Tage der Phase
 					if(availability< phase.getSkills().get(SkillID)){
-						difdays = (int) (phase.getSkills().get(SkillID)-availability);
-						_totalShould = _totalShould + difdays;
-						System.out.println("Zu wenig Ressourcen");
+						//difdays = (int) (phase.getSkills().get(SkillID)-availability);
+						//System.out.println("Zu wenig Ressourcen");
+						phase.setEnoughDays(false);
 					}else{
-						System.out.println("passt");
+						//System.out.println("passt");
+						phase.setEnoughDays(true);
 					}
 				}
 				
@@ -447,8 +463,6 @@ public class Core extends ASingelton implements ICoreServer {
 
 			// set all temp variables
 			int _skillID = 0;
-			
-			int _totalShouldRisk = 0;
 			double _totalBe = 0;
 			double _totalBeExt = 0;
 			int _availability = 0;
@@ -467,7 +481,8 @@ public class Core extends ASingelton implements ICoreServer {
 			float _dayrateExt = skill.getDayRateExt();
 			int _pdTotalBe = 0;
 			int _daysavailable = 0;
-			_totalShould = 0;
+			int _totalShould = 0;
+			int _totalShouldRisk = 0;
 
 			// calculate the total needed mandays per skill
 			_skillID = skill.getSkillID();
@@ -490,6 +505,7 @@ public class Core extends ASingelton implements ICoreServer {
 				}
 
 			}
+			_totalmandaysShouldProject = _totalmandaysShouldProject + _totalShould;
 			result.setPdTotalShould(_totalShould);
 
 			// calculate the total available mandays per skill intern/extern
@@ -547,6 +563,16 @@ public class Core extends ASingelton implements ICoreServer {
 			_costTotal = _costInt + _costExt;
 			_pdTotalBe = _pdInt + _pdExt;
 
+			_totalCostProject = _totalCostProject + _costTotal;
+			_totalCostIntProject = _totalCostIntProject +_costInt;
+			_totalCostExtProject = _totalCostExtProject +_costExt;
+			_totalmandaysProject = _totalmandaysProject + _pdTotalBe;
+			
+			_totalmandaysIntProject = _totalmandaysIntProject +_pdInt;
+			_totalmandaysExtProject = _totalmandaysExtProject + _pdExt;
+			_totalmandaysShouldProjectRisk = _totalmandaysShouldProjectRisk + _totalShouldRisk;
+			
+			
 			// set the result variables
 			result.setPdIntBe(_pdInt);
 			result.setPdExtBe(_pdExt);
@@ -557,8 +583,18 @@ public class Core extends ASingelton implements ICoreServer {
 			result.setCostInt(_costInt);
 			result.setCostTotal(_costTotal);
 			result.setPdTotalShouldRisk(_totalShouldRisk);
-
 			skill.setResult(result);
+			
+			project.getResult().setCostTotal(_totalCostProject);
+			project.getResult().setPdTotalBe(_totalmandaysProject);
+			project.getResult().setPdTotalShould(_totalmandaysShouldProject);
+			project.getResult().setPdIntBe(_totalmandaysIntProject);
+			project.getResult().setPdExtBe(_totalmandaysExtProject);
+			project.getResult().setCostInt(_totalCostIntProject);
+			project.getResult().setCostExt(_totalCostExtProject);
+			project.getResult().setPdTotalShouldRisk(_totalmandaysShouldProjectRisk);
+			
+						
 
 		}
 
@@ -570,10 +606,24 @@ public class Core extends ASingelton implements ICoreServer {
 
 			LocalDate startdate = phases.getStartDate();
 			LocalDate enddate = phases.getEndDate();
-			
-			//Gesamte Tage der Phase gilt nur wenn alles in eniem jahr ist!!
-			int _diffdate =enddate.getDayOfYear()-startdate.getDayOfYear()+1;
-			
+			int _diffdate=0;
+			//Gesamte Tage der Phase gilt nur wenn alles in eniem jahr ist!!^
+			if(enddate.getYear()-startdate.getYear()==0){
+			_diffdate =enddate.getDayOfYear()-startdate.getDayOfYear()+1;
+			}
+			else {
+				int yeardiff = enddate.getYear()-startdate.getYear();
+				if(yeardiff == 1){
+					_diffdate=365-startdate.getDayOfYear()+enddate.getDayOfYear();
+				}
+				if(yeardiff>1){
+					yeardiff = yeardiff-1;
+					for (int i = 0; i<yeardiff; i++){
+						_diffdate= _diffdate+365;
+					}
+					_diffdate=_diffdate + 365-startdate.getDayOfYear()+enddate.getDayOfYear();
+				}
+			}
 			int _skillID = 0;
 			int _endyear = phases.getEndDate().getYear();
 			int _startquarter = (phases.getStartDate().getMonthValue() - 1) / 3 + 1;
@@ -787,17 +837,13 @@ public class Core extends ASingelton implements ICoreServer {
 							 //Startjahr
 							//Gibt den Index zur�ck an dem das Startjahr im Array steht
 							int i = calculateIndexOfStartYear(startdate.getYear(), result);
-							if(result.getYears().get(i).getQ1()==null
-								&&result.getYears().get(i).getQ2()==null
-								&&result.getYears().get(i).getQ3()==null){
+							if(startdate.getMonthValue()==10||startdate.getMonthValue()==11||startdate.getMonthValue()==12){
 								daysInQ4=daysInYStart;
 								createQ4(daysInQ4, startdate.getYear(), dayfactorintern, 
 										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 							
 							}
-							else if(result.getYears().get(i).getQ1()==null
-										&&result.getYears().get(i).getQ2()==null
-										&&result.getYears().get(i).getQ3()==null){
+							else if(startdate.getMonthValue()==7||startdate.getMonthValue()==8||startdate.getMonthValue()==9){
 									//Q4 und Q3
 									daysInQ4=92;
 									daysInQ3=daysInYStart-daysInQ4;
@@ -806,8 +852,8 @@ public class Core extends ASingelton implements ICoreServer {
 									createQ4(daysInQ4, startdate.getYear(), dayfactorintern, 
 												dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
 						}
-							else if(result.getYears().get(i).getQ1()==null){
-									//Q4 und Q3
+							else if(startdate.getMonthValue()==4||startdate.getMonthValue()==5||startdate.getMonthValue()==6){
+									//Q4 und Q3 und Q2
 									daysInQ4=92;
 									daysInQ3=92;
 									daysInQ2=daysInYStart-daysInQ4-daysInQ3;

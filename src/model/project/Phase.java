@@ -15,7 +15,9 @@ public class Phase implements Serializable {
 
 	// the name of the phase
 	private String phaseName;
-
+	
+	// are there enough days ;) ?
+	private boolean enoughDays;
 	// set a parent phase if this phase is a sub phase (default is null)
 	private Phase parent = null;
 
@@ -120,6 +122,14 @@ public class Phase implements Serializable {
 	 */
 	public void setStartDate(LocalDate startDate) {
 		this.startDate = startDate;
+	}
+	
+	public boolean isEnoughDays() {
+		return enoughDays;
+	}
+
+	public void setEnoughDays(boolean enoughDays) {
+		this.enoughDays = enoughDays;
 	}
 
 	/**
