@@ -34,6 +34,8 @@ public class PhasePane extends AnchorPane implements IExpandableNode, ITester {
 	
 	private String oldSelectedSkill;
 	
+	private boolean noListener;
+	
 	
 	/**
 	 * The Constructor
@@ -62,7 +64,7 @@ public class PhasePane extends AnchorPane implements IExpandableNode, ITester {
 		cmbSkills.valueProperty().addListener(new ChangeListener<String>() {
 	        @Override
 	        public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-	            if(newValue != null)
+	            if(newValue != null && !noListener)
 	            	cmbChanged();
 	        }    
 		});
@@ -135,7 +137,7 @@ public class PhasePane extends AnchorPane implements IExpandableNode, ITester {
 	 * This method updates the skills in the drop downs
 	 */
 	public void updateCmbSkills(){
-		ArrayList<String> newSkills = parent.getAvailableSkills();
+		ArrayList<String> newSkills = parent.getAvailableSkills(this, oldSelectedSkill);
 		ArrayList<String> tempSkills = new ArrayList<String>();
 		
 		for(String skill : newSkills){
@@ -161,12 +163,24 @@ public class PhasePane extends AnchorPane implements IExpandableNode, ITester {
 				}
 			}
 			
-			if(deleted && !oldSkill.equals(cmbSkills.getSelectionModel().getSelectedItem())){
+			if(deleted){
 				skills.remove(oldSkill);
 				i--;
 			}
 			deleted = true;
 		}
+		
+		cmbSkills.getSelectionModel().select(oldSelectedSkill);
+	}
+	
+	
+	
+	/**
+	 * Disable/Enable the listener on the combo box
+	 * @param disable
+	 */
+	public void disableListener(boolean disable){
+		this.noListener = disable;
 	}
 	
 	
@@ -224,7 +238,8 @@ public class PhasePane extends AnchorPane implements IExpandableNode, ITester {
 	@Override
 	public void setParentNode(Node parent) {
 		this.parent = (PhasePaneWrapper) parent;
-		updateCmbSkills();
+		if(!noListener)
+			updateCmbSkills();
 	}
 
 

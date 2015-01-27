@@ -301,16 +301,15 @@ public class PhasePaneWrapper extends TitledPane implements ITester {
 	 */
 	public void updateSkillDropDown(){
 		for(PhasePane pane : phaseTable.getContents()){
+			pane.disableListener(true);
 			pane.updateCmbSkills();
+			pane.disableListener(false);
 		}
 	}
 	
 	
-	/**
-	 * Get all available skills
-	 * @return the available skills
-	 */
-	public ArrayList<String> getAvailableSkills(){
+	// get all available skills
+	private ArrayList<String> getAvailableSkills(){
 		availableSkills.clear();
 		
 		ArrayList<Skill> skills = core.getSkills();
@@ -320,6 +319,21 @@ public class PhasePaneWrapper extends TitledPane implements ITester {
 		}
 		
 		return availableSkills;
+	}
+	
+	
+	/**
+	 * Get all available skills for a given pane
+	 * @param pane the pane
+	 * @param newSkillName the new skill name
+	 * @return the available skills
+	 */
+	public ArrayList<String> getAvailableSkills(PhasePane pane, String newSkillName){
+		ArrayList<String> available = new ArrayList<String>(getAvailableSkills());
+		if(newSkillName != null)
+			available.add(newSkillName);
+		
+		return available;
 	}
 	
 	
