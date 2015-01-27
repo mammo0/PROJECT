@@ -24,8 +24,6 @@ import java.util.Hashtable;
 
 import javax.xml.stream.XMLStreamException;
 
-import client.view.dialogs.Dialog;
-import client.view.dialogs.DialogError;
 import model.project.Phase;
 import model.project.Project;
 import model.project.Quarter;
@@ -290,7 +288,6 @@ public class Core extends ASingelton implements ICoreServer {
 		int endquarter = 0;
 		int deltaYears = 0;
 		int numberQuarters = 0;
-		
 
 		int numberofYears = enddateYear - startdateYear + 1;
 		
@@ -443,12 +440,12 @@ public class Core extends ASingelton implements ICoreServer {
 	public void testPhaseavailable (Phase phase , int SkillID){
 		double availability = 0;
 		int difdays = 0;
-		//Wenn AnzahlTage benï¿½tigte SkillTage und phasedays (hashtable) gibt die Anzahl der Arbeistage die eine Phase hat
+		//Wenn AnzahlTage benötigte SkillTage und phasedays (hashtable) gibt die Anzahl der Arbeistage die eine Phase hat
 		if(phase.getSkills().get(SkillID)>phasesdays.get(phase.getPhaseName())){
 			for(Resource resource : project.getResources()){
 				if(resource.getSkillID() == SkillID){
 					availability = (resource.getAvailability()*0.01)*resource.getSkillAmount()*phasesdays.get(phase.getPhaseName());
-					//Wenn vorhandene Tage geringer als benï¿½tigte Tage der Phase
+					//Wenn vorhandene Tage geringer als benötigte Tage der Phase
 					if(availability< phase.getSkills().get(SkillID)){
 						//difdays = (int) (phase.getSkills().get(SkillID)-availability);
 						//System.out.println("Zu wenig Ressourcen");
@@ -501,7 +498,6 @@ public class Core extends ASingelton implements ICoreServer {
 			int _daysavailable = 0;
 			int _totalShould = 0;
 			int _totalShouldRisk = 0;
-			
 
 			// calculate the total needed mandays per skill
 			_skillID = skill.getSkillID();
@@ -626,7 +622,27 @@ public class Core extends ASingelton implements ICoreServer {
 			LocalDate startdate = phases.getStartDate();
 			LocalDate enddate = phases.getEndDate();
 			int _diffdate=0;
-			//Gesamte Tage der Phase gilt nur wenn alles in eniem jahr ist!!^
+			int _endyear = phases.getEndDate().getYear();
+			int _startquarter = (phases.getStartDate().getMonthValue() - 1) / 3 + 1;
+			int _endquarter = (phases.getEndDate().getMonthValue() - 1) / 3 + 1;
+			int daysInQ1=0;
+			int daysInQ2=0;
+			int daysInQ3=0;
+			int daysInQ4=0;
+			int daysInYStart=0;
+			int daysInYEnd=0;
+			float dayfactorintern = 0;
+			float dayfactorextern = 0;
+			int availableInternalDays=0;
+			int availableExternalDays=0;
+			
+			int neededInternalDays=0;
+			int neededExternalDays=0;
+			
+			int durationinworkingdays = 0;
+			int neededdays =0;
+			
+			//Gesamte Tage der Phase
 			if(enddate.getYear()-startdate.getYear()==0){
 			_diffdate =enddate.getDayOfYear()-startdate.getDayOfYear()+1;
 			}
@@ -643,60 +659,57 @@ public class Core extends ASingelton implements ICoreServer {
 					_diffdate=_diffdate + 365-startdate.getDayOfYear()+enddate.getDayOfYear();
 				}
 			}
-			int _skillID = 0;
-			int _endyear = phases.getEndDate().getYear();
-			int _startquarter = (phases.getStartDate().getMonthValue() - 1) / 3 + 1;
-			int _endquarter = (phases.getEndDate().getMonthValue() - 1) / 3 + 1;
-			float _availIntern=0;
-			float _availExtern=0;
-			int daysInQ1=0;
-			int daysInQ2=0;
-			int daysInQ3=0;
-			int daysInQ4=0;
-			int daysInYStart=0;
-			int daysInYEnd=0;
-			double faktor=0;
 			
-			float extDaysPerPhaseAndSkill= 0;
-			float dayfactorintern = 0;
-			float dayfactorextern = 0;
+			//Dauer in Kalendertagen
+		
+			
+			//Dauer in Arbeitstagen
+			durationinworkingdays = (int) Math.round(_diffdate * (0.55835));
 			
 			for (Skill skill : project.getSkills()) {
-				
 				Result result = skill.getResult();
-				_skillID = skill.getSkillID();
-				Enumeration<Integer> enumKey = phases.getSkills().keys();
-				while (enumKey.hasMoreElements()) {
-					int key = enumKey.nextElement();
-					if (key == _skillID) {
-
-						//Gilt fï¿½r jede Berechnung
-						for( int i = 0; i<project.getResources().size(); i++){
-							if (project.getResources().get(i).getSkillID()==_skillID){
-								if(project.getResources().get(i).isIntern()==true){
-									_availIntern= _availIntern + project.getResources().get(i).getAvailability();
-								}
-								else
-								{
-									_availExtern= _availExtern + project.getResources().get(i).getAvailability();
-								}
-							}
+				
+				//Benötigte Arbeitstage Tage des Skills in der Phase
+				if(phases.getSkills().get(skill.getSkillID())!=null){
+				neededdays = phases.getSkills().get(skill.getSkillID());
+				}
+				else{
+					neededdays=0;
+				}
+				//Vorhandene Interne und externe Tage 
+				for ( int i = 0; i<project.getResources().size(); i++){
+					if(project.getResources().get(i).getSkillID()==skill.getSkillID()){
+						if (project.getResources().get(i).isIntern()==true){
+							double faktor = project.getResources().get(i).getAvailability()*project.getResources().get(i).getSkillAmount()*0.01;
+							availableInternalDays = availableInternalDays+(int)Math.round(availableInternalDays + durationinworkingdays*faktor);
 						}
-					
-						//Benï¿½tigte Tage pro Skill und Phase auslesen
-						int neededDaysPerSkillAndPhase = phases.getSkills().get(_skillID);
-						//Summe der Verfï¿½gbarkeiten in Faktor umrechnen, mit welchem dann zuerest die externen Tage berechnet werden
-						if(_availExtern!=0){
-						faktor = _availIntern / _availExtern;
-						faktor = faktor +1;
-						//Externe Tage berechen
-						 extDaysPerPhaseAndSkill=(float) (neededDaysPerSkillAndPhase/faktor);
+						else {
+							double faktor = project.getResources().get(i).getAvailability()*project.getResources().get(i).getSkillAmount()*0.01;
+							availableExternalDays = availableExternalDays+(int)Math.round(availableExternalDays + durationinworkingdays*faktor);
 						}
-						//interne Tage berechnen
-						 float intDaysPerPhaseAndSkill=neededDaysPerSkillAndPhase-extDaysPerPhaseAndSkill;
+					}
+				}
+				
+				//Tage verteilen auf intern und extern und Kosten berechnen und ins Result schreiben
+				if (neededdays==0){
+					neededInternalDays=0;
+					neededExternalDays=0;
+				}else if (neededdays<=availableExternalDays){
+					neededInternalDays=0;
+					neededExternalDays=neededdays;
+				} else if(neededdays<=availableExternalDays+availableInternalDays){
+					neededInternalDays=neededdays-availableExternalDays;
+					neededExternalDays=availableExternalDays;
+				} else if (neededdays>availableExternalDays+availableInternalDays){
+					neededInternalDays=availableInternalDays;
+					neededExternalDays=availableExternalDays;
+				}
 						 
-						 dayfactorintern = intDaysPerPhaseAndSkill/_diffdate;
-						 dayfactorextern = extDaysPerPhaseAndSkill/_diffdate;
+						 dayfactorintern = (float) neededInternalDays/_diffdate;
+						 dayfactorextern = (float) neededExternalDays/_diffdate;
+						 
+						 
+						 
 						//Start und Ende in einem Quartal
 						if (result.getYears().size()==1){
 								if( _startquarter == _endquarter) {
@@ -704,162 +717,129 @@ public class Core extends ASingelton implements ICoreServer {
 							if (_startquarter == 1 && _endquarter == 1) {
 								daysInQ1=_diffdate;
 								createQ1(daysInQ1, startdate.getYear(), dayfactorintern, 
-										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
+										dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 								
 							} else if (_startquarter == 2 && _endquarter == 2) {
 								daysInQ2=_diffdate;
 								createQ2(daysInQ2, startdate.getYear(), dayfactorintern, 
-										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
+										dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 
 							} else if (_startquarter == 3 && _endquarter == 3) {
 								daysInQ3=_diffdate;
 								createQ3(daysInQ3, startdate.getYear(), dayfactorintern, 
-										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
+										dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 
 							} else if (_startquarter == 4 && _endquarter == 4) {
 								daysInQ4=_diffdate;
 								createQ4(daysInQ4, startdate.getYear(), dayfactorintern, 
-										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
+										dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 							}
-						} else {
-							//Phasen, die lï¿½nger als ein Quartal dauern, bzw die Quartalsgrenzen ï¿½berschreiten
-							//_endquarter - _startquarter = 1 besagt, dass die Phase in Qn beginnt und in Qn+1 endet
+						}
+								else {
 							if (_endquarter - _startquarter == 1) {
 								//Q1
 								if (startdate.getMonthValue() == 1
 										|| startdate.getMonthValue() == 2
 										|| startdate.getMonthValue() == 3){
-								
-								LocalDate enddatequarter = LocalDate.of(_endyear, 3, 31);
-							//Tage die im ersten Quartal liegen
-								 daysInQ1 = enddatequarter.getDayOfYear()-startdate.getDayOfYear()+1;
-							//Restliche tage folglich im 2 quartal	
-								 daysInQ2 = _diffdate - daysInQ1;
-								 //Tage auf die Quartale verteilen
-								 //Wie viele SkillTage verteilen sich auf einen DateDiff Tag
-								 //Also wenn die Phase Datediff 90 tage dauert und man einen internen mit 30 tagen verplanen muss
-								 //dann ist an einem Datedifftag 0,333 des internen verbraucht
-								 //diese Zahl dann mal die anzahl der arbeitstage im Q1 udn in Q2
-								 
-								 //Faktor, also wie oben beschrieben zb 0,33 brechenen  --> wird oben berechnet
+								 LocalDate enddatequarter = LocalDate.of(_endyear, 3, 31);
+								 daysInQ1 = enddatequarter.getDayOfYear()-startdate.getDayOfYear()+1;//Tage die im ersten Quartal liegen
+								 daysInQ2 = _diffdate - daysInQ1;//Restliche tage folglich im 2 quartal	
 								 
 								 createQ1(daysInQ1, startdate.getYear(), dayfactorintern, 
-											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
+											dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 								 createQ2(daysInQ2, startdate.getYear(), dayfactorintern, 
-											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
+											dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 								}
 								//Q2
 								else if (startdate.getMonthValue() == 4
 										|| startdate.getMonthValue() == 5
 										|| startdate.getMonthValue() == 6){
-								
 								LocalDate enddatequarter = LocalDate.of(_endyear, 6, 30);
-							//Tage die im zweiten Quartal liegen
-								daysInQ2 = enddatequarter.getDayOfYear()-startdate.getDayOfYear();
-							//Restliche tage folglich im 3 quartal	
-								daysInQ3 = _diffdate - daysInQ2;
+								daysInQ2 = enddatequarter.getDayOfYear()-startdate.getDayOfYear();//Tage die im zweiten Quartal liegen
+								daysInQ3 = _diffdate - daysInQ2;//Restliche tage folglich im 3 quartal	
 								
 								createQ2(daysInQ2, startdate.getYear(), dayfactorintern, 
-										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
+										dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 								createQ3(daysInQ3, startdate.getYear(), dayfactorintern, 
-										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
-								
+										dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 								}
 								//Q3
 								else if (startdate.getMonthValue() == 7
 										|| startdate.getMonthValue() == 8
 										|| startdate.getMonthValue() == 9){
-								
 								LocalDate enddatequarter = LocalDate.of(_endyear, 9, 30);
-							//Tage die im dritten Quartal liegen
-								daysInQ3 = enddatequarter.getDayOfYear()-startdate.getDayOfYear();
-							//Restliche tage folglich im 4 quartal	
-								 daysInQ4 = _diffdate - daysInQ3;
+								daysInQ3 = enddatequarter.getDayOfYear()-startdate.getDayOfYear();//Tage die im dritten Quartal liegen
+								daysInQ4 = _diffdate - daysInQ3;//Restliche tage folglich im 4 quartal
 								 
 								createQ3(daysInQ3, startdate.getYear(), dayfactorintern, 
-											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
+											dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 								createQ4(daysInQ4, startdate.getYear(), dayfactorintern, 
-											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
-	
-							} 
-//Wenn ein gesamtes Quartal dabei ist					
+											dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
+							} 	
+							}
+							//Wenn ein gesamtes Quartal dabei ist					
 							else if (_endquarter - _startquarter == 2) {
 								//Q1
 								if (startdate.getMonthValue() == 1
 										|| startdate.getMonthValue() == 2
 										|| startdate.getMonthValue() == 3){
-								
 								LocalDate enddatequarter = LocalDate.of(_endyear, 3, 31);
-							//Tage die im ersten Quartal liegen
-								 daysInQ1 = enddatequarter.getDayOfYear()-startdate.getDayOfYear();
-							//Tage im gesamten 2. Quartal
-								 daysInQ2 = 91;
-							// Tage im 3 Quartal
-								 daysInQ3=_diffdate - daysInQ1 - daysInQ2;
+								 daysInQ1 = enddatequarter.getDayOfYear()-startdate.getDayOfYear();//Tage die im ersten Quartal liegen
+								 daysInQ2 = 91;//Tage im gesamten 2. Quartal
+								 daysInQ3=_diffdate - daysInQ1 - daysInQ2;// Tage im 3 Quartal
 						
 								 createQ1(daysInQ1, startdate.getYear(), dayfactorintern, 
-											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
+											dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 								 createQ2(daysInQ2, startdate.getYear(), dayfactorintern, 
-											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
+											dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 								 createQ3(daysInQ3, startdate.getYear(), dayfactorintern, 
-											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
+											dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 							}
 								else if (startdate.getMonthValue() == 4
 										|| startdate.getMonthValue() == 5
 										|| startdate.getMonthValue() == 6){
-									
-									
 									LocalDate enddatequarter = LocalDate.of(_endyear, 6, 30);
-									//Tage die im ersten Quartal liegen
-										 daysInQ2 = enddatequarter.getDayOfYear()-startdate.getDayOfYear();
-									//Tage im gesamten 2. Quartal
-										 daysInQ3 = 92;
-									// Tage im 3 Quartal
+										 daysInQ2 = enddatequarter.getDayOfYear()-startdate.getDayOfYear();//Tage im gesamten 2. Quartal
+										 daysInQ3 = 92;// Tage im 3 Quartal
 										 daysInQ4=_diffdate - daysInQ2 - daysInQ3;
+										 
 										 createQ2(daysInQ2, startdate.getYear(), dayfactorintern, 
-													dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
+													dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 										 createQ3(daysInQ3, startdate.getYear(), dayfactorintern, 
-													dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
+													dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 										 createQ4(daysInQ4, startdate.getYear(), dayfactorintern, 
-													dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
+													dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 								}
-				
-							} else if (_endquarter - _startquarter == 3) {
-								
+							}
+							 else if (_endquarter - _startquarter == 3) {
 								LocalDate enddatequarter = LocalDate.of(_endyear, 3, 31);
 								//Tage die im ersten Quartal liegen
 									 daysInQ1 = enddatequarter.getDayOfYear()-startdate.getDayOfYear();
-								//Tage im gesamten 2. Quartal
-									 daysInQ2 = 91;
-								// Tage im 3 Quartal
-									 daysInQ3=92;
-								// Tage im 4 Quartale
-									 daysInQ4= _diffdate-daysInQ1-daysInQ2-daysInQ3;
+									 daysInQ2 = 91;//Tage im gesamten 2. Quartal
+									 daysInQ3=92;// Tage im 3 Quartal
+									 daysInQ4= _diffdate-daysInQ1-daysInQ2-daysInQ3;// Tage im 4 Quartale
 									 
 									 createQ1(daysInQ1, startdate.getYear(), dayfactorintern, 
-												dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
+												dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 									 createQ2(daysInQ2, startdate.getYear(), dayfactorintern, 
-												dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
+												dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 									 createQ3(daysInQ3, startdate.getYear(), dayfactorintern, 
-												dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
+												dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 									 createQ4(daysInQ4, startdate.getYear(), dayfactorintern, 
-												dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
+												dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 							}
 						}
-					}
-				}
-						//Abschluss der if Abfrage ob es sich um das gleiche jahr handelt
+				}//Abschluss der if Abfrage ob es sich um das gleiche jahr handelt
 						else if(result.getYears().size()==2){
 							daysInYStart = 365-startdate.getDayOfYear();
 							daysInYEnd = enddate.getDayOfYear();
 							
 							 //Startjahr
 							//Gibt den Index zurï¿½ck an dem das Startjahr im Array steht
-							int i = calculateIndexOfStartYear(startdate.getYear(), result);
 							if(startdate.getMonthValue()==10||startdate.getMonthValue()==11||startdate.getMonthValue()==12){
 								daysInQ4=daysInYStart;
 								createQ4(daysInQ4, startdate.getYear(), dayfactorintern, 
-										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
+										dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 							
 							}
 							else if(startdate.getMonthValue()==7||startdate.getMonthValue()==8||startdate.getMonthValue()==9){
@@ -867,9 +847,9 @@ public class Core extends ASingelton implements ICoreServer {
 									daysInQ4=92;
 									daysInQ3=daysInYStart-daysInQ4;
 									createQ3(daysInQ3, startdate.getYear(), dayfactorintern, 
-											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);	
+											dayfactorextern, skill, neededInternalDays, neededExternalDays, result);	
 									createQ4(daysInQ4, startdate.getYear(), dayfactorintern, 
-												dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
+												dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 						}
 							else if(startdate.getMonthValue()==4||startdate.getMonthValue()==5||startdate.getMonthValue()==6){
 									//Q4 und Q3 und Q2
@@ -877,11 +857,11 @@ public class Core extends ASingelton implements ICoreServer {
 									daysInQ3=92;
 									daysInQ2=daysInYStart-daysInQ4-daysInQ3;
 									createQ2(daysInQ2, startdate.getYear(), dayfactorintern, 
-											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
+											dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 									createQ3(daysInQ3, startdate.getYear(), dayfactorintern, 
-											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);	
+											dayfactorextern, skill, neededInternalDays, neededExternalDays, result);	
 									createQ4(daysInQ4, startdate.getYear(), dayfactorintern, 
-												dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
+												dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 						}
 							else {
 									//Q4 und Q3
@@ -890,54 +870,51 @@ public class Core extends ASingelton implements ICoreServer {
 									daysInQ2=91;
 									daysInQ1=daysInYStart-daysInQ4-daysInQ3-daysInQ2;
 									createQ1(daysInQ1, startdate.getYear(), dayfactorintern, 
-											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
+											dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 									
 									createQ2(daysInQ2, startdate.getYear(), dayfactorintern, 
-											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
+											dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 									
 									createQ3(daysInQ3, startdate.getYear(), dayfactorintern, 
-											dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
+											dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 									
 									createQ4(daysInQ4, startdate.getYear(), dayfactorintern, 
-												dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
+												dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 										}
 							
 							int j = calculateIndexOfStartYear(enddate.getYear(), result);
 							
-							if(result.getYears().get(j).getQ2()==null
-								&&result.getYears().get(j).getQ3()==null
-								&&result.getYears().get(j).getQ4()==null){
+							if(enddate.getMonthValue()==1||enddate.getMonthValue()==2||enddate.getMonthValue()==3){
 								//Nur Q1
 								daysInQ1 = daysInYEnd;
 								
 								createQ1(daysInQ1, enddate.getYear(), dayfactorintern, 
-										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
+										dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 								 
 							}
-							else if(result.getYears().get(j).getQ3()==null
-										&&result.getYears().get(j).getQ4()==null){
+							else if(enddate.getMonthValue()==4||enddate.getMonthValue()==5||enddate.getMonthValue()==6){
 									//Q1, Q2
 									daysInQ1= 90;
 									daysInQ2 =daysInYEnd- daysInQ1;
 										
 									createQ1(daysInQ1, enddate.getYear(), dayfactorintern, 
-												dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
+												dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 									createQ2(daysInQ2, enddate.getYear(), dayfactorintern, 
-												dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
+												dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 								
 							}
 							
-							else if(result.getYears().get(j).getQ4()==null){
+							else if(enddate.getMonthValue()==7||enddate.getMonthValue()==8||enddate.getMonthValue()==9){
 									daysInQ1= 90;
 									daysInQ2 = 91;
 									daysInQ3 = daysInYEnd- daysInQ1-daysInQ2;
 								
 							createQ1(daysInQ1, enddate.getYear(), dayfactorintern, 
-										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
+										dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 							createQ2(daysInQ2, enddate.getYear(), dayfactorintern, 
-										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
+										dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 							createQ3(daysInQ3, enddate.getYear(), dayfactorintern, 
-									dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
+									dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 					
 					}
 							
@@ -948,20 +925,21 @@ public class Core extends ASingelton implements ICoreServer {
 								daysInQ3 = 92;
 								daysInQ4 = daysInYEnd- daysInQ1-daysInQ2-daysInQ3;
 								createQ1(daysInQ1, enddate.getYear(), dayfactorintern, 
-										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
+										dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 								createQ2(daysInQ2, enddate.getYear(), dayfactorintern, 
-										dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
+										dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 								createQ3(daysInQ3, enddate.getYear(), dayfactorintern, 
-									dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
+									dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 								createQ4(daysInQ4, enddate.getYear(), dayfactorintern, 
-									dayfactorextern, skill, intDaysPerPhaseAndSkill, extDaysPerPhaseAndSkill, result);
+									dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 							}
 						}
 					}
 				}
 			}
-		}
-	}
+		
+	
+	
 
 	
 	public int calculateIndexOfStartYear(int year, Result result){
@@ -986,8 +964,8 @@ public class Core extends ASingelton implements ICoreServer {
 		float externalDaysPerSkillInQ1 = daysInQ1*dayfactorextern;
 		 
 		 //Kosten berechnen
-		 float internalCostsPerSkillInQ1=intDaysPerPhaseAndSkill*skill.getDayRateInt();
-		 float externalCostsPerSkillInQ1=extDaysPerPhaseAndSkill*skill.getDayRateExt();
+		 float internalCostsPerSkillInQ1=internalDaysPerSkillInQ1*skill.getDayRateInt();
+		 float externalCostsPerSkillInQ1=externalDaysPerSkillInQ1*skill.getDayRateExt();
 		 //extDaysPerPhaseAndSkill und intDaysPerPhaseAndSkill ins Result (q1) schreiben und auch die kosten
 		float tempIntDays = result.getYears().get(yearindex).getQ1().getPdInt();
 		float tempExtDays = result.getYears().get(yearindex).getQ1().getPdExt();
@@ -1016,8 +994,8 @@ public class Core extends ASingelton implements ICoreServer {
 		float externalDaysPerSkillInQ2 = daysInQ2*dayfactorextern;
 		 
 		 //Kosten berechnen
-		 float internalCostsPerSkillInQ2=intDaysPerPhaseAndSkill*skill.getDayRateInt();
-		 float externalCostsPerSkillInQ2=extDaysPerPhaseAndSkill*skill.getDayRateExt();
+		 float internalCostsPerSkillInQ2=internalDaysPerSkillInQ2*skill.getDayRateInt();
+		 float externalCostsPerSkillInQ2=externalDaysPerSkillInQ2*skill.getDayRateExt();
 		 //extDaysPerPhaseAndSkill und intDaysPerPhaseAndSkill ins Result (q2) schreiben und auch die kosten
 		float tempIntDays = result.getYears().get(yearindex).getQ2().getPdInt();
 		float tempExtDays = result.getYears().get(yearindex).getQ2().getPdExt();
@@ -1048,8 +1026,8 @@ public class Core extends ASingelton implements ICoreServer {
 		float externalDaysPerSkillInQ3 = daysInQ3*dayfactorextern;
 		 
 		 //Kosten berechnen
-		 float internalCostsPerSkillInQ3=intDaysPerPhaseAndSkill*skill.getDayRateInt();
-		 float externalCostsPerSkillInQ3=extDaysPerPhaseAndSkill*skill.getDayRateExt();
+		 float internalCostsPerSkillInQ3=internalDaysPerSkillInQ3*skill.getDayRateInt();
+		 float externalCostsPerSkillInQ3=externalDaysPerSkillInQ3*skill.getDayRateExt();
 		 //extDaysPerPhaseAndSkill und intDaysPerPhaseAndSkill ins Result (q3) schreiben und auch die kosten
 		float tempIntDays = result.getYears().get(yearindex).getQ3().getPdInt();
 		float tempExtDays = result.getYears().get(yearindex).getQ3().getPdExt();
@@ -1079,8 +1057,8 @@ public class Core extends ASingelton implements ICoreServer {
 		float externalDaysPerSkillInQ4 = daysInQ4*dayfactorextern;
 		 
 		 //Kosten berechnen
-		 float internalCostsPerSkillInQ4=intDaysPerPhaseAndSkill*skill.getDayRateInt();
-		 float externalCostsPerSkillInQ4=extDaysPerPhaseAndSkill*skill.getDayRateExt();
+		 float internalCostsPerSkillInQ4=internalDaysPerSkillInQ4*skill.getDayRateInt();
+		 float externalCostsPerSkillInQ4=externalDaysPerSkillInQ4*skill.getDayRateExt();
 		 //extDaysPerPhaseAndSkill und intDaysPerPhaseAndSkill ins Result (q4) schreiben und auch die kosten
 		float tempIntDays = result.getYears().get(yearindex).getQ4().getPdInt();
 		float tempExtDays = result.getYears().get(yearindex).getQ4().getPdExt();
