@@ -171,8 +171,8 @@ public class CreateXML {
 				+ project.getSkills().get(i).getDayRateInt());
 		createNode(eventWriter, "dayRateExt", ""
 				+ project.getSkills().get(i).getDayRateExt());
-//		createNode(eventWriter, "pdTotalReal", ""
-//				+ project.getSkills().get(i).getPdTotalReal());
+		createNode(eventWriter, "pdTotalReal", ""
+				+ project.getSkills().get(i).getPdTotalReal());
 
 		eventWriter.add(eventFactory.createEndElement("", "", "skill"));
 		eventWriter.add(end);
