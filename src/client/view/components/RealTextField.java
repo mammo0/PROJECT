@@ -27,7 +27,9 @@ public class RealTextField extends TextField implements ITester{
 	}
 	
 	
-	
+	/**
+	 * Constructor
+	 */
 	public RealTextField(){
 		this(false);
 	}
@@ -58,7 +60,11 @@ public class RealTextField extends TextField implements ITester{
 			textFields.add(this);
 	}
 	
-	private void updateSum(){
+	
+	/**
+	 * Update the sums
+	 */
+	public static void updateSum(){
 		int sum = 0;
 		RealTextField summarize = null;
 		for(RealTextField field : textFields){

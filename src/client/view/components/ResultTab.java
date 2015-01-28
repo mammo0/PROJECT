@@ -316,6 +316,8 @@ public class ResultTab extends AnchorPane {
 		}else if(!core.isProjectFinished())
 			tblPD.getColumns().remove(colRealPD);
 		
+		RealTextField.updateSum();
+		
 		tblPD.setItems(pdData);
 	}
 	
