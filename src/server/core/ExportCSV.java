@@ -117,9 +117,9 @@ public class ExportCSV {
 
 			try {
 				for (int i = 0; i <phaseGroup.size(); i++) {
-					builder.append(phaseGroup.get(i).getPhaseName());
+					builder.append(phaseGroup.get(i).getPhaseName()+ "/n");
 					builder.append(phaseGroup.get(i).getStartDate() + sep
-							+ "-" + sep + phaseGroup.get(i).getEndDate());
+							+ "-" + sep + phaseGroup.get(i).getEndDate()+ "/n");
 					
 					
 //					pWriter.println(phaseGroup.get(i).getPhaseName());
@@ -143,7 +143,7 @@ public class ExportCSV {
 								+ ":"
 								+ sep
 								+ phaseGroup.get(i).getSkills()
-										.get(nextElement).toString());
+										.get(nextElement).toString()+ "/n");
 //						pWriter.println(skillName
 //								+ ":"
 //								+ sep
@@ -164,7 +164,7 @@ public class ExportCSV {
 			try {
 				builder.append("Manntage und Kosten Intern:" + sep
 						+ prjToEx.getResult().getPdInt() + sep
-						+ prjToEx.getResult().getCostInt());
+						+ prjToEx.getResult().getCostInt()+ "/n");
 				
 //				pWriter.println("Manntage und Kosten Intern:" + sep
 //						+ prjToEx.getResult().getPdInt() + sep
@@ -172,7 +172,7 @@ public class ExportCSV {
 //				
 				builder.append("Manntage und Kosten Extern:" + sep
 						+ prjToEx.getResult().getPdExt() + sep
-						+ prjToEx.getResult().getCostExt());
+						+ prjToEx.getResult().getCostExt()+ "/n");
 				
 //				pWriter.println("Manntage und Kosten Extern:" + sep
 //						+ prjToEx.getResult().getPdExt() + sep
@@ -180,19 +180,19 @@ public class ExportCSV {
 //				
 				builder.append("Manntage und Kosten Gesamt:" + sep
 						+ prjToEx.getResult().getPdTotalShould() + sep
-						+ prjToEx.getResult().getCostTotal());
+						+ prjToEx.getResult().getCostTotal()+ "/n");
 				
 //				pWriter.println("Manntage und Kosten Gesamt:" + sep
 //						+ prjToEx.getResult().getPdTotalShould() + sep
 //						+ prjToEx.getResult().getCostTotal());
-
-				if (prjToEx.getResult().getPdTotalDiff() > 0) {
-					pWriter.println("Info:"
-							+ sep
-							+ "Um das Projektziel zu erreichen werden noch mindestens"
-							+ prjToEx.getResult().getPdTotalDiff()
-							+ " Manntage ben�tigt.");
-				}
+//
+//				if (prjToEx.getResult().getPdTotalDiff() > 0) {
+//					pWriter.println("Info:"
+//							+ sep
+//							+ "Um das Projektziel zu erreichen werden noch mindestens"
+//							+ prjToEx.getResult().getPdTotalDiff()
+//							+ " Manntage ben�tigt.");
+//				}
 
 			} catch (Exception e) {
 				e.printStackTrace();
