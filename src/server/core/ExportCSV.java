@@ -9,6 +9,7 @@ import java.io.PrintWriter;
 import model.project.*;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
 
@@ -37,18 +38,25 @@ public class ExportCSV {
 	 * Sorts the phases by start date
 	 */
 	public void sortPhases() {
-		Phase phaseChanger = new Phase();
-
-		for (int i = phaseList.size(); i > 1; i--) {
-			for (int j = 0; j < i - 1; j++) {
-				if (phaseList.get(j).getStartDate()
-						.isAfter(phaseList.get(j + 1).getStartDate())) {
-					phaseChanger = phaseList.get(j + 1);
-					phaseList.add(j + 1, phaseList.get(j));
-					phaseList.add(j, phaseChanger);
-				}
+//		Phase phaseChanger = new Phase();
+//
+//		for (int i = phaseList.size(); i > 1; i--) {
+//			for (int j = 0; j < i - 1; j++) {
+//				if (phaseList.get(j).getStartDate()
+//						.isAfter(phaseList.get(j + 1).getStartDate())) {
+//					phaseChanger = phaseList.get(j + 1);
+//					phaseList.add(j + 1, phaseList.get(j));
+//					phaseList.add(j, phaseChanger);
+//				}
+//			}
+//		}
+		phaseList.sort(new Comparator<Phase>() {
+			@Override
+			public int compare(Phase o1, Phase o2) {
+				return o1.getStartDate().isBefore(o2.getStartDate()) ? -1 :
+					o1.getStartDate().isEqual(o2.getStartDate()) ? 0 : 1;
 			}
-		}
+		});
 	}
 
 	/**
@@ -154,7 +162,7 @@ public class ExportCSV {
 							+ sep
 							+ "Um das Projektziel zu erreichen werden noch mindestens"
 							+ prjToEx.getResult().getPdTotalDiff()
-							+ " Manntage benötigt.");
+							+ " Manntage benï¿½tigt.");
 				}
 
 			} catch (Exception e) {
