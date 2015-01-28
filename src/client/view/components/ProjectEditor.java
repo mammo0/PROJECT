@@ -184,6 +184,10 @@ public class ProjectEditor extends TabPane implements IComponents {
 	
 	@Override
 	public void clearAll(){
+		txtProjectName.clear();
+		txtProjectResponsible.clear();
+		txtProjectDescription.clear();
+		
 		skillTab.clearAll();
 		resourceTab.clearAll();
 		phaseTab.clearAll();

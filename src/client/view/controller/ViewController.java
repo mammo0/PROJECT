@@ -2,21 +2,28 @@ package client.view.controller;
 
 import global.ASingelton;
 
+import java.awt.Desktop;
+import java.io.File;
+import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.ResourceBundle;
 
+import javafx.animation.Animation.Status;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
 import javafx.animation.Timeline;
 import javafx.application.Platform;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.beans.value.WritableValue;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.AnchorPane;
@@ -26,6 +33,7 @@ import client.core.ICoreClient;
 import client.view.IComponents;
 import client.view.IViewClient;
 import client.view.View;
+import client.view.components.HelpMenu;
 import client.view.components.PhasePane;
 import client.view.components.PhasePaneWrapper;
 import client.view.components.ProjectEditor;
@@ -46,10 +54,14 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 	private ICoreClient core;
 	private IViewClient view;
 	
+	private Timeline animationTimeline;
+	
 	// the project editor pane
 	private ProjectEditor projectEditor;
 	// the settings menu
 	private SettingsMenu settingsMenu;
+	// the help menu
+	private HelpMenu helpMenu;
 	
 	@FXML
 	private AnchorPane editorPane;
@@ -58,6 +70,17 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 	
 	@FXML
 	private Label lblStatus;
+	
+	@FXML
+	private Button btnLoadProject;
+	@FXML
+	private Button btnDeleteProject;
+	
+	@FXML
+	private AnchorPane ancProjectEdit;
+	@FXML
+	private AnchorPane ancManageProjects;
+	
 	
 	
 	/**
@@ -69,6 +92,7 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 		
 		projectEditor = new ProjectEditor();
 		settingsMenu = new SettingsMenu();
+		helpMenu = new HelpMenu();
 	}
 	
 	
@@ -81,6 +105,24 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 		AnchorPane.setBottomAnchor(projectEditor, 0d);
 		AnchorPane.setRightAnchor(projectEditor, 0d);
 		AnchorPane.setLeftAnchor(projectEditor, 0d);
+		
+		// add a focus listener to the list view
+		lstProjects.focusedProperty().addListener(new ChangeListener<Boolean>() {
+			@Override
+			public void changed(ObservableValue<? extends Boolean> observable, Boolean oldValue, Boolean newValue) {
+				if(!newValue){
+					if(!btnLoadProject.focusedProperty().get() && !btnDeleteProject.focusedProperty().get()){
+						String actualProject = core.getLoadedProjectName();
+						if(actualProject != null)
+							lstProjects.getSelectionModel().select(actualProject);
+						else
+							lstProjects.getSelectionModel().clearSelection();
+					}
+				}	
+			}
+		});
+		
+		ancProjectEdit.visibleProperty().bind(lstProjects.focusedProperty());
 	}
 	
 	
@@ -103,22 +145,53 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 	@FXML
 	private void loadProject(){
 		core.loadProject(lstProjects.getSelectionModel().getSelectedItem());
+		projectEditor.requestFocus();
 	}
 	
 	@FXML
 	private void saveProject(){
 		core.saveProject();
+		lstProjects.getSelectionModel().select(core.getLoadedProjectName());
+	}
+	
+	@FXML
+	private void newProject(){
+		clearAll();
+		core.clearProject();
+		markNode(null, "txtProjectName");
+		lstProjects.getSelectionModel().clearSelection();
 	}
 	
 	
 	@FXML
 	private void deleteProject(){
+		String delete = lstProjects.getSelectionModel().getSelectedItem();
 		String message = "Möchten Sie das Projekt: "
-				+ lstProjects.getSelectionModel().getSelectedItem() + "\n"
+				+ delete + "\n"
 				+ "wirklich löschen?";
 		DialogConfirmation confirmation = new DialogConfirmation("Wirklich löschen?", message);
-		if(Dialog.showDialog(confirmation))
-			core.deleteProject(lstProjects.getSelectionModel().getSelectedItem());
+		if(Dialog.showDialog(confirmation)){
+			core.deleteProject(delete);
+			projectEditor.requestFocus();
+		}
+	}
+	
+	@FXML
+	private void help(){
+		File helpFile = new File("res/help/Readme.docx");
+		if (Desktop.isDesktopSupported()){
+			try {
+				Desktop.getDesktop().open(helpFile);
+				return;
+			} catch (IOException e) {}
+		}
+		
+		AnchorPane root = (AnchorPane) view.getViewRootPane();
+		root.getChildren().add(helpMenu);
+		AnchorPane.setTopAnchor(helpMenu, 0d);
+		AnchorPane.setBottomAnchor(helpMenu, 0d);
+		AnchorPane.setRightAnchor(helpMenu, 0d);
+		AnchorPane.setLeftAnchor(helpMenu, 0d);
 	}
 	
 	
@@ -128,12 +201,16 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 		if (startValue != null)
 			targetProperty.setValue(startValue);
 		
+		// stop all currently running animations
+		if(animationTimeline != null && animationTimeline.getStatus().equals(Status.RUNNING))
+			animationTimeline.stop();
+		
 		// start the animation
-		Timeline timeline = new Timeline();
+		animationTimeline = new Timeline();
 		KeyValue keyValue = new KeyValue(targetProperty, endValue);
 		KeyFrame endFrame = new KeyFrame(Duration.seconds(duration), keyValue);
-		timeline.getKeyFrames().add(endFrame);
-		timeline.play();
+		animationTimeline.getKeyFrames().add(endFrame);
+		animationTimeline.play();
 	}
 	
 	

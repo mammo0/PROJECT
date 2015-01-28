@@ -530,6 +530,15 @@ public class Core extends ASingelton implements ICoreClient {
 		return pdModel;
 	}
 	
+	// calculate overflows
+	private OverflowTableModel calculateOverflows(String skillName, Result result){
+		OverflowTableModel overflowModel = new OverflowTableModel();
+		overflowModel.skillName.set(skillName);
+		overflowModel.pdOverflow.set(result.getPuffer());
+		
+		return overflowModel;
+	}
+	
 	// calculate costs
 	private CostTableModel calculateCosts(String skillName, Result result){
 		CostTableModel costModel = new CostTableModel();
@@ -718,6 +727,31 @@ public class Core extends ASingelton implements ICoreClient {
 	}
 	
 	@Override
+	public ObservableList<OverflowTableModel> getOverflowTable(){
+		ObservableList<OverflowTableModel> overflowData = FXCollections.observableArrayList();
+		
+		for(Skill skill : project.getSkills()){
+			OverflowTableModel overflowModel = null;
+			Result result;
+			if(skill.getResult() != null){
+				result = skill.getResult();
+				overflowModel = calculateOverflows(skill.getSkillName(), result);
+			}
+			overflowData.add(overflowModel);
+		}
+		
+		// summary line
+		OverflowTableModel overflowModel = null;
+		Result result = project.getResult();
+		if(result != null){
+			overflowModel = calculateOverflows("Gesamt", result);
+		}
+		overflowData.add(overflowModel);
+		
+		return overflowData;
+	}
+	
+	@Override
 	public ObservableList<CostTableModel> getCostTable(){
 		ObservableList<CostTableModel> costData = FXCollections.observableArrayList();
 		
@@ -783,6 +817,8 @@ public class Core extends ASingelton implements ICoreClient {
 			return false;
 		try {
 			result = server.calculateProject(project);
+			StringBuilder csv = server.getProjectCSV(result);
+			System.out.println(csv.toString());
 //			if(!testPhases(result))
 //				return false;
 		} catch (Exception e) {
@@ -917,5 +953,20 @@ public class Core extends ASingelton implements ICoreClient {
 	@Override
 	public LocalDate getProjectEndDate() {
 		return project.getEndDate();
+	}
+
+
+	@Override
+	public String getLoadedProjectName() {
+		if(project != null)
+			return project.getProjectName();
+		else
+			return null;
+	}
+
+
+	@Override
+	public void clearProject() {
+		project = null;
 	}
 }

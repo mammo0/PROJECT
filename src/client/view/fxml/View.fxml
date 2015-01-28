@@ -21,24 +21,42 @@
             </AnchorPane>
             <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" VBox.vgrow="ALWAYS">
                <children>
-                  <ListView fx:id="lstProjects" layoutX="14.0" layoutY="102.0" prefWidth="180.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="65.0" />
-                  <AnchorPane fx:id="editorPane" layoutX="178.0" layoutY="116.0" prefHeight="431.0" prefWidth="607.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="180.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
-                  <StackPane layoutX="14.0" layoutY="118.0" prefHeight="65.0" prefWidth="165.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+                  <ListView fx:id="lstProjects" layoutX="14.0" layoutY="102.0" prefWidth="180.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="68.0" />
+                  <AnchorPane fx:id="editorPane" layoutX="178.0" layoutY="116.0" prefHeight="431.0" prefWidth="607.0" style="-fx-border-color: black; -fx-border-style: solid hidden solid solid;" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="180.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <StackPane layoutX="14.0" layoutY="118.0" prefHeight="68.0" prefWidth="180.0" style="-fx-background-color: #b2b2b2; -fx-border-color: black; -fx-border-style: solid solid solid hidden;" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
                      <children>
-                        <Label layoutX="14.0" layoutY="25.0" text="Projekte" />
+                        <Label layoutX="14.0" layoutY="25.0" style="-fx-font-size: 30;" text="Projekte" />
                      </children>
                   </StackPane>
                </children>
             </AnchorPane>
-            <AnchorPane style="-fx-background-color: b2b2b2;" VBox.vgrow="NEVER">
+            <HBox>
                <children>
-                  <Button layoutX="704.0" layoutY="14.0" mnemonicParsing="false" onAction="#calculateProject" text="Berechnen" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
-                  <Button layoutX="516.0" layoutY="14.0" mnemonicParsing="false" onAction="#saveProject" text="Speichern" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="110.0" AnchorPane.topAnchor="14.0" />
-                  <Button layoutX="133.0" layoutY="14.0" mnemonicParsing="false" onAction="#loadProject" prefWidth="150.0" text="Projekt laden" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="364.0" AnchorPane.topAnchor="14.0" />
-                  <Button layoutX="14.0" layoutY="13.0" mnemonicParsing="false" onAction="#openSettings" text="Einstellungen" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
-                  <Button layoutX="298.0" layoutY="14.0" mnemonicParsing="false" onAction="#deleteProject" prefWidth="150.0" text="Projekt löschen" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="200.0" AnchorPane.topAnchor="14.0" />
+                  <AnchorPane style="-fx-background-color: b2b2b2; -fx-border-style: solid hidden hidden hidden;">
+                     <children>
+                        <Button layoutX="-3.0" layoutY="11.0" mnemonicParsing="false" onAction="#openSettings" text="Einstellungen" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
+                        <Button layoutX="125.0" layoutY="15.0" mnemonicParsing="false" onAction="#help" text="Hilfe" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="125.0" AnchorPane.topAnchor="14.0" />
+                        <Button layoutX="170.0" layoutY="15.0" mnemonicParsing="false" onAction="#newProject" text="Neues Projekt" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="184.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
+                     </children>
+                  </AnchorPane>
+                  <StackPane HBox.hgrow="ALWAYS">
+                     <children>
+                        <AnchorPane fx:id="ancManageProjects" style="-fx-background-color: b2b2b2; -fx-border-style: solid hidden hidden hidden;" StackPane.alignment="CENTER_RIGHT">
+                           <children>
+                              <Button layoutX="112.0" layoutY="14.0" mnemonicParsing="false" onAction="#saveProject" text="Speichern" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="110.0" AnchorPane.topAnchor="14.0" />
+                              <Button layoutX="189.0" layoutY="8.0" mnemonicParsing="false" onAction="#calculateProject" text="Berechnen" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
+                           </children>
+                        </AnchorPane>
+                        <AnchorPane fx:id="ancProjectEdit" style="-fx-background-color: b2b2b2; -fx-border-color: black; -fx-border-style: solid hidden hidden hidden;" VBox.vgrow="NEVER">
+                           <children>
+                              <Button fx:id="btnLoadProject" layoutX="133.0" layoutY="14.0" mnemonicParsing="false" onAction="#loadProject" text="Projekt laden" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="138.0" AnchorPane.topAnchor="14.0" />
+                              <Button fx:id="btnDeleteProject" layoutX="298.0" layoutY="14.0" mnemonicParsing="false" onAction="#deleteProject" text="Projekt löschen" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
+                           </children>
+                        </AnchorPane>
+                     </children>
+                  </StackPane>
                </children>
-            </AnchorPane>
+            </HBox>
             <GridPane VBox.vgrow="NEVER">
                <columnConstraints>
                   <ColumnConstraints hgrow="SOMETIMES" minWidth="150.0" />

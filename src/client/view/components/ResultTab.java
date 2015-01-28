@@ -21,9 +21,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.ToggleButton;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.VBox;
 import client.core.Core;
 import client.core.CostTableModel;
 import client.core.ICoreClient;
+import client.core.OverflowTableModel;
 import client.core.PDTableModel;
 import client.core.QuarterTableModel;
 import client.view.dialogs.Dialog;
@@ -45,6 +47,15 @@ public class ResultTab extends AnchorPane {
 	private TableColumn<PDTableModel, Integer> colIsPDExt;
 	private TableColumn<PDTableModel, TextField> colRealPD;
 	private ObservableList<PDTableModel> pdData;
+	
+	
+	@FXML
+	private TableView<OverflowTableModel> tblOverflow;
+	@FXML
+	private TableColumn<OverflowTableModel, String> colSkillOverflow;
+	@FXML
+	private TableColumn<OverflowTableModel, Integer> colOverflowPD;
+	private ObservableList<OverflowTableModel> overflowData;
 	
 	
 	@FXML
@@ -80,8 +91,14 @@ public class ResultTab extends AnchorPane {
 	
 	@FXML
 	private Button btnFinish;
+	
 	@FXML
 	private ToggleButton tbnRisk;
+	@FXML
+	private ToggleButton tbnOverflow;
+	
+	@FXML
+	private VBox vbxPDTables;
 	
 	private Timeline timeline;
 	
@@ -111,6 +128,8 @@ public class ResultTab extends AnchorPane {
 		}
 		
 		this.core = Core.getInstance(Core.class);
+		
+		vbxPDTables.getChildren().remove(tblOverflow);
 		
 		errorCells = new ArrayList<TableCell<?,?>>();
 		
@@ -225,6 +244,15 @@ public class ResultTab extends AnchorPane {
 			    new PropertyValueFactory<PDTableModel, TextField>("pdReal")
 			);
 		
+		// Set up the overflow table
+		prepareTable(tblOverflow);
+		colSkillOverflow.setCellValueFactory(
+				new PropertyValueFactory<OverflowTableModel, String>("skillName")
+			);
+		colOverflowPD.setCellValueFactory(
+				new PropertyValueFactory<OverflowTableModel, Integer>("pdOverflow")
+			);
+		
 		// Set up the cost table
 		prepareTable(tblCost);
 		colSkillCost.setCellValueFactory(
@@ -282,6 +310,18 @@ public class ResultTab extends AnchorPane {
 		
 		if(pdData != null && !pdData.isEmpty())
 			refreshPDResults();
+	}
+	
+	
+	@FXML
+	private void tbnOverflowClick(){
+		if(tbnOverflow.isSelected()){
+			tbnOverflow.setText("Überschüsse AUS");
+			vbxPDTables.getChildren().add(tblOverflow);
+		}else{
+			tbnOverflow.setText("Überschüsse EIN");
+			vbxPDTables.getChildren().remove(tblOverflow);
+		}
 	}
 	
 	
@@ -373,6 +413,8 @@ public class ResultTab extends AnchorPane {
 			pdData.clear();
 			RealTextField.clearTextFields();
 		}
+		if(overflowData != null)
+			overflowData.clear();
 		if(costData != null)
 			costData.clear();
 		if(quarterData != null)
@@ -386,6 +428,9 @@ public class ResultTab extends AnchorPane {
 	 */
 	public void displayResults(){
 		refreshPDResults();
+		
+		overflowData = core.getOverflowTable();
+		tblOverflow.setItems(overflowData);
 		
 		costData = core.getCostTable();
 		tblCost.setItems(costData);

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import java.lang.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.layout.GridPane?>
+
+<fx:root stylesheets="@../css/View.css" type="AnchorPane" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <VBox AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+         <children>
+            <ScrollPane fitToHeight="true" fitToWidth="true" hbarPolicy="NEVER" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0" VBox.vgrow="ALWAYS">
+               <content>
+                  <TextArea fx:id="txtHelpText" editable="false" wrapText="true" />
+               </content>
+            </ScrollPane>
+            <AnchorPane style="-fx-background-color: #eaeaea;">
+               <children>
+                  <Button layoutX="510.0" layoutY="60.0" mnemonicParsing="false" onAction="#closeHelpMenu" text="Schließen" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
+               </children>
+            </AnchorPane>
+         </children>
+      </VBox>
+   </children>
+</fx:root>

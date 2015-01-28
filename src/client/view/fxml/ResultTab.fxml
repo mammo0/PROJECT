@@ -14,18 +14,31 @@
               <tabs>
                 <Tab text="Aufwand (PT)">
                      <content>
-                        <TableView fx:id="tblPD">
-                          <columns>
-                            <TableColumn fx:id="colSkillPD" maxWidth="100000.0" minWidth="200.0" prefWidth="200.0" text="Kompetenz" />
-                            <TableColumn fx:id="colShouldPD" maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Soll" />
-                              <TableColumn fx:id="colIsPD" maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Ist-Gesamt" />
-                              <TableColumn fx:id="colIsPDInt" maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Ist-Intern" />
-                              <TableColumn fx:id="colIsPDExt" maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Ist-Extern" />
-                          </columns>
-                           <columnResizePolicy>
-                              <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-                           </columnResizePolicy>
-                        </TableView>
+                        <VBox fx:id="vbxPDTables" spacing="14.0">
+                           <children>
+                              <TableView fx:id="tblPD">
+                                <columns>
+                                  <TableColumn fx:id="colSkillPD" maxWidth="100000.0" minWidth="200.0" prefWidth="200.0" text="Kompetenz" />
+                                  <TableColumn fx:id="colShouldPD" maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Soll" />
+                                    <TableColumn fx:id="colIsPD" maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Ist-Gesamt" />
+                                    <TableColumn fx:id="colIsPDInt" maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Ist-Intern" />
+                                    <TableColumn fx:id="colIsPDExt" maxWidth="100000.0" minWidth="-1.0" prefWidth="-1.0" text="Ist-Extern" />
+                                </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                              </TableView>
+                              <TableView fx:id="tblOverflow">
+                                <columns>
+                                  <TableColumn fx:id="colSkillOverflow" maxWidth="100000.0" minWidth="200.0" prefWidth="200.0" text="Kompetenz" />
+                                  <TableColumn fx:id="colOverflowPD" maxWidth="100000.0" minWidth="150.0" prefWidth="-1.0" text="Überschuss an Externen" />
+                                </columns>
+                                 <columnResizePolicy>
+                                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                                 </columnResizePolicy>
+                              </TableView>
+                           </children>
+                        </VBox>
                      </content>
                   </Tab>
                 <Tab text="Kosten (€/PT)">
@@ -78,6 +91,7 @@
                <children>
                   <ToggleButton fx:id="tbnRisk" layoutX="14.0" layoutY="14.0" mnemonicParsing="false" onAction="#tbnRiskClick" prefWidth="175.0" text="Risikozuschlag EIN" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
                   <Button fx:id="btnFinish" layoutX="273.0" layoutY="14.0" mnemonicParsing="false" onAction="#btnFinishClick" text="Projekt melden" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0" />
+                  <ToggleButton fx:id="tbnOverflow" layoutX="197.0" layoutY="14.0" mnemonicParsing="false" onAction="#tbnOverflowClick" prefWidth="125.0" text="Überschüsse EIN" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="203.0" AnchorPane.topAnchor="14.0" />
                </children>
             </AnchorPane>
          </children>

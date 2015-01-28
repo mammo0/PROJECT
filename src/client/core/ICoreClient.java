@@ -38,6 +38,12 @@ public interface ICoreClient {
 	public ObservableList<PDTableModel> getPDTable(boolean withRisk);
 	
 	/**
+	 * Get an array list with the overflow results
+	 * @return the overflow results
+	 */
+	public ObservableList<OverflowTableModel> getOverflowTable();
+	
+	/**
 	 * Get an array list with the cost results
 	 * @return the cost results
 	 */
@@ -121,4 +127,15 @@ public interface ICoreClient {
 	 * @return the end date
 	 */
 	public LocalDate getProjectEndDate();
+	
+	/**
+	 * Get the actual loaded project name
+	 * @return the project name
+	 */
+	public String getLoadedProjectName();
+	
+	/**
+	 * Clear the project object
+	 */
+	public void clearProject();
 }
