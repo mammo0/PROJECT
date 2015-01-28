@@ -1137,7 +1137,7 @@ public class Core extends ASingelton implements ICoreServer {
 
 	@Override
 	public StringBuilder getProjectCSV(Project project) throws RemoteException {
-		ExportCSV csv = new ExportCSV(calculateProject(project));
+		ExportCSV csv = new ExportCSV(project);
 		csv.ExportFile();
 		
 		return csv.ExportFile();

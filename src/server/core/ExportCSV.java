@@ -1,13 +1,19 @@
 package server.core;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.PrintWriter;
+
+import model.project.*;
+
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
-
-import model.project.Phase;
-import model.project.Project;
 
 /**
  * This class implements all methods needed for the CSV-export.
@@ -51,9 +57,6 @@ public class ExportCSV {
 		phaseList.sort(new Comparator<Phase>() {
 			@Override
 			public int compare(Phase o1, Phase o2) {
-				if(o1.getStartDate() == null || o2.getStartDate() == null)
-					return -1;
-				
 				return o1.getStartDate().isBefore(o2.getStartDate()) ? -1 :
 					o1.getStartDate().isEqual(o2.getStartDate()) ? 0 : 1;
 			}
@@ -108,15 +111,24 @@ public class ExportCSV {
 //			e.printStackTrace();
 //		}
 
-		while (_size > 0) {
-			--_size;
+//		while (_size > 0) {
+//			--_size;
 			phaseGroup = phaseList;
-
+			
+			builder.append("Projektname: "+prjToEx.getProjectName()+"\n");
+			
 			try {
 				for (int i = 0; i <phaseGroup.size(); i++) {
-					builder.append(phaseGroup.get(i).getPhaseName()+ "\n");
+					if(phaseGroup.get(i).getParent()==null){
+					builder.append("Projektphase "+(i+1)+": " +sep+ phaseGroup.get(i).getPhaseName()+ "\n");
 					builder.append(phaseGroup.get(i).getStartDate() + sep
 							+ "-" + sep + phaseGroup.get(i).getEndDate()+ "\n");
+					}else{
+						builder.append("Projektphase "+(i+1)+": " +sep+ phaseGroup.get(i).getParent().getPhaseName()+ "\n");
+						builder.append("Subphase: "+sep+phaseGroup.get(i).getPhaseName()+ "\n");
+						builder.append(phaseGroup.get(i).getStartDate() + sep
+								+ "-" + sep + phaseGroup.get(i).getEndDate()+ "\n");
+					}
 					
 					
 //					pWriter.println(phaseGroup.get(i).getPhaseName());
@@ -136,11 +148,11 @@ public class ExportCSV {
 							}
 						}
 						
-						builder.append(skillName
+						builder.append("Benötigte Ressourcen: "+sep+skillName
 								+ ":"
 								+ sep
 								+ phaseGroup.get(i).getSkills()
-										.get(nextElement).toString()+ "\n");
+										.get(nextElement).toString()+ "PT\n");
 //						pWriter.println(skillName
 //								+ ":"
 //								+ sep
@@ -160,24 +172,24 @@ public class ExportCSV {
 
 			try {
 				builder.append("Manntage und Kosten Intern:" + sep
-						+ prjToEx.getResult().getPdInt() + sep
-						+ prjToEx.getResult().getCostInt()+ "\n");
+						+ prjToEx.getResult().getPdInt()+" PT" + sep
+						+ prjToEx.getResult().getCostInt()+ "€\n");
 				
 //				pWriter.println("Manntage und Kosten Intern:" + sep
 //						+ prjToEx.getResult().getPdInt() + sep
 //						+ prjToEx.getResult().getCostInt());
 //				
 				builder.append("Manntage und Kosten Extern:" + sep
-						+ prjToEx.getResult().getPdExt() + sep
-						+ prjToEx.getResult().getCostExt()+ "\n");
+						+ prjToEx.getResult().getPdExt()+" PT" + sep
+						+ prjToEx.getResult().getCostExt()+ "€\n");
 				
 //				pWriter.println("Manntage und Kosten Extern:" + sep
 //						+ prjToEx.getResult().getPdExt() + sep
 //						+ prjToEx.getResult().getCostExt());
 //				
 				builder.append("Manntage und Kosten Gesamt:" + sep
-						+ prjToEx.getResult().getPdTotalShould() + sep
-						+ prjToEx.getResult().getCostTotal()+ "\n");
+						+ prjToEx.getResult().getPdTotalShould()+" PT" + sep
+						+ prjToEx.getResult().getCostTotal()+ "€\n");
 				
 //				pWriter.println("Manntage und Kosten Gesamt:" + sep
 //						+ prjToEx.getResult().getPdTotalShould() + sep
@@ -203,7 +215,7 @@ public class ExportCSV {
 				}
 			}
 
-		}
+//		}
 		return builder;
 	}
 }
