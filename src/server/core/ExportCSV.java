@@ -1,19 +1,13 @@
 package server.core;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileWriter;
-import java.io.IOException;
 import java.io.PrintWriter;
-
-import model.project.*;
-
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Enumeration;
 import java.util.NoSuchElementException;
+
+import model.project.Phase;
+import model.project.Project;
 
 /**
  * This class implements all methods needed for the CSV-export.
@@ -57,6 +51,9 @@ public class ExportCSV {
 		phaseList.sort(new Comparator<Phase>() {
 			@Override
 			public int compare(Phase o1, Phase o2) {
+				if(o1.getStartDate() == null || o2.getStartDate() == null)
+					return -1;
+				
 				return o1.getStartDate().isBefore(o2.getStartDate()) ? -1 :
 					o1.getStartDate().isEqual(o2.getStartDate()) ? 0 : 1;
 			}
