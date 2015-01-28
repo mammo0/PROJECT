@@ -591,24 +591,24 @@ public class Core extends ASingelton implements ICoreServer {
 			
 			
 			// set the result variables
-			result.setPdIntBe(_pdInt);
-			result.setPdExtBe(_pdExt);
-			result.setPdTotalBe(_pdTotalBe);
+			//result.setPdIntBe(_pdInt);
+			//result.setPdExtBe(_pdExt);
+			//result.setPdTotalBe(_pdTotalBe);
 			result.setPuffer(_Puffer);
 			result.setPdTotalDiff(_totalDif);
-			result.setCostExt(_costExt);
-			result.setCostInt(_costInt);
-			result.setCostTotal(_costTotal);
+			//result.setCostExt(_costExt);
+			//result.setCostInt(_costInt);
+			//result.setCostTotal(_costTotal);
 			result.setPdTotalShouldRisk(_totalShouldRisk);
 			skill.setResult(result);
 			
-			project.getResult().setCostTotal(_totalCostProject);
-			project.getResult().setPdTotalBe(_totalmandaysProject);
+			//project.getResult().setCostTotal(_totalCostProject);
+			//project.getResult().setPdTotalBe(_totalmandaysProject);
 			project.getResult().setPdTotalShould(_totalmandaysShouldProject);
-			project.getResult().setPdIntBe(_totalmandaysIntProject);
-			project.getResult().setPdExtBe(_totalmandaysExtProject);
-			project.getResult().setCostInt(_totalCostIntProject);
-			project.getResult().setCostExt(_totalCostExtProject);
+			//project.getResult().setPdIntBe(_totalmandaysIntProject);
+			//project.getResult().setPdExtBe(_totalmandaysExtProject);
+			//project.getResult().setCostInt(_totalCostIntProject);
+			//project.getResult().setCostExt(_totalCostExtProject);
 			project.getResult().setPdTotalShouldRisk(_totalmandaysShouldProjectRisk);
 			
 						
@@ -935,6 +935,45 @@ public class Core extends ASingelton implements ICoreServer {
 						}
 					}
 				}
+		float _costIntProject = 0;
+		float _costExtProject=0;
+		int _pdIntBeProject = 0;
+		int _pdExtBeProject = 0;
+		for (Skill skill : project.getSkills()){
+			float _costInt = 0;
+			float _costExt = 0;
+			int _pdInt = 0;
+			int _pdExt=0;
+			
+			
+			for (int i=0; i<skill.getResult().getYears().size(); i++){
+				Year year = skill.getResult().getYears().get(i);
+				for (int j = 1; j<=4; j++){
+					Quarter quarter = year.getQuarter(j);
+					if (quarter!=null){
+					_costInt=_costInt+quarter.getCostInt();	
+					_costExt=_costExt+quarter.getCostExt();
+					_pdInt=_pdInt+quarter.getPdInt();
+					_pdExt = _pdExt+quarter.getPdExt();
+					_costIntProject=_costIntProject+quarter.getCostInt();	
+					_costExtProject=_costExtProject+quarter.getCostExt();
+					_pdIntBeProject=_pdIntBeProject+quarter.getPdInt();
+					_pdExtBeProject=_pdExtBeProject+quarter.getPdExt();
+					}
+				}	
+			}
+			skill.getResult().setCostInt(_costInt);
+			skill.getResult().setCostExt(_costExt);
+			skill.getResult().setCostTotal(_costExt+_costInt);
+			skill.getResult().setPdIntBe(_pdInt);
+			skill.getResult().setPdExtBe(_pdExt);
+			skill.getResult().setPdTotalBe(_pdExt+_pdInt);
+		}
+			project.getResult().setCostInt(_costIntProject);
+			project.getResult().setCostExt(_costExtProject);
+			project.getResult().setPdIntBe(_pdIntBeProject);
+			project.getResult().setPdExtBe(_pdExtBeProject);
+			project.getResult().setPdTotalBe(_pdExtBeProject+_pdIntBeProject);
 			}
 		
 	
