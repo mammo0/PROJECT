@@ -232,8 +232,6 @@ public class Core extends ASingelton implements ICoreServer {
 		
 	//	calculateYearsQuarters(project, result);
 		calculateQuarterResults(project);
-		ExportCSV export = new ExportCSV(project);
-		export.ExportFile();
 		}
 		else{
 			
