@@ -59,5 +59,5 @@ public interface IServerService extends Remote{
 	 * @return a CSV file object
 	 * @throws RemoteException
 	 */
-	public File getProjectCSV(Project project) throws RemoteException;
+	public StringBuilder getProjectCSV(Project project) throws RemoteException;
 }
