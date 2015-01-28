@@ -14,9 +14,18 @@
    <children>
       <VBox stylesheets="@../css/View.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <AnchorPane prefHeight="90.0" VBox.vgrow="NEVER">
+            <AnchorPane style="-fx-background-color: white;" VBox.vgrow="NEVER">
                <children>
-                  <ImageView fitHeight="90.0" fitWidth="150.0" layoutX="-13.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0" />
+                  <ImageView fitHeight="90.0" fitWidth="150.0" layoutX="-13.0" layoutY="34.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="40.0" AnchorPane.topAnchor="14.0">
+                     <image>
+                        <Image url="@../../../../res/logos/Grundlogo.png" />
+                     </image></ImageView>
+                  <ImageView fitHeight="75.0" layoutX="471.0" layoutY="-23.0" pickOnBounds="true" preserveRatio="true" AnchorPane.bottomAnchor="14.0" AnchorPane.rightAnchor="14.0" AnchorPane.topAnchor="14.0">
+                     <image>
+                        <Image url="@../../../../res/logos/Hallesche.png" />
+                     </image>
+                  </ImageView>
+                  <Label layoutX="213.0" layoutY="31.0" style="-fx-font-size: 17;" text="Professional Resource Organization Java-Based&#10;Expenditure Calculation Tool" AnchorPane.bottomAnchor="14.0" AnchorPane.leftAnchor="213.0" AnchorPane.topAnchor="14.0" />
                </children>
             </AnchorPane>
             <AnchorPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="800.0" VBox.vgrow="ALWAYS">
