@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import java.net.*?>
 <?import javafx.scene.control.*?>
 <?import java.lang.*?>
@@ -10,7 +11,7 @@
    <children>
       <VBox layoutY="14.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
          <children>
-            <TabPane layoutX="14.0" layoutY="14.0" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="111.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="14.0" VBox.vgrow="ALWAYS">
+            <TabPane fx:id="tabResult" layoutX="14.0" layoutY="14.0" styleClass="tabResult" tabClosingPolicy="UNAVAILABLE" AnchorPane.bottomAnchor="111.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="14.0" VBox.vgrow="ALWAYS">
               <tabs>
                 <Tab text="Aufwand (PT)">
                      <content>
@@ -31,13 +32,16 @@
                               <TableView fx:id="tblOverflow">
                                 <columns>
                                   <TableColumn fx:id="colSkillOverflow" maxWidth="100000.0" minWidth="200.0" prefWidth="200.0" text="Kompetenz" />
-                                  <TableColumn fx:id="colOverflowPD" maxWidth="100000.0" minWidth="150.0" prefWidth="-1.0" text="Überschuss an Externen" />
+                                  <TableColumn fx:id="colOverflowPD" maxWidth="100000.0" minWidth="150.0" prefWidth="-1.0" text="Überschuss an Externen(PT)" />
                                 </columns>
                                  <columnResizePolicy>
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                  </columnResizePolicy>
                               </TableView>
                            </children>
+                           <padding>
+                              <Insets bottom="-1.0" left="-1.0" right="-1.0" top="-1.0" />
+                           </padding>
                         </VBox>
                      </content>
                   </Tab>
@@ -80,8 +84,14 @@
                                     <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                                  </columnResizePolicy>
                               </TableView>
-                              <AnchorPane fx:id="ancTimeline" GridPane.rowIndex="1" />
+                              <AnchorPane fx:id="ancTimeline" style="-fx-background-color: eaeaea;" GridPane.rowIndex="1">
+                                 <VBox.margin>
+                                    <Insets bottom="-1.0" left="-1.0" right="-1.0" top="-1.0" />
+                                 </VBox.margin></AnchorPane>
                            </children>
+                           <padding>
+                              <Insets bottom="-1.0" left="-1.0" right="-1.0" top="-1.0" />
+                           </padding>
                         </VBox>
                      </content>
                   </Tab>

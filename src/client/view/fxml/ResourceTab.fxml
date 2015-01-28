@@ -16,7 +16,7 @@
                </padding></Label>
            <ScrollPane fitToHeight="true" fitToWidth="true" prefViewportHeight="519.0" prefViewportWidth="606.0" VBox.vgrow="ALWAYS">
               <content>
-                 <Accordion fx:id="accSkillList" disable="true" VBox.vgrow="ALWAYS" />
+                 <Accordion fx:id="accSkillList" disable="true" style="-fx-background-color: eaeaea;" VBox.vgrow="ALWAYS" />
               </content>
            </ScrollPane>
         </children>

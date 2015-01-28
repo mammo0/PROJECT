@@ -5,7 +5,7 @@ import java.io.IOException;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.control.ChoiceBox;
+import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
 import client.view.IExpandableNode;
@@ -23,7 +23,7 @@ public class ResourcePane extends AnchorPane implements IExpandableNode, ITester
 	@FXML
 	private TextField txtResourceName;
 	@FXML
-	private ChoiceBox<String> cmbIntExt;
+	private ComboBox<String> cmbIntExt;
 	@FXML
 	private TextField txtAvailability;
 	@FXML

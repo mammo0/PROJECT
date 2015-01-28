@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Hashtable;
 
+
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
@@ -13,6 +14,7 @@ import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.control.TabPane;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableColumn.CellDataFeatures;
@@ -100,6 +102,9 @@ public class ResultTab extends AnchorPane {
 	@FXML
 	private VBox vbxPDTables;
 	
+	@FXML
+	private TabPane tabResult;
+	
 	private Timeline timeline;
 	
 	private BooleanProperty finishable;
@@ -166,11 +171,11 @@ public class ResultTab extends AnchorPane {
 		            }else{
 		            	int pdIsValue = pdIs.call(new CellDataFeatures<PDTableModel, Integer>(tblPD, colIsPD, pdData.get(getIndex()))).getValue();
 		            	if(pdIsValue<item){
-		            		setStyle("-fx-background-color: red; -fx-text-fill: white;");
+		            		setStyle("-fx-background-color: #b11a3b; -fx-text-fill: white;");
 		            		errorCells.add(this);
 		            		finishable.set(false);
 		            	}else if(getIndex() == pdData.size()-1){
-		            		setStyle("-fx-background-color: lightgrey");
+		            		setStyle("-fx-background-color: #b2b2b2");
 		            	}else{
 		            		setStyle("");
 		            		if(errorCells.contains(this) || errorCells.isEmpty()){
@@ -196,11 +201,11 @@ public class ResultTab extends AnchorPane {
 		            }else{
 		            	int pdShouldValue = pdShould.call(new CellDataFeatures<PDTableModel, Integer>(tblPD, colShouldPD, pdData.get(getIndex()))).getValue();
 		            	if(pdShouldValue>item){
-		            		setStyle("-fx-background-color: red; -fx-text-fill: white;");
+		            		setStyle("-fx-background-color: #b11a3b; -fx-text-fill: white;");
 		            		finishable.set(false);
 		            		errorCells.add(this);
 		            	}else if(getIndex() == pdData.size()-1){
-		            		setStyle("-fx-background-color: lightgrey");
+		            		setStyle("-fx-background-color: #b2b2b2");
 		            	}else{
 		            		setStyle("");
 		            		if(errorCells.contains(this) || errorCells.isEmpty()){
@@ -232,7 +237,7 @@ public class ResultTab extends AnchorPane {
 				}else{
 	            	// mark the last line in the table
 					if(getIndex() == pdData.size()-1)
-	            		setStyle("-fx-background-color: lightgrey");
+	            		setStyle("-fx-background-color: #b2b2b2");
 				}
 				
 	            if (item != null || empty) {
@@ -285,6 +290,8 @@ public class ResultTab extends AnchorPane {
 		colExtPDQuarter.setCellValueFactory(
 				new PropertyValueFactory<QuarterTableModel, Integer>("pdExt")
 			);
+		
+		tabResult.tabMinWidthProperty().bind(tabResult.widthProperty().subtract(120).divide(3));
 	}
 	
 	
@@ -385,7 +392,7 @@ public class ResultTab extends AnchorPane {
 	            }else{
 	            	// mark the last line in the table
 	            	if(getIndex() == pdData.size()-1)
-	            		setStyle("-fx-background-color: lightgrey");
+	            		setStyle("-fx-background-color: #b2b2b2");
 	            	else
 	            		setStyle("");
 	            	

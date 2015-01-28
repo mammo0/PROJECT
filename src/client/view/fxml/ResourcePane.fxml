@@ -21,7 +21,7 @@
             <TextField fx:id="txtResourceName" promptText="Resourcename" GridPane.columnIndex="0" />
             <TextField fx:id="txtAvailability" promptText="Verfügbarkeit" GridPane.columnIndex="2" />
             <TextField fx:id="txtSkillAmount" promptText="Anzahl" GridPane.columnIndex="3" />
-            <ChoiceBox fx:id="cmbIntExt" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.hgrow="ALWAYS" />
+            <ComboBox fx:id="cmbIntExt" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" />
          </children>
       </GridPane>
    </children>

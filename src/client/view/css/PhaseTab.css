@@ -1,0 +1,53 @@
+@CHARSET "UTF-8";
+.addPhaseWrapper .title:hover{
+	-fx-background-color: #eaeaea;
+}
+.addPhaseWrapper .title:hover .text{
+	-fx-fill: black;
+}
+.mainPhase .title {
+	-fx-border-style: hidden;
+	-fx-background-color: #0a3d5a;
+}
+.mainPhase .title:hover{
+	-fx-background-color: #0a3d5a;
+	-fx-fill: black;
+}
+.mainPhase .title:hover .text{
+	-fx-fill: black;
+}
+.mainPhase .title .arrow-button .arrow{
+	-fx-background-color: white;
+}
+
+.subPhase .title {
+	-fx-border-style: hidden;
+	-fx-background-color: #2e77a0;
+}
+.subPhase .title .arrow-button .arrow{
+	-fx-background-color: white;
+}
+.subPhase .title:hover{
+	-fx-background-color: #2e77a0;
+}
+.subPhase .title:hover .text{
+	-fx-fill: black;
+}
+
+
+.date-picker-popup > * > .day-cell:hover {
+    -fx-background-color: #e23e22;
+}
+.date-picker-popup > * > .selected,
+.date-picker-popup > * > .today.selected {
+    -fx-background-color: #0a3d5a;
+}
+.date-picker-popup > * > .today {
+	-fx-background-color: #eaeaea;
+	-fx-border-color: black;
+	-fx-border-insets: 1, 2, 3;
+    -fx-border-with: 2;
+}
+.date-picker-popup > * > .week-number-cell {
+    -fx-text-fill: #b11a3b;
+}

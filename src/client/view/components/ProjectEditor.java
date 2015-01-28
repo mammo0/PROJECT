@@ -11,6 +11,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
+import javafx.scene.control.Skin;
+import javafx.scene.control.Skinnable;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
@@ -101,7 +103,7 @@ public class ProjectEditor extends TabPane implements IComponents {
 		tabResults.setGraphic(getTabHeader("res/tabs/Kalkulation.png", "Ergebnisse"));
 		
 		
-//		tabMinWidthProperty().bind(this.widthProperty().subtract(75).divide(5));
+		tabMinWidthProperty().bind(this.widthProperty().subtract(90).divide(5));
 	}
 	
 	

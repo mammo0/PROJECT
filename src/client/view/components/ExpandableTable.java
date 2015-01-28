@@ -6,6 +6,8 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 
 import client.view.IExpandableNode;
+import client.view.IViewClient;
+import client.view.View;
 import javafx.event.ActionEvent;
 import javafx.geometry.HPos;
 import javafx.scene.Node;
@@ -27,6 +29,8 @@ public class ExpandableTable<Content extends Node & IExpandableNode> extends Scr
 	
 	private Class<Content> contentPane;
 	
+	private IViewClient view;
+	
 	private GridPane contentList;
 	private Collection<ColumnConstraints> columnConstraints;
 	private int contentListRowCount;
@@ -47,14 +51,18 @@ public class ExpandableTable<Content extends Node & IExpandableNode> extends Scr
 		this.contentPane = contentPane;
 		this.parent = parent;
 		
+		this.view = View.getInstance(View.class);
+		
 		this.setFitToWidth(true);
+		
+		this.setStyle("-fx-background: #eaeaea;");
 		
 		contentList = new GridPane();
 		
 		// set the column constraints
 		columnConstraints = new ArrayList<ColumnConstraints>();
 		ColumnConstraints col1 = new ColumnConstraints();
-	    col1.setMinWidth(28d);
+	    col1.setMinWidth(30d);
 	    col1.setHgrow(Priority.NEVER);
 	    col1.setHalignment(HPos.LEFT);
 	    columnConstraints.add(col1);
@@ -216,6 +224,7 @@ public class ExpandableTable<Content extends Node & IExpandableNode> extends Scr
 	private void btnContentRemoveClick(ActionEvent event){
 		int deleteRowIndex = btnContentRemoves.get(event.getSource());
 		contentListRemoveRow(deleteRowIndex);
+		view.getViewRootPane().requestFocus();
 	}
 	
 	

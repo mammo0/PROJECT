@@ -9,6 +9,6 @@
 
 <fx:root fitToHeight="true" fitToWidth="true" type="ScrollPane" vbarPolicy="NEVER" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1">
    <content>
-      <StackPane fx:id="stkTimeline" />
+      <StackPane fx:id="stkTimeline" style="-fx-background-color: eaeaea;" />
    </content>
 </fx:root>

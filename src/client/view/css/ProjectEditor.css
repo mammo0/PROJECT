@@ -1,11 +1,50 @@
 @CHARSET "UTF-8";
 .tabEditor{
-	-fx-tab-min-height: 60px;
-	-fx-tab-max-height: 60px;
+	-fx-tab-min-height: 65px;
+	-fx-tab-max-height: 65px;
+}
+.tabEditor:top .tab-header-area{
+	-fx-padding: 0px 0px -1px 0px;
+}
+.tabEditor:top .tab-header-area .headers-region .tab:selected:top{
+	-fx-background-color: #eaeaea;
 }
 .tabEditor:top .tab-header-area .tab-header-background{
 	-fx-background-color: #b2b2b2;
 }
 .tabEditor:top .tab-header-area .headers-region .tab:top{
+	-fx-background-color: #b2b2b2;
 	-fx-min-height: 100px;
+	-fx-background-radius: 0px;
+}
+
+
+
+.tab-pane:left *.tab-header-area {
+ -fx-background-insets: 0;
+ -fx-padding: 0;
+}
+
+.tab-pane:right *.tab-header-area {
+ -fx-background-insets: 0;
+ -fx-padding: 0;
+}
+
+.control-buttons-tab {
+ -fx-background-insets: 0;
+ -fx-background-radius: 0;
+ -fx-padding: 0;
+}
+
+.tab-down-button {
+ -fx-background-color: green;
+ -fx-padding: 0;
+}
+
+.tab-down-button .arrow {
+ -fx-background-insets: 0;
+ -fx-background:black;
+ -fx-width:0;
+ -fx-padding: 0;
+ -fx-shape: " ";
 }

@@ -312,6 +312,7 @@ public class PhaseTab extends ScrollPane implements IComponents {
 	public PhasePaneWrapper addMainPhase(AddPhaseWrapper from){
 		// create the new main phase
 		PhasePaneWrapper main = new PhasePaneWrapper(this);
+		main.getStyleClass().add("mainPhase");
 		
 		// new sub phase adder below
 		AddPhaseWrapper addSub = new AddPhaseWrapper(this, "Neue Subphase", main);
@@ -346,6 +347,7 @@ public class PhaseTab extends ScrollPane implements IComponents {
 	public PhasePaneWrapper addSubPhase(AddPhaseWrapper from, PhasePaneWrapper main){
 		// create the new sub phase
 		PhasePaneWrapper sub = new PhasePaneWrapper(this, true);
+		sub.getStyleClass().add("subPhase");
 		
 		int index = accPhaseList.getPanes().indexOf(from);
 		
@@ -497,6 +499,9 @@ public class PhaseTab extends ScrollPane implements IComponents {
 		 */
 		public AddPhaseWrapper(PhaseTab parent, String title, PhasePaneWrapper parentPhase){
 			this.parent = parent;
+			
+			// set style
+			getStyleClass().add("addPhaseWrapper");
 			
 			// set the title
 			setText(title);
