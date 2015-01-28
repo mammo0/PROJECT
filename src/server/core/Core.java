@@ -712,7 +712,7 @@ public class Core extends ASingelton implements ICoreServer {
 						 
 						 
 						//Start und Ende in einem Quartal
-						if (result.getYears().size()==1){
+						if (startdate.getYear()-enddate.getYear()==0){
 								if( _startquarter == _endquarter) {
 
 							if (_startquarter == 1 && _endquarter == 1) {
@@ -831,7 +831,7 @@ public class Core extends ASingelton implements ICoreServer {
 							}
 						}
 				}//Abschluss der if Abfrage ob es sich um das gleiche jahr handelt
-						else if(result.getYears().size()==2){
+						else if(enddate.getYear()-startdate.getYear()==1){
 							daysInYStart = 365-startdate.getDayOfYear();
 							daysInYEnd = enddate.getDayOfYear();
 							
