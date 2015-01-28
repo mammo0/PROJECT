@@ -137,6 +137,15 @@ public class PhasePane extends AnchorPane implements IExpandableNode, ITester {
 	 * This method updates the skills in the drop downs
 	 */
 	public void updateCmbSkills(){
+		boolean found = false;
+		for(Skill skill : core.getSkills()){
+			if(skill.getSkillName().equals(oldSelectedSkill))
+				found = true;
+		}
+		if(!found)
+			oldSelectedSkill = null;
+		
+		
 		ArrayList<String> newSkills = parent.getAvailableSkills(this, oldSelectedSkill);
 		ArrayList<String> tempSkills = new ArrayList<String>();
 		
