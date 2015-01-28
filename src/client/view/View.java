@@ -34,6 +34,8 @@ public class View extends ASingelton implements IViewClient {
 	
 	private Node viewRootPane;
 	
+	private Stage primaryStage;
+	
 	
 	/**
 	 * Constructor
@@ -53,9 +55,20 @@ public class View extends ASingelton implements IViewClient {
 		this.viewRootPane = viewRootPane;
 	}
 	
+	// set the primary stage of the view
+	private void setViewPrimaryStage(Stage primaryStage){
+		this.primaryStage = primaryStage;
+	}
+	
+	
 	@Override
 	public Node getViewRootPane() {
 		return viewRootPane;
+	}
+	
+	@Override
+	public Stage getViewPrimaryStage(){
+		return primaryStage;
 	}
 	
 	
@@ -102,12 +115,12 @@ public class View extends ASingelton implements IViewClient {
 			Parent root;
 			try {
 				root = FXMLLoader.load(View.class.getResource("fxml/View.fxml"));
-				Stage stage = new Stage();
-	            stage.setTitle("PROJECT Client");
-	            stage.setScene(new Scene(root));
-	            stage.show();
+				primaryStage.setTitle("PROJECT Client");
+				primaryStage.setScene(new Scene(root));
+				primaryStage.show();
 	            view.setViewController(ViewController.getInstance(ViewController.class));
 	            view.setViewRootPane(root);
+	            view.setViewPrimaryStage(primaryStage);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}

@@ -35,7 +35,7 @@
                      <children>
                         <Label layoutX="14.0" layoutY="268.0" text="Projekt gemeldet:" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="268.0" />
                         <Label text="Meldezeit:" GridPane.rowIndex="1" />
-                        <Circle fx:id="crlFinish" fill="RED" radius="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" GridPane.columnIndex="1" />
+                        <Circle fx:id="crlFinish" fill="#b11a3b" radius="10.0" stroke="BLACK" strokeType="INSIDE" strokeWidth="0.0" style="-fx-fill: b11a3b;" GridPane.columnIndex="1" />
                         <Label fx:id="lblTimeStamp" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                      </children>
                   </GridPane>

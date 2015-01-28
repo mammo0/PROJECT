@@ -1,5 +1,6 @@
 package client.core;
 
+import java.io.File;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -138,4 +139,10 @@ public interface ICoreClient {
 	 * Clear the project object
 	 */
 	public void clearProject();
+	
+	/**
+	 * Export the project to a csv file
+	 * @param saveFile the file to save
+	 */
+	public void exportCSV(File saveFile);
 }

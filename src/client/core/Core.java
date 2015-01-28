@@ -817,8 +817,6 @@ public class Core extends ASingelton implements ICoreClient {
 			return false;
 		try {
 			result = server.calculateProject(project);
-			StringBuilder csv = server.getProjectCSV(result);
-			System.out.println(csv.toString());
 //			if(!testPhases(result))
 //				return false;
 		} catch (Exception e) {
@@ -968,5 +966,44 @@ public class Core extends ASingelton implements ICoreClient {
 	@Override
 	public void clearProject() {
 		project = null;
+	}
+
+
+	@Override
+	public void exportCSV(File saveFile) {
+		if(saveFile != null && project != null && isProjectFinished()){
+			try {
+				StringBuilder csv = server.getProjectCSV(project);
+				BufferedWriter writer;
+				try {
+					writer = new BufferedWriter(new FileWriter(saveFile));
+					String[] lines = csv.toString().split("\n");
+					for(int i=0;i<lines.length;i++){
+						writer.write(lines[i]);
+						if(i < lines.length-1)
+							writer.newLine();
+					}
+					writer.close();
+				} catch (IOException e) {
+					if(view != null){
+						String message = "Fehler beim Exportieren des Projekts";
+						DialogError error = new DialogError("Exportieren des Projekts", message+"\nBitte stellen Sie sicher das Sie die Berechtigungen haben die Datei anzulegen.", e);
+						Dialog.showDialog(error);
+						
+						view.setStatus(message, 10);
+					}
+				}
+			} catch (RemoteException e) {
+				if(view != null){
+					String message = "Fehler beim Exportieren des Projekts";
+					DialogError error = new DialogError("Exportieren des Projekts", message+"\nBitte überprüfen Sie die Serververbindung.", e);
+					Dialog.showDialog(error);
+					
+					view.setStatus(message, 10);
+					
+					askForNewConnection();
+				}
+			}
+		}
 	}
 }

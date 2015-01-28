@@ -11,8 +11,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.control.Label;
-import javafx.scene.control.Skin;
-import javafx.scene.control.Skinnable;
 import javafx.scene.control.Tab;
 import javafx.scene.control.TabPane;
 import javafx.scene.control.TextArea;
@@ -20,7 +18,6 @@ import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
 import client.view.IComponents;
 
@@ -189,6 +186,7 @@ public class ProjectEditor extends TabPane implements IComponents {
 		txtProjectName.clear();
 		txtProjectResponsible.clear();
 		txtProjectDescription.clear();
+		setProjectTimeStamp(null);
 		
 		skillTab.clearAll();
 		resourceTab.clearAll();
@@ -243,14 +241,14 @@ public class ProjectEditor extends TabPane implements IComponents {
 	@Override
 	public void setProjectTimeStamp(LocalDateTime timeStamp){
 		if(timeStamp == null){
-			crlFinish.setFill(Color.RED);
+			crlFinish.setStyle("-fx-fill: #b11a3b");
 			lblTimeStamp.setText("");
 		}else{
 			DateTimeFormatter formatter = DateTimeFormatter.ofPattern("HH:mm:ss - dd.MM.yyyy");
 			lblTimeStamp.setText(timeStamp.format(formatter));
 			
 			// set the finish indicator
-			crlFinish.setFill(Color.GREEN);
+			crlFinish.setStyle("-fx-fill: green");
 		}
 	}
 	

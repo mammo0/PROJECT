@@ -6,7 +6,6 @@ import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Hashtable;
 
-
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.collections.FXCollections;
@@ -24,12 +23,16 @@ import javafx.scene.control.ToggleButton;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 import client.core.Core;
 import client.core.CostTableModel;
 import client.core.ICoreClient;
 import client.core.OverflowTableModel;
 import client.core.PDTableModel;
 import client.core.QuarterTableModel;
+import client.view.IViewClient;
+import client.view.View;
 import client.view.dialogs.Dialog;
 import client.view.dialogs.DialogConfirmation;
 
@@ -93,6 +96,8 @@ public class ResultTab extends AnchorPane {
 	
 	@FXML
 	private Button btnFinish;
+	@FXML
+	private Button btnExportCSV;
 	
 	@FXML
 	private ToggleButton tbnRisk;
@@ -113,6 +118,7 @@ public class ResultTab extends AnchorPane {
 	
 	
 	private ICoreClient core;
+	private IViewClient view;
 	
 	
 	/**
@@ -133,6 +139,7 @@ public class ResultTab extends AnchorPane {
 		}
 		
 		this.core = Core.getInstance(Core.class);
+		this.view = View.getInstance(View.class);
 		
 		vbxPDTables.getChildren().remove(tblOverflow);
 		
@@ -140,6 +147,7 @@ public class ResultTab extends AnchorPane {
 		
 		finishable = new SimpleBooleanProperty(this, "finishable", false);
 		btnFinish.disableProperty().bind(finishable.not());
+		btnExportCSV.disableProperty().bind(finishable.not());
 		
 		// add the time line
 		timeline = new Timeline(this);
@@ -305,6 +313,19 @@ public class ResultTab extends AnchorPane {
 			tblPD.getColumns().remove(colRealPD);
 		
 		tblPD.setItems(pdData);
+	}
+	
+	
+	@FXML
+	private void btnExportCSVClick(){
+		FileChooser fileChooser = new FileChooser();
+		fileChooser.setInitialFileName(core.getLoadedProjectName());
+		  
+        // Set extension filter
+		ExtensionFilter extFilter = new FileChooser.ExtensionFilter("CSV Dateien (*.csv)", "*.csv");
+        fileChooser.getExtensionFilters().add(extFilter);
+        
+    	core.exportCSV(fileChooser.showSaveDialog(view.getViewPrimaryStage()));
 	}
 	
 	

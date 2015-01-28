@@ -48,7 +48,7 @@ public class RealTextField extends TextField implements ITester{
 		}else{
 			setText("0");
 			setMouseTransparent(true);
-			setStyle("-fx-background-color: lightgrey; -fx-focus-color: transparent;");
+			setStyle("-fx-background-color: #b2b2b2; -fx-focus-color: transparent;");
 			
 			updateSum();
 		}
@@ -73,7 +73,7 @@ public class RealTextField extends TextField implements ITester{
 		if(summarize != null){
 			summarize.setText(String.valueOf(sum));
 			summarize.setMouseTransparent(true);
-			summarize.setStyle("-fx-background-color: lightgrey; -fx-focus-color: transparent;");
+			summarize.setStyle("-fx-background-color: #b2b2b2; -fx-focus-color: transparent;");
 		}
 	}
 	

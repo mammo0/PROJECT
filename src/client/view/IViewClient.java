@@ -3,6 +3,7 @@ package client.view;
 import java.util.ArrayList;
 
 import javafx.scene.Node;
+import javafx.stage.Stage;
 
 
 /**
@@ -21,6 +22,12 @@ public interface IViewClient extends IComponents {
 	 * @return the root pane
 	 */
 	public Node getViewRootPane();
+	
+	/**
+	 * Get the primary stage of the view
+	 * @return the primary stage
+	 */
+	public Stage getViewPrimaryStage();
 	
 	/**
 	 * This method displays a status text for a given period of time on the view
