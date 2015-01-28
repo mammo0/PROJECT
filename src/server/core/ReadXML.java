@@ -155,8 +155,8 @@ public class ReadXML {
 							.getChildren("dayRateInt");
 					List<Element> dayRateExt = _skillinhalt
 							.getChildren("dayRateExt");
-//					List<Element> pdTotalReal = _skillinhalt
-//							.getChildren("pdTotalReal");
+				List<Element> pdTotalReal = _skillinhalt
+							.getChildren("pdTotalReal");
 					
 					for (int i = 0; i < skillName.size(); i++) {
 						Skill skill = new Skill();
@@ -170,8 +170,11 @@ public class ReadXML {
 						float _dayRateExt = Float.parseFloat(dayRateExt.get(i)
 								.getText());
 						skill.setDayRateExt(_dayRateExt);
-//						int _pdTotalReal = Integer
-//								.valueOf(pdTotalReal.get(i).getText());
+						if(pdTotalReal.size()>0){
+						int _pdTotalReal = Integer
+								.valueOf(pdTotalReal.get(i).getText());
+						skill.setPdTotalReal(_pdTotalReal);
+						}
 						project.addSkill(skill);
 					}
 
