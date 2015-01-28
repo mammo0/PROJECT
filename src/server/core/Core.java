@@ -52,30 +52,12 @@ public class Core extends ASingelton implements ICoreServer {
 	private int serverPort;
 	private String rmiUrl;
 	private Project project;
-//	private Result result;
 	Hashtable<String, Integer> phasesdays = new Hashtable();
-//	int _totalShould = 0;
-//	int _totalShouldRisk = 0;
 	private Result resultProject;
-	float _totalCostProject = 0;
-	int _totalmandaysProject = 0;
-	int _totalmandaysIntProject = 0;
-	int _totalmandaysShouldProject = 0;
-	int _totalmandaysShouldProjectRisk = 0;
-	int _totalmandaysExtProject = 0;
-	float _totalCostIntProject = 0;
-	float _totalCostExtProject = 0;
-	
-	
-	
-	
 
 	private File projectFilesDir;
 	
 	private File configFile;
-	
-	
-	
 
 	public Core() {
 		configFile = new File("server.conf");
@@ -223,14 +205,11 @@ public class Core extends ASingelton implements ICoreServer {
 	public Project calculateProject(Project project) {
 		this.project = project;
 		resultProject = new Result();
-		clearVariables();
 		project.setResult(resultProject);
 		if(project.getPhases().size()!= 0){
 		calculateLenght(project);
 		calculateProjectDays(project);
 		calculateResultSkill(project);
-		
-	//	calculateYearsQuarters(project, result);
 		calculateQuarterResults(project);
 		}
 		else{
@@ -239,19 +218,6 @@ public class Core extends ASingelton implements ICoreServer {
 		return project;
 	}
 	
-	public void clearVariables(){
-		
-		
-		 _totalCostProject = 0;
-		_totalmandaysProject = 0;
-		_totalmandaysIntProject = 0;
-		_totalmandaysShouldProject = 0;
-		_totalmandaysShouldProjectRisk = 0;
-		_totalmandaysExtProject = 0;
-		_totalCostIntProject = 0;
-		_totalCostExtProject = 0;
-		
-	}
 
 	// calculate the length of the complete Project
 	public void calculateLenght(Project project) {
@@ -272,6 +238,9 @@ public class Core extends ASingelton implements ICoreServer {
 		}
 		project.setStartDate(startdate);
 		project.setEndDate(enddate);
+		
+		//Jahrobjekte ins Projekt schreiben
+		
 	}
 	
 	
@@ -437,35 +406,7 @@ public class Core extends ASingelton implements ICoreServer {
 		}
 	}
 	
-	public void testPhaseavailable (Phase phase , int SkillID){
-		double availability = 0;
-		int difdays = 0;
-		//Wenn AnzahlTage benötigte SkillTage und phasedays (hashtable) gibt die Anzahl der Arbeistage die eine Phase hat
-		if(phase.getSkills().get(SkillID)>phasesdays.get(phase.getPhaseName())){
-			for(Resource resource : project.getResources()){
-				if(resource.getSkillID() == SkillID){
-					availability = (resource.getAvailability()*0.01)*resource.getSkillAmount()*phasesdays.get(phase.getPhaseName());
-					//Wenn vorhandene Tage geringer als benötigte Tage der Phase
-					if(availability< phase.getSkills().get(SkillID)){
-						//difdays = (int) (phase.getSkills().get(SkillID)-availability);
-						//System.out.println("Zu wenig Ressourcen");
-						phase.setEnoughDays(false);
-					}else{
-						//System.out.println("passt");
-						phase.setEnoughDays(true);
-					}
-				}
-				
-			}
-				
-			}
-		
-		else{
-			//System.out.println("passt");
-		}
-		
-		
-	}
+
 
 	// calculate the skill result object
 	public void calculateResultSkill(Project project) {
@@ -474,149 +415,14 @@ public class Core extends ASingelton implements ICoreServer {
 
 			Result result = new Result();
 			calculateYearsQuarters(project, result);
-			
 
-			// set all temp variables
-			int _skillID = 0;
-			double _totalBe = 0;
-			double _totalBeExt = 0;
-			int _availability = 0;
-			int _availabilityExt = 0;
-			int _pdExt = 0;
-			int _pdInt = 0;
-			int _totalDif = 0;
-			int _totalDifRisk = 0;
-			int _Puffer = 0;
-			float _costIntRisk = 0;
-			float _costInt = 0;
-			float _costExt = 0;
-			float _costExtRisk = 0;
-			float _costTotal = 0;
-			float _dayrateInt = skill.getDayRateInt();
-			float _dayrateExt = skill.getDayRateExt();
-			int _pdTotalBe = 0;
-			int _daysavailable = 0;
-			int _totalShould = 0;
-			int _totalShouldRisk = 0;
-
-			// calculate the total needed mandays per skill
-			_skillID = skill.getSkillID();
-			for (Phase phases : project.getPhases()) {
-				Enumeration<Integer> enumKey = phases.getSkills().keys();
-				while (enumKey.hasMoreElements()) {
-					int tempRisk = 0;
-					int key = enumKey.nextElement();
-					if (key == _skillID) {
-						_totalShould = _totalShould
-								+ phases.getSkills().get(_skillID);
-						tempRisk = (int) Math.round(phases.getRiskFactor()
-								* 0.01 * phases.getSkills().get(_skillID));
-						_totalShouldRisk = _totalShouldRisk
-								+ (tempRisk + phases.getSkills().get(_skillID));
-						
-						testPhaseavailable (phases , _skillID);
-
-					}
-				}
-
-			}
-			_totalmandaysShouldProject = _totalmandaysShouldProject + _totalShould;
-			result.setPdTotalShould(_totalShould);
-
-			// calculate the total available mandays per skill intern/extern
-			for (Resource resource : project.getResources()) {
-				if (resource.getSkillID() == skill.getSkillID()) {
-					if (resource.isIntern()) {
-						_availability = _availability
-								+ (resource.getSkillAmount() * resource.getAvailability());
-					} else {
-						_availabilityExt = _availabilityExt
-								+ (resource.getSkillAmount() * resource.getAvailability());
-					}
-				}
-
-			}
-
-			_totalBe = (_availability * 0.01) * calculateProjectDays(project);
-			_totalBeExt = (_availabilityExt * 0.01)
-					* calculateProjectDays(project);
-
-			_totalBe = Math.round(_totalBe);
-			_totalBeExt = Math.round(_totalBeExt);
-
-			_availability = 0;
-			_availabilityExt = 0;
-
-			// calculate the Difference between the should and be mandays
-			while (_totalShould > 0) {
-				while (_totalBeExt > 0 && _totalShould > 0) {
-					_pdExt = _pdExt + 1;
-					_totalBeExt = _totalBeExt - 1;
-					_totalShould = _totalShould - 1;
-				}
-				if (_totalBeExt > 0) {
-					_Puffer = (int) Math.round(_totalBeExt);
-				}
-				if (_totalShould >= _totalBe) {
-					_pdInt = (int) Math.round(_totalBe);
-					_totalDif = _totalShould - (int) Math.round(_totalBe);
-					_totalDifRisk = _totalShouldRisk
-							- (int) Math.round(_totalBe);
-					_totalShould = 0;
-				} else {
-					_pdInt = (int) Math.round(_totalShould);
-					_totalShould = 0;
-				}
-
-			}
-
-			// calculate costs
-			_costIntRisk = _totalShouldRisk * _dayrateInt;
-			_costExt = _pdExt * _dayrateExt;
-			_costInt = _pdInt * _dayrateInt;
-			_costExt = _pdExt * _dayrateExt;
-			_costTotal = _costInt + _costExt;
-			_pdTotalBe = _pdInt + _pdExt;
-
-			_totalCostProject = _totalCostProject + _costTotal;
-			_totalCostIntProject = _totalCostIntProject +_costInt;
-			_totalCostExtProject = _totalCostExtProject +_costExt;
-			_totalmandaysProject = _totalmandaysProject + _pdTotalBe;
-			
-			_totalmandaysIntProject = _totalmandaysIntProject +_pdInt;
-			_totalmandaysExtProject = _totalmandaysExtProject + _pdExt;
-			_totalmandaysShouldProjectRisk = _totalmandaysShouldProjectRisk + _totalShouldRisk;
-			
-			
-			// set the result variables
-			//result.setPdIntBe(_pdInt);
-			//result.setPdExtBe(_pdExt);
-			//result.setPdTotalBe(_pdTotalBe);
-			result.setPuffer(_Puffer);
-			result.setPdTotalDiff(_totalDif);
-			//result.setCostExt(_costExt);
-			//result.setCostInt(_costInt);
-			//result.setCostTotal(_costTotal);
-			result.setPdTotalShouldRisk(_totalShouldRisk);
 			skill.setResult(result);
-			
-			//project.getResult().setCostTotal(_totalCostProject);
-			//project.getResult().setPdTotalBe(_totalmandaysProject);
-			project.getResult().setPdTotalShould(_totalmandaysShouldProject);
-			//project.getResult().setPdIntBe(_totalmandaysIntProject);
-			//project.getResult().setPdExtBe(_totalmandaysExtProject);
-			//project.getResult().setCostInt(_totalCostIntProject);
-			//project.getResult().setCostExt(_totalCostExtProject);
-			project.getResult().setPdTotalShouldRisk(_totalmandaysShouldProjectRisk);
-			
-						
 
 		}
-
 	}
 
 	public void calculateQuarterResults(Project project) {
-
+		Hashtable <Integer, Integer> Puffer = new Hashtable();
 		for (Phase phases : project.getPhases()) {
 
 			LocalDate startdate = phases.getStartDate();
@@ -664,6 +470,7 @@ public class Core extends ASingelton implements ICoreServer {
 				int daysInQ4=0;
 				int availableInternalDays=0;
 				int availableExternalDays=0;
+				int externalPuffer = 0;
 				
 				int neededInternalDays=0;
 				int neededExternalDays=0;
@@ -696,6 +503,7 @@ public class Core extends ASingelton implements ICoreServer {
 				}else if (neededdays<=availableExternalDays){
 					neededInternalDays=0;
 					neededExternalDays=neededdays;
+					externalPuffer=availableExternalDays-neededdays;
 				} else if(neededdays<=availableExternalDays+availableInternalDays){
 					neededInternalDays=neededdays-availableExternalDays;
 					neededExternalDays=availableExternalDays;
@@ -703,7 +511,15 @@ public class Core extends ASingelton implements ICoreServer {
 					neededInternalDays=availableInternalDays;
 					neededExternalDays=availableExternalDays;
 				}
-						 
+			 if (Puffer.containsKey(skill.getSkillID())){
+				 int temppuffer= Puffer.get(skill.getSkillID())+externalPuffer;
+				 
+				 Puffer.replace(skill.getSkillID(), temppuffer);
+				 
+			 }
+			 else{
+				 Puffer.put(skill.getSkillID(), externalPuffer);
+			 }
 						 dayfactorintern = (float) neededInternalDays/_diffdate;
 						 dayfactorextern = (float) neededExternalDays/_diffdate;
 						 
@@ -937,12 +753,19 @@ public class Core extends ASingelton implements ICoreServer {
 		float _costExtProject=0;
 		int _pdIntBeProject = 0;
 		int _pdExtBeProject = 0;
+		int _pdTotalShouldProject=0;
+		int _pdTotalShouldRiskProject=0;
+		int _PufferProject=0;
+		
+		
 		for (Skill skill : project.getSkills()){
 			float _costInt = 0;
 			float _costExt = 0;
 			int _pdInt = 0;
 			int _pdExt=0;
-			
+			int _pdTotalShould = 0;
+			int _pdTotalShouldRisk = 0;
+					
 			
 			for (int i=0; i<skill.getResult().getYears().size(); i++){
 				Year year = skill.getResult().getYears().get(i);
@@ -960,18 +783,56 @@ public class Core extends ASingelton implements ICoreServer {
 					}
 				}	
 			}
+			for (Phase phase : project.getPhases()){
+				if(phase.getSkills().get(skill.getSkillID())!=null){
+				_pdTotalShould = _pdTotalShould + phase.getSkills().get(skill.getSkillID());
+				double risikofaktor= 0;
+				risikofaktor = 1+phase.getRiskFactor()*0.01;
+				_pdTotalShouldRisk = (int) (_pdTotalShouldRisk + phase.getSkills().get(skill.getSkillID())*risikofaktor);
+				}
+			}
 			skill.getResult().setCostInt(_costInt);
 			skill.getResult().setCostExt(_costExt);
 			skill.getResult().setCostTotal(_costExt+_costInt);
 			skill.getResult().setPdIntBe(_pdInt);
 			skill.getResult().setPdExtBe(_pdExt);
 			skill.getResult().setPdTotalBe(_pdExt+_pdInt);
+			skill.getResult().setPdTotalShould(_pdTotalShould);
+			skill.getResult().setPdTotalShouldRisk(_pdTotalShouldRisk);
+			skill.getResult().setPdTotalDiff(_pdTotalShould-skill.getResult().getPdTotalBe());
+			skill.getResult().setPuffer(Puffer.get(skill.getSkillID()));
+			_PufferProject=_PufferProject+Puffer.get(skill.getSkillID());
+			_pdTotalShouldProject=_pdTotalShouldProject+_pdTotalShould;
+			_pdTotalShouldRiskProject=_pdTotalShouldRiskProject+_pdTotalShouldRisk;
 		}
 			project.getResult().setCostInt(_costIntProject);
 			project.getResult().setCostExt(_costExtProject);
+			project.getResult().setCostTotal(_costIntProject+_costExtProject);
 			project.getResult().setPdIntBe(_pdIntBeProject);
 			project.getResult().setPdExtBe(_pdExtBeProject);
 			project.getResult().setPdTotalBe(_pdExtBeProject+_pdIntBeProject);
+			project.getResult().setPdTotalShould(_pdTotalShouldProject);
+			project.getResult().setPdTotalShouldRisk(_pdTotalShouldRiskProject);
+			project.getResult().setPdTotalDiff(_pdTotalShouldProject-project.getResult().getPdTotalBe());
+			
+			for (int a = 0; a<project.getResult().getYears().size(); a++){
+				Year year= project.getResult().getYears().get(a);
+				for (int b = 1; b<=4; b++){
+					Quarter quarter = year.getQuarter(b);
+					float _costExtQuarterProject =0;
+					if (quarter!=null){
+						
+						for(Skill skill : project.getSkills()){
+							_costExtQuarterProject=_costExtQuarterProject+
+									skill.getResult().getYears().get(a).getQuarter(b).getCostExt();
+							
+						}
+						
+					}
+					project.getResult().getYears().get(a).getQuarter(b).setCostExt(_costExtQuarterProject);	
+				}
+			}
+			
 			}
 		
 	
