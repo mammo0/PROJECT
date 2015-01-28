@@ -239,7 +239,6 @@ public class Core extends ASingelton implements ICoreServer {
 		project.setStartDate(startdate);
 		project.setEndDate(enddate);
 		
-		//Jahrobjekte ins Projekt schreiben
 		
 	}
 	
@@ -264,6 +263,7 @@ public class Core extends ASingelton implements ICoreServer {
 			year = new Year();
 			year.setYearDate(startdateYear + i);
 			result.addYear(year);
+			
 		}
 
 		if (result.getYears().size() > 1) {
@@ -419,6 +419,8 @@ public class Core extends ASingelton implements ICoreServer {
 			skill.setResult(result);
 
 		}
+		
+		calculateYearsQuarters(project, project.getResult());
 	}
 
 	public void calculateQuarterResults(Project project) {
@@ -757,6 +759,38 @@ public class Core extends ASingelton implements ICoreServer {
 		int _pdTotalShouldRiskProject=0;
 		int _PufferProject=0;
 		
+		for (int a = 0; a<project.getResult().getYears().size(); a++){
+			Year year= project.getResult().getYears().get(a);
+			for (int b = 1; b<=4; b++){
+				Quarter quarter = year.getQuarter(b);
+				float _costExtQuarterProject = 0;
+				float _costIntQuarterProject = 0;
+				int _pdExtQuarter = 0;
+				int _pdIntQuarter = 0;
+				
+				if (quarter!=null){
+					
+					for(Skill skill : project.getSkills()){
+						_costExtQuarterProject=_costExtQuarterProject+
+								skill.getResult().getYears().get(a).getQuarter(b).getCostExt();
+						_costIntQuarterProject=_costIntQuarterProject+
+								skill.getResult().getYears().get(a).getQuarter(b).getCostInt();
+						_pdExtQuarter=_pdExtQuarter+
+								skill.getResult().getYears().get(a).getQuarter(b).getPdExt();
+						_pdIntQuarter=_pdIntQuarter+
+								skill.getResult().getYears().get(a).getQuarter(b).getPdInt();
+						
+					}
+					project.getResult().getYears().get(a).getQuarter(b).setCostExt(_costExtQuarterProject);	
+					project.getResult().getYears().get(a).getQuarter(b).setCostInt(_costIntQuarterProject);
+					project.getResult().getYears().get(a).getQuarter(b).setCostTotal(_costExtQuarterProject+_costIntQuarterProject);
+					project.getResult().getYears().get(a).getQuarter(b).setPdExt(_pdExtQuarter);
+					project.getResult().getYears().get(a).getQuarter(b).setPdInt(_pdIntQuarter);
+					project.getResult().getYears().get(a).getQuarter(b).setPdTotal(_pdIntQuarter+_pdExtQuarter);
+				}
+				
+			}
+		}
 		
 		for (Skill skill : project.getSkills()){
 			float _costInt = 0;
@@ -814,24 +848,10 @@ public class Core extends ASingelton implements ICoreServer {
 			project.getResult().setPdTotalShould(_pdTotalShouldProject);
 			project.getResult().setPdTotalShouldRisk(_pdTotalShouldRiskProject);
 			project.getResult().setPdTotalDiff(_pdTotalShouldProject-project.getResult().getPdTotalBe());
+			project.getResult().setPuffer(_PufferProject);
 			
-			for (int a = 0; a<project.getResult().getYears().size(); a++){
-				Year year= project.getResult().getYears().get(a);
-				for (int b = 1; b<=4; b++){
-					Quarter quarter = year.getQuarter(b);
-					float _costExtQuarterProject =0;
-					if (quarter!=null){
-						
-						for(Skill skill : project.getSkills()){
-							_costExtQuarterProject=_costExtQuarterProject+
-									skill.getResult().getYears().get(a).getQuarter(b).getCostExt();
-							
-						}
-						
-					}
-					project.getResult().getYears().get(a).getQuarter(b).setCostExt(_costExtQuarterProject);	
-				}
-			}
+			
+		
 			
 			}
 		
