@@ -1,6 +1,7 @@
 package server.core;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -21,14 +22,12 @@ public class ExportCSV {
 
 	private Project prjToEx;
 	private ArrayList<Phase> phaseList;
-	private ICoreServer core;
 	private int _size;
 
 	/**
 	 * Constructor
 	 */
 	public ExportCSV(Project prj) {
-		this.core = Core.getInstance(Core.class);
 		this.prjToEx = prj;
 		this.phaseList = prj.getPhases();
 		_size = phaseList.size();
@@ -82,7 +81,7 @@ public class ExportCSV {
 	/**
 	 * Creates the CSV-file and fills it with information
 	 */
-	public void ExportFile() {
+	public File ExportFile() {
 		sortPhases();
 		String sep = ";";
 		ArrayList<Phase> phaseGroup;
@@ -93,7 +92,7 @@ public class ExportCSV {
 
 		try {
 			pWriter = new PrintWriter(new BufferedWriter(new FileWriter(
-					core.getProjectDirectory() + prjToEx.getProjectName()
+					prjToEx.getProjectName()
 							+ ".csv")));
 
 		} catch (IOException e) {
@@ -171,5 +170,9 @@ public class ExportCSV {
 			}
 
 		}
+		
+		File file = new File(prjToEx.getProjectName()
+							+ ".csv");
+		return file;
 	}
 }
