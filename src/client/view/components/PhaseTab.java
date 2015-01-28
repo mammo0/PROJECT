@@ -54,6 +54,10 @@ public class PhaseTab extends ScrollPane implements IComponents {
 		} catch (IOException e) { 
 		    e.printStackTrace();
 		}
+		
+		String viewCss = getClass().getResource("/client/view/css/View.css").toExternalForm();
+		String phaseTabCss = getClass().getResource("/client/view/css/PhaseTab.css").toExternalForm();
+		this.getStylesheets().addAll(viewCss, phaseTabCss);
         
 		mainPhases = new ArrayList<PhasePaneWrapper>();
 		subPhases = new Hashtable<PhasePaneWrapper, ArrayList<PhasePaneWrapper>>();

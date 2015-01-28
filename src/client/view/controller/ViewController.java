@@ -4,13 +4,16 @@ import global.ASingelton;
 
 import java.awt.Desktop;
 import java.io.File;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URL;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.ResourceBundle;
 
+import sun.misc.IOUtils;
 import javafx.animation.Animation.Status;
 import javafx.animation.KeyFrame;
 import javafx.animation.KeyValue;
@@ -26,6 +29,8 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.ListView;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.AnchorPane;
 import javafx.util.Duration;
 import client.core.Core;
@@ -81,6 +86,11 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 	@FXML
 	private AnchorPane ancManageProjects;
 	
+	@FXML
+	private ImageView picProject;
+	@FXML
+	private ImageView picHallesche;
+	
 	
 	
 	/**
@@ -99,6 +109,10 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 	// this method is called by the initialization of the frame
 	@Override
 	public void initialize(URL location, ResourceBundle resources) {
+		// load the logos
+		picProject.setImage(new Image(getClass().getResourceAsStream("/client/res/logos/Grundlogo.png")));
+		picHallesche.setImage(new Image(getClass().getResourceAsStream("/client/res/logos/Hallesche.png")));
+		
 		// add the project editor to the main window
 		editorPane.getChildren().add(projectEditor);
 		AnchorPane.setTopAnchor(projectEditor, 0d);
@@ -178,13 +192,21 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 	
 	@FXML
 	private void help(){
-		File helpFile = new File("res/help/Readme.docx");
-		if (Desktop.isDesktopSupported()){
-			try {
-				Desktop.getDesktop().open(helpFile);
-				return;
-			} catch (IOException e) {}
-		}
+		try {
+			File helpFile = File.createTempFile("project", ".docx");
+			helpFile.deleteOnExit();
+			InputStream input = getClass().getResourceAsStream("/client/res/help/Readme.docx");
+			FileOutputStream output = new FileOutputStream(helpFile);
+			output.write(IOUtils.readFully(input, -1, false));
+			output.close();
+			
+			if (Desktop.isDesktopSupported()){
+				try {
+					Desktop.getDesktop().open(helpFile);
+					return;
+				} catch (IOException e) {}
+			}
+		} catch (IOException e) {}
 		
 		AnchorPane root = (AnchorPane) view.getViewRootPane();
 		root.getChildren().add(helpMenu);

@@ -1,6 +1,5 @@
 package client.view.components;
 
-import java.io.File;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
@@ -75,29 +74,33 @@ public class ProjectEditor extends TabPane implements IComponents {
 		    e.printStackTrace();
 		}
 		
+		String viewCss = getClass().getResource("/client/view/css/View.css").toExternalForm();
+		String projectEditorCss = getClass().getResource("/client/view/css/ProjectEditor.css").toExternalForm();
+		this.getStylesheets().addAll(viewCss, projectEditorCss);
+		
 		
 		// set up first screen
-		tabProject.setGraphic(getTabHeader("res/tabs/Home.png", "Projekt anlegen"));
+		tabProject.setGraphic(getTabHeader("/client/res/tabs/Home.png", "Projekt anlegen"));
 		
 		// add the second screen (skills)
 		skillTab = new SkillTab();
 		tabSkills.setContent(skillTab);
-		tabSkills.setGraphic(getTabHeader("res/tabs/KompetenzenAnlegen.png", "Kompetenz anlegen"));
+		tabSkills.setGraphic(getTabHeader("/client/res/tabs/KompetenzenAnlegen.png", "Kompetenz anlegen"));
 		
 		// add the third screen (resources)
 		resourceTab = new ResourceTab();
 		tabResources.setContent(resourceTab);
-		tabResources.setGraphic(getTabHeader("res/tabs/KompetenzenDefinieren.png", "Ressourenplanung"));
+		tabResources.setGraphic(getTabHeader("/client/res/tabs/KompetenzenDefinieren.png", "Ressourenplanung"));
 		
 		// add the fourth screen (phases)
 		phaseTab = new PhaseTab();
 		tabPhases.setContent(phaseTab);
-		tabPhases.setGraphic(getTabHeader("res/tabs/Phasenplanung.png", "Phasenplanung"));
+		tabPhases.setGraphic(getTabHeader("/client/res/tabs/Phasenplanung.png", "Phasenplanung"));
 		
 		// add the fifth screen (results)
 		resultTab = new ResultTab();
 		tabResults.setContent(resultTab);
-		tabResults.setGraphic(getTabHeader("res/tabs/Kalkulation.png", "Ergebnisse"));
+		tabResults.setGraphic(getTabHeader("/client/res/tabs/Kalkulation.png", "Ergebnisse"));
 		
 		
 		tabMinWidthProperty().bind(this.widthProperty().subtract(90).divide(5));
@@ -108,17 +111,14 @@ public class ProjectEditor extends TabPane implements IComponents {
 	private BorderPane getTabHeader(String imagePath, String tabTitle){
 		BorderPane pane = new BorderPane();
 		
-		
-		File file = new File(imagePath);
-	    Image img = new Image(file.toURI().toString());
+		Image img = new Image(getClass().getResourceAsStream(imagePath));
 		ImageView image = new ImageView();
 		image.setPreserveRatio(true);
 		image.setFitWidth(40);
 		image.setImage(img);
+		pane.setCenter(image);
 		
 		Label label = new Label(tabTitle);
-		
-		pane.setCenter(image);
 		pane.setBottom(label);
 		
 		return pane;

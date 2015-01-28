@@ -115,6 +115,8 @@ public class View extends ASingelton implements IViewClient {
 			Parent root;
 			try {
 				root = FXMLLoader.load(View.class.getResource("fxml/View.fxml"));
+				String viewCss = getClass().getResource("/client/view/css/View.css").toExternalForm(); 
+				root.getStylesheets().add(viewCss);
 				primaryStage.setTitle("PROJECT Client");
 				primaryStage.setScene(new Scene(root));
 				primaryStage.setMinHeight(750);

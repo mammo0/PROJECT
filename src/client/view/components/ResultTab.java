@@ -138,6 +138,10 @@ public class ResultTab extends AnchorPane {
 		     e.printStackTrace();
 		}
 		
+		String viewCss = getClass().getResource("/client/view/css/View.css").toExternalForm();
+		String resultTabCss = getClass().getResource("/client/view/css/ResultTab.css").toExternalForm();
+		this.getStylesheets().addAll(viewCss, resultTabCss);
+		
 		this.core = Core.getInstance(Core.class);
 		this.view = View.getInstance(View.class);
 		
