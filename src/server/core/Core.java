@@ -626,10 +626,7 @@ public class Core extends ASingelton implements ICoreServer {
 			int _endyear = phases.getEndDate().getYear();
 			int _startquarter = (phases.getStartDate().getMonthValue() - 1) / 3 + 1;
 			int _endquarter = (phases.getEndDate().getMonthValue() - 1) / 3 + 1;
-			int daysInQ1=0;
-			int daysInQ2=0;
-			int daysInQ3=0;
-			int daysInQ4=0;
+			
 			int daysInYStart=0;
 			int daysInYEnd=0;
 			float dayfactorintern = 0;
@@ -657,14 +654,15 @@ public class Core extends ASingelton implements ICoreServer {
 				}
 			}
 			
-			//Dauer in Kalendertagen
-		
-			
 			//Dauer in Arbeitstagen
 			durationinworkingdays = (int) Math.round(_diffdate * (0.55835));
 			
 			for (Skill skill : project.getSkills()) {
 				Result result = skill.getResult();
+				int daysInQ1=0;
+				int daysInQ2=0;
+				int daysInQ3=0;
+				int daysInQ4=0;
 				int availableInternalDays=0;
 				int availableExternalDays=0;
 				
@@ -713,7 +711,7 @@ public class Core extends ASingelton implements ICoreServer {
 						 
 						 
 						//Start und Ende in einem Quartal
-						if (result.getYears().size()==1){
+						if (startdate.getYear()-enddate.getYear()==0){
 								if( _startquarter == _endquarter) {
 
 							if (_startquarter == 1 && _endquarter == 1) {
@@ -832,7 +830,7 @@ public class Core extends ASingelton implements ICoreServer {
 							}
 						}
 				}//Abschluss der if Abfrage ob es sich um das gleiche jahr handelt
-						else if(result.getYears().size()==2){
+						else if(enddate.getYear()-startdate.getYear()==1){
 							daysInYStart = 365-startdate.getDayOfYear();
 							daysInYEnd = enddate.getDayOfYear();
 							
@@ -883,9 +881,7 @@ public class Core extends ASingelton implements ICoreServer {
 									createQ4(daysInQ4, startdate.getYear(), dayfactorintern, 
 												dayfactorextern, skill, neededInternalDays, neededExternalDays, result);
 										}
-							
-							int j = calculateIndexOfStartYear(enddate.getYear(), result);
-							
+						
 							if(enddate.getMonthValue()==1||enddate.getMonthValue()==2||enddate.getMonthValue()==3){
 								//Nur Q1
 								daysInQ1 = daysInYEnd;
@@ -940,9 +936,6 @@ public class Core extends ASingelton implements ICoreServer {
 				}
 			}
 		
-	
-	
-
 	
 	public int calculateIndexOfStartYear(int year, Result result){
 		
