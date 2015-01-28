@@ -232,7 +232,6 @@ public class Core extends ASingelton implements ICoreServer {
 		
 	//	calculateYearsQuarters(project, result);
 		calculateQuarterResults(project);
-		
 		}
 		else{
 			
@@ -1219,10 +1218,7 @@ public class Core extends ASingelton implements ICoreServer {
 	@Override
 	public File getProjectCSV(Project project) throws RemoteException {
 		
-		ExportCSV export = new ExportCSV(project);
 		
-		return export.ExportFile();
-
-
+		return null;
 	}
 }
