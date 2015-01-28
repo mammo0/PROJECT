@@ -117,6 +117,8 @@ public class View extends ASingelton implements IViewClient {
 				root = FXMLLoader.load(View.class.getResource("fxml/View.fxml"));
 				primaryStage.setTitle("PROJECT Client");
 				primaryStage.setScene(new Scene(root));
+				primaryStage.setMinHeight(750);
+				primaryStage.setMinWidth(850);
 				primaryStage.show();
 	            view.setViewController(ViewController.getInstance(ViewController.class));
 	            view.setViewRootPane(root);
