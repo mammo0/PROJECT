@@ -171,6 +171,7 @@ public class ViewController extends ASingelton implements Initializable, ICompon
 	@FXML
 	private void newProject(){
 		clearAll();
+		disableWrite(false);
 		core.clearProject();
 		markNode(null, "txtProjectName");
 		lstProjects.getSelectionModel().clearSelection();

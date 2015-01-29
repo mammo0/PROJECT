@@ -8,6 +8,7 @@ import java.util.NoSuchElementException;
 
 import model.project.Phase;
 import model.project.Project;
+import model.project.Skill;
 
 /**
  * This class implements all methods needed for the CSV-export.
@@ -127,21 +128,32 @@ public class ExportCSV {
 					skillIDs = phaseGroup.get(i).getSkills().keys();
 
 					try {
-						nextElement = skillIDs.nextElement();
-						for (int j = 0; j < prjToEx.getSkills().size(); j++) {
-							if (nextElement == prjToEx.getSkills().get(j)
-									.getSkillID()) {
-								skillName = prjToEx.getSkills().get(j)
-										.getSkillName();
-
+						
+						boolean resources = false;
+						if(skillIDs.hasMoreElements()){
+							builder.append("Benötigte Ressourcen: "+sep);
+							resources = true;
+						}
+						while(skillIDs.hasMoreElements()){
+							nextElement = skillIDs.nextElement();
+							
+							for(Skill skill : prjToEx.getSkills()){
+								if(skill.getSkillID() == nextElement){
+									builder.append(skill.getSkillName()+":"+sep+String.valueOf(phaseGroup.get(i).getSkills().get(nextElement)+"\n"));
+									builder.append(sep);
+								}
 							}
 						}
+						if(resources){
+							builder.setCharAt(builder.length()-1, '\0');
+							builder.append("\n");
+						}
 						
-						builder.append("Benötigte Ressourcen: "+sep+skillName
-								+ ":"
-								+ sep
-								+ phaseGroup.get(i).getSkills()
-										.get(nextElement).toString()+ "PT\n");
+//						builder.append("Benötigte Ressourcen: "+sep+skillName
+//								+ ":"
+//								+ sep
+//								+ phaseGroup.get(i).getSkills()
+//										.get(nextElement).toString()+ "PT\n");
 //						pWriter.println(skillName
 //								+ ":"
 //								+ sep
