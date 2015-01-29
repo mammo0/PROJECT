@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Stack;
 
 import javafx.application.Platform;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -18,6 +19,8 @@ import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.control.DateCell;
 import javafx.scene.control.DatePicker;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.AnchorPane;
@@ -40,6 +43,13 @@ public class PhasePaneWrapper extends TitledPane implements ITester {
 	private TextField txtRiskFactor;
 	@FXML
 	private AnchorPane ancPhaseList;
+	
+	@FXML
+	private TableView<?> tblPhase;
+	@FXML
+	private TableColumn<?, ?> colSkill;
+	@FXML
+	private TableColumn<?, ?> colDuration;
 	
 	private PhaseTab parent;
 	
@@ -88,6 +98,11 @@ public class PhasePaneWrapper extends TitledPane implements ITester {
 		} catch (IOException e) { 
 		    e.printStackTrace();
 		}
+		
+		SimpleDoubleProperty tableWidth = new SimpleDoubleProperty();
+		tableWidth.bind(tblPhase.widthProperty().subtract(4).divide(2));
+		colSkill.prefWidthProperty().bind(tableWidth);
+		colDuration.prefWidthProperty().bind(tableWidth);
 		
 		final PhasePaneWrapper This = this;
 		

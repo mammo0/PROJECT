@@ -5,8 +5,11 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.layout.AnchorPane;
 import client.view.IComponents;
 
@@ -20,6 +23,15 @@ public class SkillTab extends AnchorPane implements IComponents {
 	
 	@FXML
 	private AnchorPane ancSkillList;
+	
+	@FXML
+	private TableView<?> tblSkill;
+	@FXML
+	private TableColumn<?, ?> colSkill;
+	@FXML
+	private TableColumn<?, ?> colInt;
+	@FXML
+	private TableColumn<?, ?> colExt;
 	
 	private ExpandableTable<SkillPane> skillTable;
 	
@@ -41,6 +53,12 @@ public class SkillTab extends AnchorPane implements IComponents {
 		} catch (IOException e) { 
 		    e.printStackTrace();
 		}
+		
+		SimpleDoubleProperty tableWidth = new SimpleDoubleProperty();
+		tableWidth.bind(tblSkill.widthProperty().subtract(4).divide(3));
+		colSkill.prefWidthProperty().bind(tableWidth);
+		colInt.prefWidthProperty().bind(tableWidth);
+		colExt.prefWidthProperty().bind(tableWidth);
 		
 		// initialize the expandable table and add it to the anchor pane
 		skillTable = new ExpandableTable<SkillPane>(SkillPane.class, this);

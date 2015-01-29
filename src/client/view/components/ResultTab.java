@@ -35,6 +35,7 @@ import client.view.IViewClient;
 import client.view.View;
 import client.view.dialogs.Dialog;
 import client.view.dialogs.DialogConfirmation;
+import client.view.dialogs.DialogWarning;
 
 public class ResultTab extends AnchorPane {
 	
@@ -331,7 +332,14 @@ public class ResultTab extends AnchorPane {
 		ExtensionFilter extFilter = new FileChooser.ExtensionFilter("CSV Dateien (*.csv)", "*.csv");
         fileChooser.getExtensionFilters().add(extFilter);
         
-    	core.exportCSV(fileChooser.showSaveDialog(view.getViewPrimaryStage()));
+        if(core.isProjectFinished())
+        	core.exportCSV(fileChooser.showSaveDialog(view.getViewPrimaryStage()));
+        else{
+        	String message = "Das Projekt kann nicht exportiert werden, wenn es noch nicht gemeldet wurde.\n"
+        			+ "Bitte melden Sie zuerst das Projekt.";
+        	DialogWarning warning = new DialogWarning("Exportieren des Projekts", message);
+        	Dialog.showDialog(warning);
+        }
 	}
 	
 	

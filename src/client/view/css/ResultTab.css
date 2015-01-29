@@ -20,7 +20,6 @@
 }
 .table-view .column-header-background .nested-column-header .table-column {
 	-fx-border-color: black;
-	/*-fx-border-style: hidden solid hidden solid;*/
 	-fx-background-color: #b7e1f7;
 }
 

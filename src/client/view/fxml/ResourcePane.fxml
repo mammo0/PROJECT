@@ -10,7 +10,7 @@
       <GridPane gridLinesVisible="true" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <columnConstraints>
           <ColumnConstraints hgrow="ALWAYS" />
-            <ColumnConstraints hgrow="ALWAYS" prefWidth="163.0" />
+            <ColumnConstraints hgrow="ALWAYS" />
             <ColumnConstraints hgrow="ALWAYS" />
             <ColumnConstraints hgrow="ALWAYS" />
         </columnConstraints>
@@ -21,7 +21,7 @@
             <TextField fx:id="txtResourceName" promptText="Resourcename" GridPane.columnIndex="0" />
             <TextField fx:id="txtAvailability" promptText="Verfügbarkeit" GridPane.columnIndex="2" />
             <TextField fx:id="txtSkillAmount" promptText="Anzahl" GridPane.columnIndex="3" />
-            <ComboBox fx:id="cmbIntExt" maxWidth="1.7976931348623157E308" GridPane.columnIndex="1" />
+            <ComboBox fx:id="cmbIntExt" maxWidth="1.7976931348623157E308" prefWidth="163.0" GridPane.columnIndex="1" />
          </children>
       </GridPane>
    </children>

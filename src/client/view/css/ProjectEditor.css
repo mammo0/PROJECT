@@ -18,8 +18,6 @@
 	-fx-background-radius: 0px;
 }
 
-
-
 .tab-pane:left *.tab-header-area {
  -fx-background-insets: 0;
  -fx-padding: 0;
@@ -47,4 +45,17 @@
  -fx-width:0;
  -fx-padding: 0;
  -fx-shape: " ";
+}
+
+
+.shortTable{
+	-fx-background-color: transparent;
+	-fx-background-insets: 0;
+}
+.shortTable .placeholder{
+	visibility: hidden;
+}
+.shortTable .column-header-background .nested-column-header .table-column {
+	-fx-border-color: black;
+	-fx-background-color: #b7e1f7;
 }

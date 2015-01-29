@@ -11,7 +11,10 @@ import java.awt.Toolkit;
 import java.awt.TrayIcon;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.io.IOException;
+import java.io.InputStream;
 
 import javafx.application.Application;
 import javafx.application.Platform;
@@ -73,40 +76,76 @@ public class View extends ASingelton implements IViewServer {
 		}
 		
 		
+		private void showFrame(Stage stage){
+			Platform.runLater(new Runnable() {
+				@Override
+				public void run() {
+					stage.show();
+					stage.toFront();
+				}
+			});
+		}
+		
+		private void closeFrame(){
+			// stop the server
+			core.stopServer();
+			
+			// exit the application
+            Platform.exit();
+            System.exit(0);
+		}
+		
+		
 		public void setTray(Stage stage){
 			SystemTray sTray = null;
 			sTray = SystemTray.getSystemTray();
-			// TODO set icon
-			Image image = Toolkit.getDefaultToolkit().getImage("Mario-icon.png");
+			Image image = null;
+			InputStream is = getClass().getResourceAsStream("/server/res/icons/icon.png");
+			try{
+				if (is != null)
+					{
+					byte[] buffer = new byte[0];
+					byte[] tmpbuf = new byte[1024];
+					while (true)
+					{
+						int len = is.read(tmpbuf);
+						if (len <= 0) {
+						break;
+					}
+					byte[] newbuf = new byte[buffer.length + len];
+					System.arraycopy(buffer, 0, newbuf, 0, buffer.length);
+					System.arraycopy(tmpbuf, 0, newbuf, buffer.length, len);
+					buffer = newbuf;
+					}
+					//create image
+					image = Toolkit.getDefaultToolkit().createImage(buffer);
+					is.close();
+				}
+			}catch (IOException e){}
 			
 			ActionListener listenerShow = new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					Platform.runLater(new Runnable() {
-						@Override
-						public void run() {
-							stage.show();
-							stage.toFront();
-						}
-					});
+					showFrame(stage);
 				}
 			};
 
 			ActionListener listenerClose = new ActionListener() {
 				@Override
 				public void actionPerformed(ActionEvent e) {
-					// stop the server
-					core.stopServer();
-					
-					System.exit(0);
+					closeFrame();
 				}
 			};
 
 			stage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 				@Override
 				public void handle(WindowEvent arg0) {
-					stage.toBack();
-					stage.hide();
+					if(core.isServerRunning()){
+						stage.toBack();
+						stage.hide();
+					}else{
+						closeFrame();
+					}
 				}
 			});
 			
@@ -122,13 +161,33 @@ public class View extends ASingelton implements IViewServer {
 			popup.add(exitItem);
 
 			TrayIcon icon = new TrayIcon(image, "PROJECT", popup);
+			icon.setImageAutoSize(true);
+			icon.addMouseListener(new MouseListener() {
+				
+				@Override
+				public void mouseReleased(MouseEvent e) {}
+				
+				@Override
+				public void mousePressed(MouseEvent e) {}
+				
+				@Override
+				public void mouseExited(MouseEvent e) {}
+				
+				@Override
+				public void mouseEntered(MouseEvent e) {}
+				
+				@Override
+				public void mouseClicked(MouseEvent e) {
+					if(e.getButton() == MouseEvent.BUTTON1 && e.getClickCount() > 1){
+						showFrame(stage);
+					}
+				}
+			});
 
 			try {
 				sTray.add(icon);
 			}
-			catch (AWTException e) {
-				System.err.println(e);
-			}
+			catch (AWTException e) {}
 		}
 		
 		
@@ -140,6 +199,7 @@ public class View extends ASingelton implements IViewServer {
 	            primaryStage.setTitle("PROJECT Server");
 	            primaryStage.setScene(new Scene(root));
 	            primaryStage.setResizable(false);
+	            primaryStage.getIcons().add(new javafx.scene.image.Image(getClass().getResourceAsStream("/server/res/icons/icon.png")));
 	            
 	            // set the primary stage
 	            view.setPrimaryStage(primaryStage);
@@ -152,12 +212,7 @@ public class View extends ASingelton implements IViewServer {
 		            primaryStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
 		                @Override
 		                public void handle(WindowEvent t) {
-		                	// stop the server
-		                	core.stopServer();
-		                	
-		                	// exit the application
-		                    Platform.exit();
-		                    System.exit(0);
+		                	closeFrame();
 		                }
 		            });
 	    		}

@@ -3,8 +3,11 @@ package client.view.components;
 import java.io.IOException;
 import java.util.ArrayList;
 
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TitledPane;
 import javafx.scene.layout.AnchorPane;
 import model.project.Skill;
@@ -19,6 +22,17 @@ public class ResourcePaneWrapper extends TitledPane {
 	
 	@FXML
 	private AnchorPane ancResourceList;
+	
+	@FXML
+	private TableView<?> tblResource;
+	@FXML
+	private TableColumn<?, ?> colResource;
+	@FXML
+	private TableColumn<?, ?> colIntExt;
+	@FXML
+	private TableColumn<?, ?> colAvailability;
+	@FXML
+	private TableColumn<?, ?> colAmount;
 	
 	private Skill skill;
 	
@@ -43,6 +57,13 @@ public class ResourcePaneWrapper extends TitledPane {
 		} catch (IOException e) { 
 		    e.printStackTrace();
 		}
+		
+		SimpleDoubleProperty tableWidth = new SimpleDoubleProperty();
+		tableWidth.bind(tblResource.widthProperty().subtract(4).divide(4));
+		colResource.prefWidthProperty().bind(tableWidth);
+		colIntExt.prefWidthProperty().bind(tableWidth);
+		colAvailability.prefWidthProperty().bind(tableWidth);
+		colAmount.prefWidthProperty().bind(tableWidth);
 		
 		this.skill = skill;
 		

@@ -121,6 +121,7 @@ public class View extends ASingelton implements IViewClient {
 				primaryStage.setScene(new Scene(root));
 				primaryStage.setMinHeight(750);
 				primaryStage.setMinWidth(850);
+	            primaryStage.getIcons().add(new javafx.scene.image.Image(getClass().getResourceAsStream("/client/res/icons/icon.png")));
 				primaryStage.show();
 	            view.setViewController(ViewController.getInstance(ViewController.class));
 	            view.setViewRootPane(root);

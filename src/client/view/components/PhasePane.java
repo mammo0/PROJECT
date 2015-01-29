@@ -55,6 +55,9 @@ public class PhasePane extends AnchorPane implements IExpandableNode, ITester {
 		    e.printStackTrace();
 		}
 		
+		cmbSkills.prefWidthProperty().bind(this.widthProperty().divide(2));
+		txtDuration.prefWidthProperty().bind(this.widthProperty().divide(2));
+		
 		this.core = Core.getInstance(Core.class);
 		
 		// initialize the skill collection

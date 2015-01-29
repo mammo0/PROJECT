@@ -49,6 +49,11 @@ public class ResourcePane extends AnchorPane implements IExpandableNode, ITester
 		    e.printStackTrace();
 		}
 		
+		txtResourceName.prefWidthProperty().bind(this.widthProperty().divide(4));
+		cmbIntExt.prefWidthProperty().bind(this.widthProperty().divide(4));
+		txtAvailability.prefWidthProperty().bind(this.widthProperty().divide(4));
+		txtSkillAmount.prefWidthProperty().bind(this.widthProperty().divide(4));
+		
 		// finalize the choice box
 		cmbIntExt.getItems().addAll("Intern","Extern");
 		cmbIntExt.getSelectionModel().selectFirst();
