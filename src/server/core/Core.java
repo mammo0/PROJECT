@@ -10,7 +10,9 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.net.InetAddress;
 import java.net.MalformedURLException;
+import java.net.UnknownHostException;
 import java.rmi.Naming;
 import java.rmi.NotBoundException;
 import java.rmi.RemoteException;
@@ -161,14 +163,14 @@ public class Core extends ASingelton implements ICoreServer {
 	public void startServer() {
 		if (serverPort == 0)
 			return;
-
-		// build the rmi url
-		this.rmiUrl = "rmi://localhost:" + serverPort + "/PROJECT";
-
-		// set the server project path
-		this.projectFilesDir = new File(projectPath);
-
+		
 		try {
+			// build the rmi url
+			this.rmiUrl = "rmi://"+InetAddress.getLocalHost().getHostAddress()+":" + serverPort + "/PROJECT";
+
+			// set the server project path
+			this.projectFilesDir = new File(projectPath);
+			
 			// set up the server
 			server = new ProjectCalculator(this);
 
@@ -176,7 +178,7 @@ public class Core extends ASingelton implements ICoreServer {
 			rmiRegistry = LocateRegistry.createRegistry(serverPort);
 			Naming.rebind(rmiUrl, server);
 			System.out.println("Server läuft.");
-		} catch (RemoteException | MalformedURLException e) {
+		} catch (RemoteException | MalformedURLException | UnknownHostException e) {
 			System.err.println(e.getMessage());
 		}
 	}
