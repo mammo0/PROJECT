@@ -104,15 +104,19 @@ public class ExportCSV {
 				for (int i = 0; i <phaseGroup.size(); i++) {
 					if(phaseGroup.get(i).getParent()==null){
 						if(phaseGroup.get(i).getStartDate()!=null){
-					builder.append("Projektphase: " +sep+ phaseGroup.get(i).getPhaseName()+ "\n");
-					builder.append(phaseGroup.get(i).getStartDate() + sep
-							+ "-" + sep + phaseGroup.get(i).getEndDate()+ "\n");
-						}
+							builder.append("Projektphase: " +sep+ phaseGroup.get(i).getPhaseName()+ sep);
+							builder.append(phaseGroup.get(i).getStartDate() + sep
+									+ "-" + sep + phaseGroup.get(i).getEndDate()+ "\n");
+						}else
+							builder.append("Projektphase: " +sep+ phaseGroup.get(i).getPhaseName()+ "\n");
 					}else{
-						builder.append("Projektphase: " +sep+ phaseGroup.get(i).getParent().getPhaseName()+ "\n");
-						builder.append("Subphase: "+sep+phaseGroup.get(i).getPhaseName()+ "\n");
-						builder.append(phaseGroup.get(i).getStartDate() + sep
-								+ "-" + sep + phaseGroup.get(i).getEndDate()+ "\n");
+//						builder.append("Projektphase: " +sep+ phaseGroup.get(i).getParent().getPhaseName()+ "\n");
+						if(phaseGroup.get(i).getStartDate()!=null){
+							builder.append("Subphase: "+sep+phaseGroup.get(i).getPhaseName()+ sep);
+							builder.append(phaseGroup.get(i).getStartDate() + sep
+									+ "-" + sep + phaseGroup.get(i).getEndDate()+ "\n");
+						}else
+							builder.append("Subphase: "+sep+phaseGroup.get(i).getPhaseName()+ "\n");
 					}
 					
 					
@@ -133,7 +137,7 @@ public class ExportCSV {
 							}
 						}
 						
-						builder.append("Benötigte Ressourcen: "+sep+skillName
+						builder.append("BenÃ¶tigte Ressourcen: "+sep+skillName
 								+ ":"
 								+ sep
 								+ phaseGroup.get(i).getSkills()

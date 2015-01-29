@@ -229,19 +229,18 @@ public class Core extends ASingelton implements ICoreServer {
 		for (Phase phases : project.getPhases()) {
 
 			if (startdate == null
-					|| startdate.compareTo(phases.getStartDate()) > 0) {
+					|| (phases.getStartDate() != null && startdate.compareTo(phases.getStartDate()) > 0)) {
 
 				startdate = phases.getStartDate();
 			}
 
-			if (enddate == null || enddate.compareTo(phases.getEndDate()) < 0) {
+			if (enddate == null
+					|| (phases.getEndDate() != null && enddate.compareTo(phases.getEndDate()) < 0)) {
 				enddate = phases.getEndDate();
 			}
 		}
 		project.setStartDate(startdate);
 		project.setEndDate(enddate);
-		
-		
 	}
 	
 	

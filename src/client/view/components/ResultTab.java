@@ -379,9 +379,8 @@ public class ResultTab extends AnchorPane {
 		if(!Dialog.showDialog(confirmation))
 			return;
 		
-		core.finishProject();
-		
-		tblPD.getColumns().add(colRealPD);
+		if(core.finishProject())
+			tblPD.getColumns().add(colRealPD);
 	}
 	
 	

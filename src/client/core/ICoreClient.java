@@ -108,8 +108,9 @@ public interface ICoreClient {
 	
 	/**
 	 * Finish the current built project
+	 * @return true if it was successful
 	 */
-	public void finishProject();
+	public boolean finishProject();
 	
 	/**
 	 * Get if the project is finished

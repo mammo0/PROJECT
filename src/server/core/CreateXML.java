@@ -98,6 +98,9 @@ public class CreateXML {
 	// Phase eintragen
 	public void insertPhase(Project project, int i) throws XMLStreamException,
 			NullPointerException {
+		if (project.getPhases().get(i).getStartDate() == null || project.getPhases().get(i).getEndDate() == null)
+			return;
+		
 		StartElement configStartElementphase = eventFactory.createStartElement(
 				"", "", "phase");
 		eventWriter.add(configStartElementphase);

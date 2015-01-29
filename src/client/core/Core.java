@@ -404,6 +404,9 @@ public class Core extends ASingelton implements ICoreClient {
 		phases.sort(new Comparator<Phase>() {
 			@Override
 			public int compare(Phase o1, Phase o2) {
+				if(o1.getStartDate() == null || o2.getStartDate() == null)
+					return -1;
+				
 				return o1.getStartDate().isBefore(o2.getStartDate()) ? -1 :
 					o1.getStartDate().isEqual(o2.getStartDate()) ? 0 : 1;
 			}
@@ -909,12 +912,19 @@ public class Core extends ASingelton implements ICoreClient {
 	}
 	
 	@Override
-	public void finishProject(){
+	public boolean finishProject(){
 		project.setFinished(true);
 		project.setTimestamp(LocalDateTime.now());
 		
 		try {
 			server.saveProject(project);
+			
+			if(view != null){
+				view.setProjectTimeStamp(project.getTimestamp());
+				view.disableWrite(true);
+				view.setStatus(project.getProjectName()+" wurde gemeldet.", 5);
+			}
+			return true;
 		} catch (Exception e) {
 			if(view != null){
 				String message = "Fehler beim Speichern des Projekts";
@@ -925,12 +935,8 @@ public class Core extends ASingelton implements ICoreClient {
 				
 				askForNewConnection();
 			}
-			return;
+			return false;
 		}
-		
-		view.setProjectTimeStamp(project.getTimestamp());
-		view.disableWrite(true);
-		view.setStatus(project.getProjectName()+" wurde gemeldet.", 5);
 	}
 	
 	@Override
