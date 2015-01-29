@@ -477,7 +477,7 @@ public class Core extends ASingelton implements ICoreServer {
 				int neededInternalDays=0;
 				int neededExternalDays=0;
 				
-				//Benötigte Arbeitstage Tage des Skills in der Phase
+				//Benï¿½tigte Arbeitstage Tage des Skills in der Phase
 				if(phases.getSkills().get(skill.getSkillID())!=null){
 				neededdays = phases.getSkills().get(skill.getSkillID());
 				}
@@ -1138,7 +1138,6 @@ public class Core extends ASingelton implements ICoreServer {
 	@Override
 	public StringBuilder getProjectCSV(Project project) throws RemoteException {
 		ExportCSV csv = new ExportCSV(project);
-		csv.ExportFile();
 		
 		return csv.ExportFile();
 	}

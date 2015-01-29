@@ -131,7 +131,7 @@ public class ExportCSV {
 							}
 						}
 						
-						builder.append("Ben�tigte Ressourcen: "+sep+skillName
+						builder.append("Benötigte Ressourcen: "+sep+skillName
 								+ ":"
 								+ sep
 								+ phaseGroup.get(i).getSkills()
@@ -156,7 +156,7 @@ public class ExportCSV {
 			try {
 				builder.append("Manntage und Kosten Intern:" + sep
 						+ prjToEx.getResult().getPdInt()+" PT" + sep
-						+ prjToEx.getResult().getCostInt()+ "�\n");
+						+ prjToEx.getResult().getCostInt()+ "\n");
 				
 //				pWriter.println("Manntage und Kosten Intern:" + sep
 //						+ prjToEx.getResult().getPdInt() + sep
@@ -164,7 +164,7 @@ public class ExportCSV {
 //				
 				builder.append("Manntage und Kosten Extern:" + sep
 						+ prjToEx.getResult().getPdExt()+" PT" + sep
-						+ prjToEx.getResult().getCostExt()+ "�\n");
+						+ prjToEx.getResult().getCostExt()+ "\n");
 				
 //				pWriter.println("Manntage und Kosten Extern:" + sep
 //						+ prjToEx.getResult().getPdExt() + sep
@@ -172,7 +172,7 @@ public class ExportCSV {
 //				
 				builder.append("Manntage und Kosten Gesamt:" + sep
 						+ prjToEx.getResult().getPdTotalShould()+" PT" + sep
-						+ prjToEx.getResult().getCostTotal()+ "�\n");
+						+ prjToEx.getResult().getCostTotal()+ "\n");
 				
 //				pWriter.println("Manntage und Kosten Gesamt:" + sep
 //						+ prjToEx.getResult().getPdTotalShould() + sep
@@ -183,7 +183,7 @@ public class ExportCSV {
 //							+ sep
 //							+ "Um das Projektziel zu erreichen werden noch mindestens"
 //							+ prjToEx.getResult().getPdTotalDiff()
-//							+ " Manntage ben�tigt.");
+//							+ " Manntage benötigt.");
 //				}
 
 			} catch (Exception e) {
