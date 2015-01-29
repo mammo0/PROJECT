@@ -990,6 +990,8 @@ public class Core extends ASingelton implements ICoreClient {
 							writer.newLine();
 					}
 					writer.close();
+					
+					view.setStatus(saveFile.getName()+" wurde exportiert.", 5);
 				} catch (IOException e) {
 					if(view != null){
 						String message = "Fehler beim Exportieren des Projekts";
